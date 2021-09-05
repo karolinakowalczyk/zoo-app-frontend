@@ -1,0 +1,34 @@
+.container {
+    background-color: #81B214;
+    width: 100%;
+    padding-left: 5rem;
+    padding-bottom: 5rem;
+    background-image: url('../../assets/images/penguinBackground.png');
+    background-size: 20rem;
+    width: auto;
+    height: 30rem;
+    background-repeat: no-repeat;
+    background-position: 90%;
+
+}
+h1 {
+    color: #FFF;
+    font-family: 'Rammetto One',
+    'Montserrat',
+    Arial,
+    sans-serif;
+    font-weight: 700;
+    font-size: 4.5rem;
+    padding: 0rem;
+    margin-top: -2rem;
+    margin-bottom: -2rem;
+}
+
+h3 {
+    font-size: 2em;
+    color: #FFF;
+    font-weight: 400;
+    font-family: 'Montserrat',
+    Arial,
+    sans-serif !important;
+}

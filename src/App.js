@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import MenuIcon from '@material-ui/icons/Menu';
-import { Container, createTheme, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton } from '@material-ui/core';
+import { createTheme, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { makeStyles } from "@material-ui/core/styles";
 import penguin from './assets/images/penguin.png';
@@ -12,10 +12,10 @@ import AuthService from "./services/auth.service";
 
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Home from "./components/Home";
+import Home from "./components/HomePage/Home";
 import Profile from "./components/Profile";
 import BoardUser from "./components/BoardUser";
-import BoardAdmin from "./components/BoardAdmin";
+import BoardAdmin from "./components/BoardAdminPage/BoardAdmin";
 import { AppBar } from "@material-ui/core";
 
 const theme = createTheme({
@@ -58,12 +58,11 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar color="primary" className="app-bar-class">
+      <AppBar color="primary" className="app-bar-class" position="fixed" elevation={0}>
         <Toolbar>
           <Box display='flex' flexGrow={1}>
           <IconButton
             edge="start"
-            color="inherit"
             aria-label="open drawer"
             className="menu-btn"
             onClick={() => setShowSiteBar(!showSiteBar)}
@@ -73,8 +72,8 @@ const App = () => {
           <Typography>
             <Link to={"/"} className="logo-link">
               Z
-              <img src={penguin} alt="angular_icon" />
-              <img src={penguin} alt="angular_icon" />
+              <img src={penguin} alt="penguin_icon" />
+              <img src={penguin} alt="penguin_icon" />
             </Link>
           </Typography>
           </Box>
@@ -86,32 +85,40 @@ const App = () => {
           >
             <div>
               <IconButton onClick={() => setShowSiteBar(false)}>
-                <ChevronLeftIcon/>
+                <ChevronLeftIcon className="back-icon"/>
               </IconButton>
             </div>
             <Divider />
             <List>
               <ListItem>
                 <Link to={"/"}  className="item-link" onClick={() => setShowSiteBar(false)}>
-                  <ListItemText secondary={"Main site"} />
+                  <ListItemText>
+                    <span className="item-text">Main Site</span>
+                  </ListItemText>
                 </Link>
               </ListItem>
               <ListItem>
                 <Link to={"/home"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                  <ListItemText secondary={"Home"} />
+                  <ListItemText>
+                    <span className="item-text">Home</span>
+                  </ListItemText>
                 </Link>
               </ListItem>
               {showAdminBoard && (
                 <ListItem>
                   <Link to={"/admin"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                    <ListItemText secondary={"Admin board"} />
+                    <ListItemText>
+                      <span className="item-text">Admin Board</span>
+                    </ListItemText>
                   </Link>
                 </ListItem>
               )}
               {currentUser && (
                 <ListItem>
                   <Link to={"/user"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                    <ListItemText secondary={"User"} />
+                    <ListItemText>
+                      <span className="item-text">User</span>
+                    </ListItemText>
                   </Link>
                 </ListItem>
               )}
@@ -119,12 +126,16 @@ const App = () => {
                   <div>
                   <ListItem>
                     <Link to={"/profile"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                      <ListItemText secondary={currentUser.username} />
+                      <ListItemText>
+                        <span className="item-text">{currentUser.username}</span>
+                      </ListItemText>
                     </Link>
                   </ListItem>
                   <ListItem>
                     <a href="/login" className="item-link" onClick={mobileLogOut}>
-                      <ListItemText secondary={"Log out"} />
+                      <ListItemText>
+                        <span className="item-text">Log out</span>
+                      </ListItemText>
                     </a>
                   </ListItem>
                 </div>
@@ -132,12 +143,16 @@ const App = () => {
                 <div>
                   <ListItem>
                     <Link to={"/login"} className="item-link" onClick={() => setShowSiteBar(false)}> 
-                      <ListItemText secondary={"Login"} />
+                      <ListItemText>
+                        <span className="item-text">Login</span>
+                      </ListItemText>
                     </Link>
                   </ListItem>
                   <ListItem>
                     <Link to={"/register"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                      <ListItemText secondary={"Sign up"} />
+                      <ListItemText>
+                        <span className="item-text">Sign up</span>
+                      </ListItemText>
                     </Link>
                   </ListItem>
                 </div>
@@ -193,7 +208,6 @@ const App = () => {
                   LOGIN
                 </Link>
               </Typography>
-
               <Typography>
                 <Link to={"/register"} className="nav-link">
                   SIGN UP
@@ -202,17 +216,17 @@ const App = () => {
             </Toolbar>
           )}
         </Toolbar>
-        </AppBar>
-        <Container>
-          <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/profile" component={Profile} />
-            <Route path="/user" component={BoardUser} />
-            <Route path="/admin" component={BoardAdmin} />
-          </Switch>
-      </Container>
+      </AppBar>
+      <div className="main-container">
+        <Switch>
+          <Route exact path={["/", "/home"]} component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/profile" component={Profile} />
+          <Route path="/user" component={BoardUser} />
+          <Route path="/admin" component={BoardAdmin} />
+        </Switch>
+      </div>
     </ThemeProvider>
   );
 };
