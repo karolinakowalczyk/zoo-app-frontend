@@ -1,38 +1,62 @@
-.App {
-  text-align: center;
+.nav-link {
+  color: #FFF;
+  font-family: 'Montserrat',
+  Arial,
+  sans-serif;
+  font-weight: 700;
+  text-decoration: none;
+  margin-right: 1rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.logo-link {
+  color: #FFF;
+  font-family: 'Rammetto One', 'Montserrat',
+    Arial,
+    sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  text-decoration: none;
+  margin-right: 1rem;
+  text-align: right;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.logo-link img {
+  width: 3rem;
+  height: auto;
+  vertical-align: middle;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.item-link {
+  text-decoration: none;
+  font-family: 'Montserrat', Arial, sans-serif !important;
+}
+
+.dependent-link {
+  margin-left: -1.25rem;
+}
+.menu-btn {
+  display: none !important;
+}
+@media (max-width: 40rem) {
+  .menu-btn {
+    display: block !important;
+  }
+  .menu-icon {
+    color: #FFF;
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+
+  .typography-links{
+    display: none !important;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.app-bar-class{
+  padding-top: 2rem;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

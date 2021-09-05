@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import { Container, createTheme, ThemeProvider, Toolbar, Typography } from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu';
+import { Container, createTheme, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton } from '@material-ui/core';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import { makeStyles } from "@material-ui/core/styles";
+import penguin from './assets/images/penguin.png';
 
 import "./App.css";
 
@@ -20,11 +24,19 @@ const theme = createTheme({
       main: '#81B214'
     }
   }
-}) 
+})
+
+const useStyles = makeStyles({
+  paper: {
+    width: 350
+  }
+});
 
 const App = () => {
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [showSiteBar, setShowSiteBar] = useState(false);
+  const classes = useStyles();
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -39,70 +51,157 @@ const App = () => {
     AuthService.logout();
   };
 
+  const mobileLogOut = () => {
+    AuthService.logout();
+    setShowSiteBar(false);
+  }
+
   return (
     <ThemeProvider theme={theme}>
-     
-      <AppBar color="primary" position="static">
+      <AppBar color="primary" className="app-bar-class">
         <Toolbar>
+          <Box display='flex' flexGrow={1}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            className="menu-btn"
+            onClick={() => setShowSiteBar(!showSiteBar)}
+          >
+            <MenuIcon className="menu-icon"/>
+          </IconButton>
           <Typography>
-            <Link to={"/"} className="navbar-brand">
-              Main Site
+            <Link to={"/"} className="logo-link">
+              Z
+              <img src={penguin} alt="angular_icon" />
+              <img src={penguin} alt="angular_icon" />
             </Link>
           </Typography>
-         
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
+          </Box>
+          <Drawer
+            variant="persistent"
+            anchor="left"
+            open={showSiteBar}
+            classes={{ paper: classes.paper }}
+          >
+            <div>
+              <IconButton onClick={() => setShowSiteBar(false)}>
+                <ChevronLeftIcon/>
+              </IconButton>
+            </div>
+            <Divider />
+            <List>
+              <ListItem>
+                <Link to={"/"}  className="item-link" onClick={() => setShowSiteBar(false)}>
+                  <ListItemText secondary={"Main site"} />
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link to={"/home"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                  <ListItemText secondary={"Home"} />
+                </Link>
+              </ListItem>
+              {showAdminBoard && (
+                <ListItem>
+                  <Link to={"/admin"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                    <ListItemText secondary={"Admin board"} />
+                  </Link>
+                </ListItem>
+              )}
+              {currentUser && (
+                <ListItem>
+                  <Link to={"/user"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                    <ListItemText secondary={"User"} />
+                  </Link>
+                </ListItem>
+              )}
+              {currentUser ? (
+                  <div>
+                  <ListItem>
+                    <Link to={"/profile"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                      <ListItemText secondary={currentUser.username} />
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <a href="/login" className="item-link" onClick={mobileLogOut}>
+                      <ListItemText secondary={"Log out"} />
+                    </a>
+                  </ListItem>
+                </div>
+              ) : (
+                <div>
+                  <ListItem>
+                    <Link to={"/login"} className="item-link" onClick={() => setShowSiteBar(false)}> 
+                      <ListItemText secondary={"Login"} />
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link to={"/register"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                      <ListItemText secondary={"Sign up"} />
+                    </Link>
+                  </ListItem>
+                </div>
+              )}
+            </List>
+          </Drawer>
+          
+          <Typography className="typography-links">
+            <Link to={"/"} className="nav-link">
+              MAIN SITE
+            </Link>
+          </Typography>
+            
+          <Typography className="typography-links">
+            <Link to={"/home"} className="nav-link">
+              HOME
+            </Link>
+          </Typography>
+
+          {showAdminBoard && (
+            <Typography className="typography-links">
+              <Link to={"/admin"} className="nav-link">
+                ADMIN BOARD
               </Link>
-            </li>
+            </Typography>
+          )}
 
-            {showAdminBoard && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
-                  Admin Board
-                </Link>
-              </li>
-            )}
-
-            {currentUser && (
-              <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
-              </li>
-            )}
-          </div>
+          {currentUser && (
+            <Typography className="typography-links">
+              <Link to={"/user"} className="nav-link">
+                USER
+              </Link>
+            </Typography>
+          )}
 
           {currentUser ? (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
+            <Toolbar className="typography-links">
+              <Typography>
+                <Link to={"/profile"} className="nav-link dependent-link" style={{ textTransform: 'uppercase'}}>
                   {currentUser.username}
                 </Link>
-              </li>
-              <li className="nav-item">
+              </Typography>
+              <Typography>
                 <a href="/login" className="nav-link" onClick={logOut}>
-                  LogOut
+                  LOG OUT
                 </a>
-              </li>
-            </div>
+              </Typography>
+            </Toolbar>
           ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
+            <Toolbar className="typography-links">
+              <Typography>
+                <Link to={"/login"} className="nav-link dependent-link"> 
+                  LOGIN
                 </Link>
-              </li>
+              </Typography>
 
-              <li className="nav-item">
+              <Typography>
                 <Link to={"/register"} className="nav-link">
-                  Sign Up
+                  SIGN UP
                 </Link>
-              </li>
-            </div>
+              </Typography>
+            </Toolbar>
           )}
-          </Toolbar>
+        </Toolbar>
         </AppBar>
         <Container>
           <Switch>
