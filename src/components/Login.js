@@ -1,21 +1,70 @@
 import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import Input from "react-validation/build/input";
+import { Container, CssBaseline, Avatar, Typography, FormControlLabel, Checkbox, Button, Grid, Link, CircularProgress  } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import PersonIcon from '@material-ui/icons/Person';
+import Alert from '@material-ui/lab/Alert';
 
 import AuthService from "../services/auth.service";
 
 const required = (value) => {
   if (!value) {
     return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
+      <div>
+        <p style={{color: "red", margin: "0"}}>This field is required!</p>
       </div>
     );
   }
 };
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(20),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  input: {
+    width: '100%',
+    height: '3rem',
+    border: '0.01rem solid #81B214',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    borderRadius: '0.25rem',
+    backgroundColor: '#fafafa',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    '&:hover': {
+      background: "#777777",
+    },
+  },
+  buttonText: {
+    color: '#FFF',
+  },
+  alert: {
+    marginTop: theme.spacing(1),
+  },
+  h1: {
+    color: '#000'
+  },
+}));
+
 const Login = (props) => {
+  const classes = useStyles();
+
   const form = useRef();
   const checkBtn = useRef();
 
@@ -23,6 +72,8 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  
 
   const onChangeUsername = (e) => {
     const username = e.target.value;
@@ -35,6 +86,7 @@ const Login = (props) => {
   };
 
   const handleLogin = (e) => {
+
     e.preventDefault();
 
     setMessage("");
@@ -66,59 +118,71 @@ const Login = (props) => {
   };
 
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
-
-        <Form onSubmit={handleLogin} ref={form}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <Input
-              type="text"
-              className="form-control"
-              name="username"
-              value={username}
-              onChange={onChangeUsername}
-              validations={[required]}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              className="form-control"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-              validations={[required]}
-            />
-          </div>
-
-          <div className="form-group">
-            <button className="btn btn-primary btn-block" disabled={loading}>
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
-              <span>Login</span>
-            </button>
-          </div>
-
+    <Container component="main" maxWidth="sm">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <PersonIcon />
+        </Avatar>
+        <Typography className={classes.h1} component="h1" variant="h5">
+          Login
+        </Typography>
+        <Form className={classes.form} onSubmit={handleLogin} ref={form}>
+          <Input
+            className={classes.input}
+            validations={[required]}
+            name="username"
+            value={username}
+            onChange={onChangeUsername}
+            placeholder="User name"
+          />
+          <Input
+            className={classes.input}
+            validations={[required]}
+            placeholder="Password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={onChangePassword}
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            disabled={loading}
+          >
+            {loading && (
+              <CircularProgress color="primary" />
+            )}
+            <span className={classes.buttonText}>Login</span>
+          </Button>
+          <Grid container>
+            <Grid item xs={6} container justify="flex-start">
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item xs={6} container justify="flex-end">
+              <Link href={"/register"} variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
           {message && (
-            <div className="form-group">
-              <div className="alert alert-danger" role="alert">
-                {message}
-              </div>
+            <div className={classes.alert}>
+              <Alert severity="error">{message}</Alert>
             </div>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </div>
-    </div>
+    </Container>
   );
 };
 

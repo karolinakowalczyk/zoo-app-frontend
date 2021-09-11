@@ -3,14 +3,66 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-
+import { Container, CssBaseline, Avatar, Typography, FormControlLabel, Checkbox, Button, Grid, Link, CircularProgress  } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
+import PersonIcon from '@material-ui/icons/Person';
 import AuthService from "../services/auth.service";
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(20),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  input: {
+    width: '100%',
+    height: '3rem',
+    border: '0.01rem solid #81B214',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    borderRadius: '0.25rem',
+    backgroundColor: '#fafafa',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    '&:hover': {
+      background: "#777777",
+    },
+  },
+  alert: {
+    marginTop: theme.spacing(1),
+  },
+  h1: {
+    color: '#000'
+  },
+  buttonText: {
+    color: '#FFF',
+  },
+  link: {
+    '&:hover': {
+      textDecoration: 'none',
+    },
+    color: "#FFF",
+  }
+}));
 
 const required = (value) => {
   if (!value) {
     return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
+      <div>
+        <p style={{color: "red", margin: "0"}}>This field is required!</p>
       </div>
     );
   }
@@ -19,8 +71,8 @@ const required = (value) => {
 const validEmail = (value) => {
   if (!isEmail(value)) {
     return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid email.
+      <div>
+        <p style={{color: "red", margin: "0"}}>This is not a valid email.</p>
       </div>
     );
   }
@@ -29,8 +81,8 @@ const validEmail = (value) => {
 const vusername = (value) => {
   if (value.length < 3 || value.length > 20) {
     return (
-      <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
+      <div>
+        <p style={{color: "red", margin: "0"}}>The username must be between 3 and 20 characters.</p>
       </div>
     );
   }
@@ -39,21 +91,25 @@ const vusername = (value) => {
 const vpassword = (value) => {
   if (value.length < 6 || value.length > 40) {
     return (
-      <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
+      <div>
+        <p style={{color: "red", margin: "0"}}>The password must be between 6 and 40 characters.</p>
       </div>
     );
   }
 };
 
 const Register = (props) => {
+  const classes = useStyles();
+
   const form = useRef();
   const checkBtn = useRef();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatpassword, setRepeatPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const onChangeUsername = (e) => {
@@ -71,17 +127,31 @@ const Register = (props) => {
     setPassword(password);
   };
 
+  const onChangeRepeatPassword = (e) => {
+    const repeatpassword = e.target.value;
+    setRepeatPassword(repeatpassword);
+  };
+
   const handleRegister = (e) => {
     e.preventDefault();
 
     setMessage("");
+    setLoading(true);
     setSuccessful(false);
 
     form.current.validateAll();
+    setLoading(false);
+    if (password !== repeatpassword) {
+      setMessage("Password's don't match!");
+      setLoading(false);
+      return;
+      
+    }
 
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.register(username, email, password).then(
         (response) => {
+          setLoading(false);
           setMessage(response.data.message);
           setSuccessful(true);
         },
@@ -92,82 +162,103 @@ const Register = (props) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-
+          setLoading(false);
           setMessage(resMessage);
-          setSuccessful(false);
+          setSuccessful(false);   
         }
       );
     }
   };
 
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
-
-        <Form onSubmit={handleRegister} ref={form}>
+    <Container component="main" maxWidth="sm">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <PersonIcon />
+        </Avatar>
+        <Typography className={classes.h1} component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <Form className={classes.form} onSubmit={handleRegister} ref={form}>
           {!successful && (
             <div>
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="username"
-                  value={username}
-                  onChange={onChangeUsername}
-                  validations={[required, vusername]}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="email"
-                  value={email}
-                  onChange={onChangeEmail}
-                  validations={[required, validEmail]}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <Input
-                  type="password"
-                  className="form-control"
-                  name="password"
-                  value={password}
-                  onChange={onChangePassword}
-                  validations={[required, vpassword]}
-                />
-              </div>
-
-              <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
-              </div>
+              <Input
+                type="text"
+                className={classes.input}
+                placeholder="User name"
+                name="username"
+                value={username}
+                onChange={onChangeUsername}
+                validations={[required, vusername]}
+              />
+              <Input
+                type="text"
+                className={classes.input}
+                placeholder="Email"
+                name="email"
+                value={email}
+                onChange={onChangeEmail}
+                validations={[required, validEmail]}
+              />
+              <Input
+                type="password"
+                className={classes.input}
+                placeholder="Password"
+                name="password"
+                value={password}
+                onChange={onChangePassword}
+                validations={[required, vpassword ]}
+              />
+              <Input
+                type="password"
+                className={classes.input}
+                placeholder="Repeat password"
+                name="repeatpassword"
+                value={repeatpassword}
+                onChange={onChangeRepeatPassword}
+                validations={[required, vpassword ]}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                disabled={loading}
+              >
+                {loading && (
+                  <CircularProgress color="primary" />
+                )}
+                <span className={classes.buttonText}>Sign Up</span>
+              </Button>
             </div>
           )}
 
-          {message && (
-            <div className="form-group">
-              <div
-                className={ successful ? "alert alert-success" : "alert alert-danger" }
-                role="alert"
-              >
-                {message}
-              </div>
+          {message && successful && (
+            <div className={classes.alert}>
+              <Alert severity="success" >{message}</Alert>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}>
+                <Link className={classes.link} href={"/login"} variant="body2">
+                  {"Login"}
+                </Link>
+              </Button>
+              
+            </div>
+          )}
+          {message && !successful && (
+            <div className={classes.alert}>
+              <Alert severity="error" >{message}</Alert>
             </div>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </div>
-    </div>
+    </Container>
   );
 };
 

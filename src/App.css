@@ -7,6 +7,11 @@
   text-decoration: none;
   margin-right: 2rem;
 }
+.main-container {
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+
+}
 
 .logo-link {
   color: #FFF;
@@ -49,7 +54,7 @@
 .menu-btn {
   display: none !important;
 }
-@media (max-width: 48rem) {
+@media (max-width: 48rem){
   .menu-btn {
     display: block !important;
   }
@@ -69,8 +74,7 @@
   }
   .main-container {
     margin-top: 4.5rem;
-    margin-right: -0.5rem;
-    margin-left: -0.5rem;
+
   }
 }
 
@@ -80,11 +84,18 @@
     padding-bottom: 2rem;
   }
   .main-container {
-    margin-top: 8.5rem;
-    margin-right: -0.5rem;
-    margin-left: -0.5rem;
+    margin-top: 8.25rem;
   }
 }
+
+@media (max-width: 12.45rem) {
+  .main-container {
+    margin-top: 10rem;
+    margin-left:-0.5rem;
+    margin-right: -6rem;
+  }
+}
+
 
 
 
