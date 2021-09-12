@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    marginTop: theme.spacing(1),
+    width: "101.25%",
     '&:hover': {
       background: "#777777",
     },
@@ -172,7 +173,6 @@ const Register = (props) => {
 
   return (
     <Container component="main" maxWidth="sm">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <PersonIcon />
