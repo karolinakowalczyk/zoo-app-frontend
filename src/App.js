@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import MenuIcon from '@material-ui/icons/Menu';
-import { createTheme, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton } from '@material-ui/core';
+import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { makeStyles } from "@material-ui/core/styles";
 import penguin from './assets/images/penguin.png';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import "./App.css";
 
@@ -16,7 +18,7 @@ import Home from "./components/HomePage/Home";
 import Profile from "./components/Profile";
 import BoardUser from "./components/BoardUser";
 import BoardAdmin from "./components/BoardAdminPage/BoardAdmin";
-import { AppBar } from "@material-ui/core";
+import OpeningHours from "./components/OpeningHours";
 
 const theme = createTheme({
   palette: {
@@ -26,16 +28,30 @@ const theme = createTheme({
   }
 })
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   paper: {
     width: 350
+  },
+  popper: {
+    backgroundColor: '#777777',
+    marginTop: theme.spacing(1),
+    padding: theme.spacing(1),
+  },
+  popperLink: {
+    color: '#FFF',
+    textDecoration: 'none',
+    '&:hover': {
+      color: '#81B214',
+    },
   }
-});
+}));
 
 const App = () => {
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
   const [showSiteBar, setShowSiteBar] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
@@ -56,11 +72,22 @@ const App = () => {
     setShowSiteBar(false);
   }
 
+  const handleVisitZooButton = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleVisitZooMobileButton = (event) => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
+
   return (
     <ThemeProvider theme={theme}>
-      <AppBar color="primary" className="app-bar-class" position="fixed" elevation={0}>
+      <AppBar color="primary" className="app-bar-class" elevation={0}>
         <Toolbar>
-          <Box display='flex' flexGrow={1}>
+          <Box display='flex' flexGrow={0.9}>
           <IconButton
             edge="start"
             aria-label="open drawer"
@@ -154,7 +181,21 @@ const App = () => {
                         <span className="item-text">Sign up</span>
                       </ListItemText>
                     </Link>
-                  </ListItem>
+                    </ListItem>
+                    <ListItem button className="item-link" onClick={handleVisitZooMobileButton}>
+                      <ListItemText>
+                        <span className="item-text">Visit Zoo</span>
+                      </ListItemText>
+                      {mobileOpen ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                    {mobileOpen && (
+                      <List component="div" disablePadding>
+                        <ListItem></ListItem>
+                        <ListItemText>
+                          <span className="item-text nested-text">Opening hours</span>
+                        </ListItemText>
+                      </List>
+                    )}
                 </div>
               )}
             </List>
@@ -213,6 +254,23 @@ const App = () => {
                   SIGN UP
                 </Link>
               </Typography>
+                <Typography >
+                  <Button  aria-describedby={id} type="button" onClick={handleVisitZooButton}>
+                    VISIT ZOO
+                    {open ? <ExpandLess /> : <ExpandMore />}
+                  </Button>
+                  <Popper id={id} open={open} anchorEl={anchorEl} style={{zIndex: "1101"}}>
+                    <List component="div" className={classes.popper}>
+                      <ListItem>
+                        <Link to={"/opening-hours"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                        <ListItemText>
+                          Opening hours
+                        </ListItemText>
+                    </Link>
+                      </ListItem>
+                    </List>
+                  </Popper>
+                </Typography> 
             </Toolbar>
           )}
         </Toolbar>
@@ -225,6 +283,7 @@ const App = () => {
           <Route exact path="/profile" component={Profile} />
           <Route path="/user" component={BoardUser} />
           <Route path="/admin" component={BoardAdmin} />
+          <Route exact path="/opening-hours" component={OpeningHours} />
         </Switch>
       </div>
     </ThemeProvider>
