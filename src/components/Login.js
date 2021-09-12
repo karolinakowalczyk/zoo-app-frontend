@@ -72,12 +72,21 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  const [error, setError] = useState("");
+  const [isEdit, setisEdit] = useState(false);
   
 
   const onChangeUsername = (e) => {
+    setisEdit(true);
     const username = e.target.value;
+    if (!username) {
+      setError("This filed is required");
+    }
+    else {
+      setError("");
+    }
     setUsername(username);
+    
   };
 
   const onChangePassword = (e) => {
@@ -92,8 +101,11 @@ const Login = (props) => {
     setMessage("");
     setLoading(true);
 
-    form.current.validateAll();
+    if (error === "" && isEdit === false) {
+      setError("This field is required!");
+    }
 
+    //form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(username, password).then(
         () => {
@@ -130,12 +142,14 @@ const Login = (props) => {
         <Form className={classes.form} onSubmit={handleLogin} ref={form}>
           <Input
             className={classes.input}
-            validations={[required]}
             name="username"
             value={username}
             onChange={onChangeUsername}
             placeholder="User name"
           />
+          <div>
+            { error }
+          </div>
           <Input
             className={classes.input}
             validations={[required]}
@@ -163,12 +177,12 @@ const Login = (props) => {
             <span className={classes.buttonText}>Login</span>
           </Button>
           <Grid container>
-            <Grid item xs={6} container justify="flex-start">
+            <Grid item xs={6} container justifyContent="flex-start">
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
-            <Grid item xs={6} container justify="flex-end">
+            <Grid item xs={6} container justifyContent="flex-end">
               <Link href={"/register"} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
