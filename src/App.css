@@ -96,6 +96,21 @@
   }
 }
 
+.popover {
+  position: absolute;
+  z-index: 50000;
+}
+
+.nested-text {
+  margin-left: 3rem;
+  font-size: 1.5em;
+}
+
+.arrow {
+  color: #9e9e9e;
+  width: 3rem !important;
+  height: auto !important;
+}
 
 
 

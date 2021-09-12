@@ -163,12 +163,12 @@ const Login = (props) => {
             <span className={classes.buttonText}>Login</span>
           </Button>
           <Grid container>
-            <Grid item xs={6} container justify="flex-start">
+            <Grid item xs={6} container justifyContent="flex-start">
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
-            <Grid item xs={6} container justify="flex-end">
+            <Grid item xs={6} container justifyContent="flex-end">
               <Link href={"/register"} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
