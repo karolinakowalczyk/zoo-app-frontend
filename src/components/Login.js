@@ -46,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    width: "101.25%",
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     '&:hover': {
       background: "#777777",
     },
@@ -131,7 +133,6 @@ const Login = (props) => {
 
   return (
     <Container component="main" maxWidth="sm">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <PersonIcon />
