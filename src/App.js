@@ -190,10 +190,13 @@ const App = () => {
                     </ListItem>
                     {mobileOpen && (
                       <List component="div" disablePadding>
-                        <ListItem></ListItem>
-                        <ListItemText>
-                          <span className="item-text nested-text">Opening hours</span>
-                        </ListItemText>
+                        <ListItem>
+                        <Link to={"/opening-hours"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                          <ListItemText>
+                            <span className="item-text nested-text">Opening hours</span>
+                          </ListItemText>
+                        </Link>
+                        </ListItem>
                       </List>
                     )}
                 </div>
