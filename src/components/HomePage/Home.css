@@ -1,143 +1,16 @@
 .container {
     background-color: #81B214;
     width: 100%;
-    padding-left: 6rem;
-    padding-right: 6rem;
-    padding-bottom: 7rem;
+    padding-left: 5rem;
+    padding-bottom: 5rem;
     background-image: url('../../assets/images/penguinBackground.png');
+    background-size: 20rem;
+    width: auto;
+    height: 30rem;
     background-repeat: no-repeat;
-    
+    background-position: 90%;
+
 }
-
-@media (min-width: 100rem) {
-    .container {
-        background-position: 90%;
-        background-size: 30rem;
-        width: auto;
-        height: 44em;
-    }
-
-    h1 {
-        font-size: 4.5rem;
-        margin-top: -2rem;
-        margin-bottom: -2rem;
-    }
-    h3 {
-        padding-top: 5rem;
-        font-size: 2em;
-        margin-bottom: 4rem;
-    }
-}
-
-@media (min-width: 56rem) and (max-width: 100rem) {
-    h1 {
-        font-size: 3rem;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-    .container {
-        background-position: 90%;
-        background-size: 20rem;
-        width: auto;
-        height: 25em;
-    }
-    h3 {
-        padding-top: 3rem;
-        font-size: 1.5em;
-        margin-bottom: 2rem;
-    }
-}
-
-@media (min-width: 48rem) and (max-width: 56rem) {
-    h1 {
-        font-size: 3rem;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .container {
-        background-position: 90%;
-        background-size: 20rem;
-        width: auto;
-        height: 25em;
-    }
-
-    h3 {
-        padding-top: 3rem;
-        font-size: 1.5em;
-        margin-bottom: 1rem;
-    }
-}
-
-@media (min-width: 24rem) and (max-width: 48rem) {
-    h1 {
-        font-size: 2rem;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .container {
-        background-position: 90%;
-        background-size: 20rem;
-        width: auto;
-        height: 25em;
-    }
-
-    h3 {
-        padding-top: 2rem;
-        font-size: 1.5em;
-        margin-bottom: 2rem;
-    }
-}
-
-@media (min-width: 16rem) and (max-width: 24rem) {
-    h1 {
-        font-size: 2rem;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .container {
-        background-position: 130%;
-        background-size: 18rem;
-        width: auto;
-        height: 28em;
-        padding-left: 2rem;
-        padding-right: 2rem;
-    }
-
-    h3 {
-        padding-top: 2rem;
-        font-size: 1.5em;
-        margin-bottom: 3rem;
-    }
-}
-
-@media (max-width: 16rem){
-
-    h1 {
-        font-size: 1rem;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .container {
-        margin: 0;
-        background-position: 50%;
-        background-size: 10rem;
-        width: auto;
-        height: 15em;
-        margin-top: 8.75rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-    }
-
-    h3 {
-        visibility: hidden;
-        margin-bottom: 2rem;
-    }
-}
-
 h1 {
     color: #FFF;
     font-family: 'Rammetto One',
@@ -145,11 +18,14 @@ h1 {
     Arial,
     sans-serif;
     font-weight: 700;
+    font-size: 4.5rem;
     padding: 0rem;
-    
+    margin-top: -2rem;
+    margin-bottom: -2rem;
 }
 
 h3 {
+    font-size: 2em;
     color: #FFF;
     font-weight: 400;
     font-family: 'Montserrat',

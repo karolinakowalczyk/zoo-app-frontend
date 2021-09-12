@@ -58,9 +58,9 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar color="primary" className="app-bar-class" elevation={0}>
+      <AppBar color="primary" className="app-bar-class" position="fixed" elevation={0}>
         <Toolbar>
-          <Box display='flex' flexGrow={0.9}>
+          <Box display='flex' flexGrow={1}>
           <IconButton
             edge="start"
             aria-label="open drawer"
