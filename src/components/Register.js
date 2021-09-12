@@ -3,7 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-import { Container, CssBaseline, Avatar, Typography, Button, Link, CircularProgress  } from '@material-ui/core';
+import { Container, Avatar, Typography, Button, Link, CircularProgress  } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
