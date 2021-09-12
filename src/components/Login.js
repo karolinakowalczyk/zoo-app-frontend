@@ -105,7 +105,7 @@ const Login = (props) => {
       setError("This field is required!");
     }
 
-    //form.current.validateAll();
+    form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(username, password).then(
         () => {
