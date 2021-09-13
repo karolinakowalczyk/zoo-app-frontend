@@ -3,7 +3,6 @@ import AttractionsService from "../services/attractions.service";
 
 const Attractions = () => {
   const [attractionsData, setAttractionsData] = useState([]);
-   const [attractionsHours, setAttractionsHours] = useState([]);
   useEffect(() => {
     AttractionsService.getAttractions().then(
       (response) => {
@@ -22,7 +21,7 @@ const Attractions = () => {
     );
   }, []);
 
-  const convertMinsToTime = (mins) => {
+const convertMinsToTime = (mins) => {
   let hours = Math.floor(mins / 60);
   let minutes = mins % 60;
   minutes = minutes < 10 ? '0' + minutes : minutes;
