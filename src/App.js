@@ -19,6 +19,7 @@ import Profile from "./components/Profile";
 import BoardUser from "./components/BoardUser";
 import BoardAdmin from "./components/BoardAdminPage/BoardAdmin";
 import OpeningHours from "./components/OpeningHours";
+import Attractions from "./components/Attractions";
 
 const theme = createTheme({
   palette: {
@@ -197,6 +198,13 @@ const App = () => {
                             </ListItemText>
                           </Link>
                         </ListItem>
+                        <ListItem>
+                          <Link to={"/attractions"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                            <ListItemText>
+                              <span className="item-text nested-text">Attracions</span>
+                            </ListItemText>
+                          </Link>
+                        </ListItem>
                       </List>
                     )}
                 </div>
@@ -269,7 +277,14 @@ const App = () => {
                         <ListItemText>
                           Opening hours
                         </ListItemText>
-                    </Link>
+                        </Link>
+                      </ListItem>
+                      <ListItem>
+                        <Link to={"/attractions"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                        <ListItemText>
+                          Attractions
+                        </ListItemText>
+                        </Link>
                       </ListItem>
                     </List>
                   </Popper>
@@ -287,6 +302,7 @@ const App = () => {
           <Route path="/user" component={BoardUser} />
           <Route path="/admin" component={BoardAdmin} />
           <Route exact path="/opening-hours" component={OpeningHours} />
+          <Route exact path="/attractions" component={Attractions} />
         </Switch>
       </div>
     </ThemeProvider>
