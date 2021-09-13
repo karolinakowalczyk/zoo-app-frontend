@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import AttractionsService from "../services/attractions.service";
+import createUUID from "../helpers/createUUID";
+import { Button } from '@material-ui/core';
 
-const Attractions = () => {
+const Attractions = (props) => {
   const [attractionsData, setAttractionsData] = useState([]);
-   const [attractionsHours, setAttractionsHours] = useState([]);
   useEffect(() => {
     AttractionsService.getAttractions().then(
       (response) => {
@@ -23,23 +24,23 @@ const Attractions = () => {
   }, []);
 
   const convertMinsToTime = (mins) => {
-  let hours = Math.floor(mins / 60);
-  let minutes = mins % 60;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  return `${hours ? `${hours}:` : ''}${minutes}`;
-}
+    let hours = Math.floor(mins / 60);
+    let minutes = mins % 60;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours ? `${hours}:` : ''}${minutes}`;
+  }
 
-
-const displayAttractions = attractionsData.map((attraction) =>
-  <div>
+const displayAttractions = attractionsData.map((attraction, index) =>
+  <div key={index}>
     <li key={attraction.name}>{attraction.name}</li>
     <ul>
-      {attraction.hours.map((hour) => (
-          <li key={attraction.id}>{convertMinsToTime(hour)}</li>
-      ))}
-  </ul> 
+        {attraction.hours.map((hour) => (
+            <li key={createUUID(hour)}>{convertMinsToTime(hour)}</li>
+        ))}
+    </ul>
+    {props.user &&
+        <Button>Add to plan</Button>}
   </div>
-  
 );
 
   return (
@@ -48,6 +49,7 @@ const displayAttractions = attractionsData.map((attraction) =>
       <ul>
         {displayAttractions}
       </ul>
+      
     </div>
   );
 };
