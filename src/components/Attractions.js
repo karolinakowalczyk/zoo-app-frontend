@@ -23,13 +23,12 @@ const Attractions = (props) => {
     );
   }, []);
 
-  const convertMinsToTime = (mins) => {
-    let hours = Math.floor(mins / 60);
-    let minutes = mins % 60;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    return `${hours ? `${hours}:` : ''}${minutes}`;
-  }
-
+const convertMinsToTime = (mins) => {
+  let hours = Math.floor(mins / 60);
+  let minutes = mins % 60;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  return `${hours ? `${hours}:` : ''}${minutes}`;
+}
 const displayAttractions = attractionsData.map((attraction, index) =>
   <div key={index}>
     <li key={attraction.name}>{attraction.name}</li>
