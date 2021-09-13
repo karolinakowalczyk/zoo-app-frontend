@@ -182,13 +182,15 @@ const App = () => {
                         <span className="item-text">Sign up</span>
                       </ListItemText>
                     </Link>
-                    </ListItem>
-                    <ListItem button className="item-link" onClick={handleVisitZooMobileButton}>
-                      <ListItemText>
-                        <span className="item-text">Visit Zoo</span>
-                      </ListItemText>
-                      {mobileOpen ? <ExpandLess className="arrow"/> : <ExpandMore className="arrow" />}
-                    </ListItem>
+                  </ListItem>
+                </div>
+              )}
+              <ListItem button className="item-link" onClick={handleVisitZooMobileButton}>
+                  <ListItemText>
+                    <span className="item-text">Visit Zoo</span>
+                  </ListItemText>
+                  {mobileOpen ? <ExpandLess className="arrow"/> : <ExpandMore className="arrow" />}
+                  </ListItem>
                     {mobileOpen && (
                       <List component="div" disablePadding>
                         <ListItem>
@@ -205,11 +207,9 @@ const App = () => {
                             </ListItemText>
                           </Link>
                         </ListItem>
-                      </List>
+                      </List> 
                     )}
-                </div>
-              )}
-            </List>
+              </List>
           </Drawer>
           
           <Typography className="typography-links">
@@ -265,32 +265,32 @@ const App = () => {
                   SIGN UP
                 </Link>
               </Typography>
-                <Typography >
-                  <Button  aria-describedby={id} type="button" onClick={handleVisitZooButton}>
-                    VISIT ZOO
-                    {open ? <ExpandLess /> : <ExpandMore />}
-                  </Button>
-                  <Popper id={id} open={open} anchorEl={anchorEl} style={{zIndex: "1101"}}>
-                    <List component="div" className={classes.popper}>
-                      <ListItem>
-                        <Link to={"/opening-hours"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
-                        <ListItemText>
-                          Opening hours
-                        </ListItemText>
-                        </Link>
-                      </ListItem>
-                      <ListItem>
-                        <Link to={"/attractions"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
-                        <ListItemText>
-                          Attractions
-                        </ListItemText>
-                        </Link>
-                      </ListItem>
-                    </List>
-                  </Popper>
-                </Typography> 
             </Toolbar>
           )}
+          <Typography >
+            <Button  aria-describedby={id} type="button" onClick={handleVisitZooButton}>
+              VISIT ZOO
+              {open ? <ExpandLess /> : <ExpandMore />}
+            </Button>
+            <Popper id={id} open={open} anchorEl={anchorEl} style={{zIndex: "1101"}}>
+              <List component="div" className={classes.popper}>
+                <ListItem>
+                  <Link to={"/opening-hours"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                  <ListItemText>
+                    Opening hours
+                  </ListItemText>
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to={"/attractions"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                  <ListItemText>
+                    Attractions
+                  </ListItemText>
+                  </Link>
+                </ListItem>
+              </List>
+            </Popper>
+          </Typography> 
         </Toolbar>
       </AppBar>
       <div className="main-container">
@@ -302,7 +302,7 @@ const App = () => {
           <Route path="/user" component={BoardUser} />
           <Route path="/admin" component={BoardAdmin} />
           <Route exact path="/opening-hours" component={OpeningHours} />
-          <Route exact path="/attractions" component={Attractions} />
+          <Route exact path="/attractions"><Attractions user={currentUser}></Attractions></Route>
         </Switch>
       </div>
     </ThemeProvider>
