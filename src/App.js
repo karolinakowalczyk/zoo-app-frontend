@@ -20,6 +20,8 @@ import BoardUser from "./components/BoardUser";
 import BoardAdmin from "./components/BoardAdminPage/BoardAdmin";
 import OpeningHours from "./components/OpeningHours";
 import Attractions from "./components/Attractions";
+import RequestResetPassword from "./components/RequestResetPassword";
+import ResetPassword from "./components/ResetPassword";
 
 const theme = createTheme({
   palette: {
@@ -267,7 +269,7 @@ const App = () => {
               </Typography>
             </Toolbar>
           )}
-          <Typography >
+          <Typography className="typography-links">
             <Button  aria-describedby={id} type="button" onClick={handleVisitZooButton}>
               VISIT ZOO
               {open ? <ExpandLess /> : <ExpandMore />}
@@ -303,6 +305,8 @@ const App = () => {
           <Route path="/admin" component={BoardAdmin} />
           <Route exact path="/opening-hours" component={OpeningHours} />
           <Route exact path="/attractions"><Attractions user={currentUser}></Attractions></Route>
+          <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
+          <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
         </Switch>
       </div>
     </ThemeProvider>
