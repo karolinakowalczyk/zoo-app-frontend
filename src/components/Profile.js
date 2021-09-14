@@ -1,20 +1,22 @@
 import React from "react";
 import AuthService from "../services/auth.service";
+import { Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+ 
+}));
 
 const Profile = () => {
   const currentUser = AuthService.getCurrentUser();
 
   return (
-    <div className="container">
+    <Container>
       <header className="jumbotron">
         <h3>
           <strong>{currentUser.username}</strong> Profile
         </h3>
       </header>
-      <p>
-        <strong>Token:</strong> {currentUser.accessToken.substring(0, 20)} ...{" "}
-        {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
-      </p>
       <p>
         <strong>Id:</strong> {currentUser.id}
       </p>
@@ -26,7 +28,7 @@ const Profile = () => {
         {currentUser.roles &&
           currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
       </ul>
-    </div>
+    </Container>
   );
 };
 
