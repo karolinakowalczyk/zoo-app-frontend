@@ -179,8 +179,8 @@ const Login = (props) => {
           </Button>
           <Grid container>
             <Grid item xs={6} container justifyContent="flex-start">
-              <Link href="#" variant="body2">
-                Forgot password?
+              <Link href="/request-reset-password" variant="body2">
+                {"Forgot password?"}
               </Link>
             </Grid>
             <Grid item xs={6} container justifyContent="flex-end">

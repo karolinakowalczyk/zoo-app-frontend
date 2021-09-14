@@ -22,6 +22,12 @@ const login = async (username, password) => {
     return response.data;
 };
 
+const requestResetPassword = async (email) => {
+  return axios.post(API_URL + "requestResetPassword", {
+    email,
+  });
+}
+
 const logout = () => {
   localStorage.removeItem("user");
 };
@@ -30,9 +36,11 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
 
+
 const authService = {
   register,
   login,
+  requestResetPassword,
   logout,
   getCurrentUser,
 };
