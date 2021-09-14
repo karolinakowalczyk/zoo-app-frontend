@@ -21,6 +21,7 @@ import BoardAdmin from "./components/BoardAdminPage/BoardAdmin";
 import OpeningHours from "./components/OpeningHours";
 import Attractions from "./components/Attractions";
 import RequestResetPassword from "./components/RequestResetPassword";
+import ResetPassword from "./components/ResetPassword";
 
 const theme = createTheme({
   palette: {
@@ -305,6 +306,7 @@ const App = () => {
           <Route exact path="/opening-hours" component={OpeningHours} />
           <Route exact path="/attractions"><Attractions user={currentUser}></Attractions></Route>
           <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
+          <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
         </Switch>
       </div>
     </ThemeProvider>

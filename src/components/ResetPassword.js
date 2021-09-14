@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import MailIcon from '@material-ui/icons/Mail';
 import Alert from '@material-ui/lab/Alert';
 import AuthService from "../services/auth.service";
+import { useParams } from "react-router-dom";
 
 const required = (value) => {
   if (!value) {
@@ -68,21 +69,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const RequestResetPassword = (props) => {
+const ResetPassword = (props) => {
   const classes = useStyles();
-
+  
+  const { hash } = useParams();
+    
   const form = useRef();
   const checkBtn = useRef();
 
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [successful, setSuccessful] = useState(false);
 
 
-  const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
+  const onChangePassword = (e) => {
+    const password = e.target.value;
+    setPassword(password);
   };
 
   const handleResetPassword = (e) => {
@@ -92,10 +95,11 @@ const RequestResetPassword = (props) => {
     setMessage("");
     setLoading(true);
     setSuccessful(false);
-
+    console.log(hash);
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
-      AuthService.requestResetPassword(email).then(
+        AuthService.resetPassword(hash, password).then(
+          //jak wziąć z linku token i userId???
         (response) => {
           setLoading(false);
           setMessage(response.data.message);
@@ -128,14 +132,15 @@ const RequestResetPassword = (props) => {
             <Form className={classes.form} onSubmit={handleResetPassword} ref={form}>
                   {!successful && (
                       <div>
-                          <Input
-                              className={classes.input}
-                              name="email"
-                              value={email}
-                              onChange={onChangeEmail}
-                              placeholder="Email"
-                              validations={[required]}
-                          />
+                            <Input
+                                className={classes.input}
+                                validations={[required]}
+                                placeholder="Password"
+                                name="password"
+                                type="password"
+                                value={password}
+                                onChange={onChangePassword}
+                            />
                           <Button
                               type="submit"
                               fullWidth
@@ -147,7 +152,7 @@ const RequestResetPassword = (props) => {
                               {loading && (
                                   <CircularProgress color="primary" />
                               )}
-                              <span className={classes.buttonText}>Send email</span>
+                              <span className={classes.buttonText}>Change password</span>
                           </Button>
                       </div>
                   )}
@@ -178,4 +183,4 @@ const RequestResetPassword = (props) => {
   );
 };
 
-export default RequestResetPassword;
+export default ResetPassword;

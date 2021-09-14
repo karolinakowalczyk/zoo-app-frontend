@@ -28,6 +28,13 @@ const requestResetPassword = async (email) => {
   });
 }
 
+const resetPassword = async (hash, password) => {
+  return axios.post(API_URL + "resetPassword", {
+    hash,
+    password,
+  });
+}
+
 const logout = () => {
   localStorage.removeItem("user");
 };
@@ -41,6 +48,7 @@ const authService = {
   register,
   login,
   requestResetPassword,
+  resetPassword,
   logout,
   getCurrentUser,
 };
