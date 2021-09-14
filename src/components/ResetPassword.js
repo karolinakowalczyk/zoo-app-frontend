@@ -165,8 +165,8 @@ const ResetPassword = (props) => {
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}>
-                                <Link className={classes.link} href={"/"} variant="body2">
-                                {"Back to main site"}
+                                <Link className={classes.link} href={"/login"} variant="body2">
+                                {"Login with new password"}
                                 </Link>
                             </Button>
                         </div>
