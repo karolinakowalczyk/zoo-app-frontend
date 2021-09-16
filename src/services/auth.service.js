@@ -55,6 +55,11 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
 
+const updateCurrentUser = (data) => {
+  localStorage.removeItem("user");
+  localStorage.setItem("user", JSON.stringify(data));
+}
+
 
 const authService = {
   register,
@@ -64,6 +69,7 @@ const authService = {
   editProfile,
   logout,
   getCurrentUser,
+  updateCurrentUser
 };
 
 export default authService;

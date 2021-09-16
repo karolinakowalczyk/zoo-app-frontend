@@ -37,8 +37,6 @@ const useStyles = makeStyles((theme) => ({
 const Profile = () => {
   const classes = useStyles();
   const currentUser = AuthService.getCurrentUser();
-  //const userData = AuthService.getCurrentUser();
-  //const [currentUser, setcurrentUser] = useState(AuthService.getCurrentUser());
 
   const [disable, setDisable] = useState(true);
   const [name, setName] = useState(currentUser.name || '');
@@ -50,14 +48,6 @@ const Profile = () => {
   const [successful, setSuccessful] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [isEdited, setIsEdited] = useState(false);
-
-  const [saveName, setSaveName] = useState("");
-  const [saveSurname, setSaveSurname] = useState("");
-  const [saveAddress, setSaveAddress] = useState("");
-  const [savePostalCode, setSavePostalCode] = useState("");
-  const [saveCity, setSaveCity] = useState("");
-  const [savePhoneNumber, setSavePhoneNumber] = useState("");
 
   const form = useRef();
   const checkBtn = useRef();
@@ -81,35 +71,15 @@ const Profile = () => {
     setPhoneNumber(e.target.value);
   };
 
-  const setEntryData = (currentName, currentSurname, currentAddress, currentPostalCode, currentCity, currentPhoneNumber) => {
-    setSaveName(currentName);
-    setSaveSurname(currentSurname);
-    setSaveAddress(currentAddress);
-    setSavePostalCode(currentPostalCode);
-    setSaveCity(currentCity);
-    setSavePhoneNumber(currentPhoneNumber);
-
-  }
-
   const handleEditButton = (e) => {
     setDisable(!disable);
     if (disable === false) {
-      if (isEdited === false) {
-        setName(currentUser.name || '');
-        setSurname(currentUser.surname || '');
-        setAddress(currentUser.address || '');
-        setPostalCode(currentUser.postalCode || '');
-        setCity(currentUser.city || '');
-        setPhoneNumber(currentUser.phonenumber || '');
-      }
-      else {
-        setName(saveName);
-        setSurname(saveSurname);
-        setAddress(saveAddress);
-        setPostalCode(savePostalCode);
-        setCity(saveCity);
-        setPhoneNumber(savePhoneNumber);
-      }
+      setName(currentUser.name || '');
+      setSurname(currentUser.surname || '');
+      setAddress(currentUser.address || '');
+      setPostalCode(currentUser.postalCode || '');
+      setCity(currentUser.city || '');
+      setPhoneNumber(currentUser.phonenumber || '');
     }
   }
 
@@ -126,12 +96,24 @@ const Profile = () => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.editProfile(currentUser.email, name, surname, address, postalCode, city, phoneNumber).then(
         (response) => {
-          setIsEdited(true);
           setLoading(false);
           setMessage(response.data.message);
           setSuccessful(true);
-          setEntryData(name, surname, address, postalCode, city, phoneNumber);
           setDisable(true);
+          const data = ({
+            id: currentUser._id,
+            username: currentUser.username,
+            email: currentUser.email,
+            name: name,
+            surname: surname,
+            address: address,
+            postalCode: postalCode,
+            city: city,
+            phonenumber: phoneNumber,
+            roles: currentUser.roles,
+            accessToken: currentUser.accessToken
+          });
+          AuthService.updateCurrentUser(data);
         },
         (error) => {
           const resMessage =
@@ -167,7 +149,6 @@ const Profile = () => {
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
-                placeholder={currentUser.name}
                 value={name}
                 onChange={onChangeName}
                 name="name"
@@ -179,7 +160,6 @@ const Profile = () => {
                 className={classes.input}
                 type="text"
                 disabled={disable}
-                placeholder={currentUser.surname}
                 value={surname}
                 onChange={onChangeSurname}
                 name="surname"
@@ -190,7 +170,6 @@ const Profile = () => {
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
-                placeholder={currentUser.address}
                 value={address}
                 onChange={onChangeAddress}
                 name="address"
@@ -201,7 +180,6 @@ const Profile = () => {
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
-                placeholder={currentUser.postalCode}
                 value={postalCode}
                 onChange={onChangePostalCode}
                 name="postalCode"
@@ -212,7 +190,6 @@ const Profile = () => {
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
-                placeholder={currentUser.city}
                 value={city}
                 onChange={onChangeCity}
                 name="city"
@@ -223,7 +200,6 @@ const Profile = () => {
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
-                placeholder={currentUser.phonenumber}
                 value={phoneNumber}
                 onChange={onChangePhoneNumber}
                 //value={disable ? (currentUser.phoneNumber || '') : phoneNumber }
