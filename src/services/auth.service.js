@@ -35,6 +35,18 @@ const resetPassword = async (hash, password) => {
   });
 }
 
+const editProfile = async (email, name, surname, address, postalCode, city, phonenumber) => {
+  return axios.put(API_URL + "editProfile", {
+    email,
+    name,
+    surname,
+    address,
+    postalCode,
+    city,
+    phonenumber
+  });
+}
+
 const logout = () => {
   localStorage.removeItem("user");
 };
@@ -49,6 +61,7 @@ const authService = {
   login,
   requestResetPassword,
   resetPassword,
+  editProfile,
   logout,
   getCurrentUser,
 };
