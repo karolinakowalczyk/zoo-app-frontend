@@ -295,7 +295,7 @@ const App = () => {
           </Typography> 
         </Toolbar>
       </AppBar>
-      <div className="main-container">
+      <Box className="main-container">
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
           <Route exact path="/login" component={Login} />
@@ -308,7 +308,7 @@ const App = () => {
           <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
           <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
         </Switch>
-      </div>
+      </Box>
     </ThemeProvider>
   );
 };

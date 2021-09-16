@@ -156,8 +156,7 @@ const ResetPassword = (props) => {
                           </Button>
                       </div>
                   )}
-                  {message && successful && (
-                        
+                  {message && successful && (   
                       <div className={classes.alert}>
                             <Alert severity="success" >{message}</Alert>
                             <Button

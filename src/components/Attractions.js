@@ -23,8 +23,6 @@ const Attractions = (props) => {
           error.toString();
           setMessage(resMessage);
           setSuccessful(false); 
-        
-        //setAttractionsData(_content);
       }
     );
   }, []);

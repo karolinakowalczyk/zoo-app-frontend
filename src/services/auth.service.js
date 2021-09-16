@@ -35,6 +35,18 @@ const resetPassword = async (hash, password) => {
   });
 }
 
+const editProfile = async (email, name, surname, address, postalCode, city, phonenumber) => {
+  return axios.put(API_URL + "editProfile", {
+    email,
+    name,
+    surname,
+    address,
+    postalCode,
+    city,
+    phonenumber
+  });
+}
+
 const logout = () => {
   localStorage.removeItem("user");
 };
@@ -43,14 +55,21 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
 
+const updateCurrentUser = (data) => {
+  localStorage.removeItem("user");
+  localStorage.setItem("user", JSON.stringify(data));
+}
+
 
 const authService = {
   register,
   login,
   requestResetPassword,
   resetPassword,
+  editProfile,
   logout,
   getCurrentUser,
+  updateCurrentUser
 };
 
 export default authService;
