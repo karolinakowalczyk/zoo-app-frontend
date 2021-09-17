@@ -22,6 +22,8 @@ import OpeningHours from "./components/OpeningHours";
 import Attractions from "./components/Attractions";
 import RequestResetPassword from "./components/RequestResetPassword";
 import ResetPassword from "./components/ResetPassword";
+import Reservation from "./components/Reservation";
+import LoginRequired from "./components/LoginRequired";
 
 const theme = createTheme({
   palette: {
@@ -208,7 +210,24 @@ const App = () => {
                               <span className="item-text nested-text">Attracions</span>
                             </ListItemText>
                           </Link>
+                      </ListItem>
+                      {currentUser ? (
+                        <ListItem>
+                          <Link to={"/reservation"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                            <ListItemText>
+                              <span className="item-text nested-text">Make Reservation</span>
+                            </ListItemText>
+                          </Link>
                         </ListItem>
+                      ) : (
+                        <ListItem>
+                          <Link to={"/login-required"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                            <ListItemText>
+                              <span className="item-text nested-text">Make Reservation</span>
+                            </ListItemText>
+                          </Link>
+                        </ListItem>
+                      )}
                       </List> 
                     )}
               </List>
@@ -290,6 +309,23 @@ const App = () => {
                   </ListItemText>
                   </Link>
                 </ListItem>
+                {currentUser ? (
+                    <ListItem>
+                      <Link to={"/reservation"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                      <ListItemText>
+                        Make Reservation
+                      </ListItemText>
+                      </Link>
+                    </ListItem>
+                ): (
+                    <ListItem>
+                      <Link to={"/login-required"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                      <ListItemText>
+                        Make Reservation
+                      </ListItemText>
+                      </Link>
+                    </ListItem>
+                  )}
               </List>
             </Popper>
           </Typography> 
@@ -307,6 +343,8 @@ const App = () => {
           <Route exact path="/attractions"><Attractions user={currentUser}></Attractions></Route>
           <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
           <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
+          <Route exact path="/reservation" component={Reservation}></Route>
+          <Route exact path="/login-required" component={LoginRequired}></Route>
         </Switch>
       </Box>
     </ThemeProvider>
