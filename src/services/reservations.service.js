@@ -6,11 +6,12 @@ const getUserReservations = () => {
   return axios.get(API_URL + "getUserReservations");
 };
 
-const createReservation = async (userId, date, expirationDate) => {
+const createReservation = async (userId, date, expirationDate, quantity) => {
   return axios.post(API_URL + "createReservation", {
     userId,
     date,
-    expirationDate
+    expirationDate,
+    quantity
   });
 }
 

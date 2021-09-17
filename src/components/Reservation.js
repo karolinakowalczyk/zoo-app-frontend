@@ -47,6 +47,17 @@ const Reservation = () => {
     const [successful, setSuccessful] = useState(false);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [quantity, setQuantity] = useState(1);
+
+    const increment = () => {
+        setQuantity(quantity + 1);
+    }
+    const decrement = () => {
+        if (quantity !== 1) {
+            setQuantity(quantity - 1);
+        }
+        
+    }
 
     const onDateChange = date => {
         setChangeDate(date);
@@ -56,6 +67,7 @@ const Reservation = () => {
         const current = new Date(date);
         current.setDate(current.getDate() + days);
         setExpiredDate(current.toString());
+        
     }
 
     const getMonthName = (month) => {
@@ -94,8 +106,10 @@ const Reservation = () => {
         setMessage("");
         setLoading(true);
         setSuccessful(false);
+
+        console.log("DATE" + date);
     
-        ReservationsService.createReservation(currentUser.id, date, expiredDate).then(
+        ReservationsService.createReservation(currentUser.id, date.toString(), expiredDate.toString(), quantity).then(
             (response) => {
                 setLoading(false);
                 setMessage(response.data.message);
@@ -124,15 +138,24 @@ const Reservation = () => {
                 value={date}
                 minDate={new Date()}
             />
-            <p>{date.toString()}</p>
-            
             <h2>You choose date:</h2>
             <p>{currentDay}</p>
             <p>{getMonthName(currentMonth)}</p>
             <p>{currentYear}</p>
-            <p>ADDED DATE</p>
-            <p>{date.toString()}</p>
-            <p>{expiredDate.toString()}</p>
+            <div>
+                <p>
+                    Set the quantity
+                </p>
+                <div className="quantity-input">
+                    <button className="quantity-input__modifier quantity-input__modifier--left" onClick={decrement}>
+                    -
+                    </button>
+                    <input className="quantity-input__screen" type="text" value={quantity} readOnly />
+                    <button className="quantity-input__modifier quantity-input__modifier--right" onClick={increment}>
+                    +
+                    </button>  
+                </div>  
+            </div>
             <Button onClick={handleMakeReservation}>Make reservation</Button>
             {message && successful && (
                 <div className={classes.alert}>
@@ -146,7 +169,6 @@ const Reservation = () => {
                     {"Login"}
                     </Link>
                 </Button>
-                
                 </div>
             )}
             {message && !successful && (
