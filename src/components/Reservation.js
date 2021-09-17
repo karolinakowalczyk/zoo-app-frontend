@@ -55,7 +55,7 @@ const Reservation = () => {
         setCurrentYear(date.getFullYear().toString());
         const current = new Date(date);
         current.setDate(current.getDate() + days);
-        setExpiredDate(current.toDateString());
+        setExpiredDate(current.toString());
     }
 
     const getMonthName = (month) => {
@@ -95,7 +95,7 @@ const Reservation = () => {
         setLoading(true);
         setSuccessful(false);
     
-        ReservationsService.createReservation(currentUser.id, date.toString(), expiredDate.toString()).then(
+        ReservationsService.createReservation(currentUser.id, date, expiredDate).then(
             (response) => {
                 setLoading(false);
                 setMessage(response.data.message);
