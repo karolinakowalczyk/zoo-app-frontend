@@ -3,11 +3,13 @@ import AttractionsService from "../services/attractions.service";
 import createUUID from "../helpers/createUUID";
 import { Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import AuthService from "../services/auth.service";
 
 const Attractions = (props) => {
   const [attractionsData, setAttractionsData] = useState([]);
   const [successful, setSuccessful] = useState(true);
   const [message, setMessage] = useState("");
+  const currentUser = AuthService.getCurrentUser();
 
   useEffect(() => {
     AttractionsService.getAttractions().then(
@@ -42,7 +44,7 @@ const displayAttractions = attractionsData.map((attraction, index) =>
             <li key={createUUID(hour)}>{convertMinsToTime(hour)}</li>
         ))}
     </ul>
-    {props.user &&
+    {currentUser &&
         <Button>Add to plan</Button>}
   </div>
 );
