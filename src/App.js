@@ -24,6 +24,7 @@ import RequestResetPassword from "./components/RequestResetPassword";
 import ResetPassword from "./components/ResetPassword";
 import Reservation from "./components/Reservation";
 import LoginRequired from "./components/LoginRequired";
+import ReservationsList from "./components/ReservationsList";
 
 const theme = createTheme({
   palette: {
@@ -310,6 +311,7 @@ const App = () => {
                   </Link>
                 </ListItem>
                 {currentUser ? (
+                  <div>
                     <ListItem>
                       <Link to={"/reservation"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
                       <ListItemText>
@@ -317,6 +319,14 @@ const App = () => {
                       </ListItemText>
                       </Link>
                     </ListItem>
+                    <ListItem>
+                      <Link to={"/reservations-list"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                      <ListItemText>
+                        Your reservations
+                      </ListItemText>
+                      </Link>
+                    </ListItem>
+                  </div>
                 ): (
                     <ListItem>
                       <Link to={"/login-required"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
@@ -340,11 +350,14 @@ const App = () => {
           <Route path="/user" component={BoardUser} />
           <Route path="/admin" component={BoardAdmin} />
           <Route exact path="/opening-hours" component={OpeningHours} />
-          <Route exact path="/attractions"><Attractions user={currentUser}></Attractions></Route>
+          
+          <Route exact path="/attractions" component={Attractions}></Route>
           <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
           <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
           <Route exact path="/reservation" component={Reservation}></Route>
           <Route exact path="/login-required" component={LoginRequired}></Route>
+          <Route exact path="/reservations-list" component={ReservationsList}></Route>
+          
         </Switch>
       </Box>
     </ThemeProvider>

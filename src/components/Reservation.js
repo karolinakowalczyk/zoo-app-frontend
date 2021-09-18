@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 //import AuthService from "../services/auth.service";
-import { Box, Button, Link } from '@material-ui/core';
+import { Box, Button, Link, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Calendar from 'react-calendar';
 import ReservationsService from "../services/reservations.service";
@@ -106,8 +106,6 @@ const Reservation = () => {
         setMessage("");
         setLoading(true);
         setSuccessful(false);
-
-        console.log("DATE" + date);
     
         ReservationsService.createReservation(currentUser.id, date.toString(), expiredDate.toString(), quantity).then(
             (response) => {
@@ -156,7 +154,12 @@ const Reservation = () => {
                     </button>  
                 </div>  
             </div>
-            <Button onClick={handleMakeReservation}>Make reservation</Button>
+            <Button onClick={handleMakeReservation}>
+                {loading && (
+                  <CircularProgress color="primary" />
+                )}
+                <span className={classes.buttonText}>Make reservation</span>
+            </Button>
             {message && successful && (
                 <div className={classes.alert}>
                 <Alert severity="success" >{message}</Alert>
@@ -165,8 +168,8 @@ const Reservation = () => {
                     variant="contained"
                     color="primary"
                     className={classes.submit}>
-                    <Link className={classes.link} href={"/login"} variant="body2">
-                    {"Login"}
+                    <Link className={classes.link} href={"/reservations-list"} variant="body2">
+                    {"See your reservations"}
                     </Link>
                 </Button>
                 </div>
