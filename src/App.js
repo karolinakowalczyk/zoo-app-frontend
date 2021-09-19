@@ -25,6 +25,7 @@ import ResetPassword from "./components/ResetPassword";
 import Reservation from "./components/Reservation";
 import LoginRequired from "./components/LoginRequired";
 import ReservationsList from "./components/ReservationsList";
+import PlanTrip from "./components/PlanTrip";
 
 const theme = createTheme({
   palette: {
@@ -213,13 +214,29 @@ const App = () => {
                           </Link>
                       </ListItem>
                       {currentUser ? (
-                        <ListItem>
-                          <Link to={"/reservation"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                            <ListItemText>
-                              <span className="item-text nested-text">Make Reservation</span>
-                            </ListItemText>
-                          </Link>
+                        <div>
+                          <ListItem>
+                            <Link to={"/reservation"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Make Reservation</span>
+                              </ListItemText>
+                            </Link>
+                          </ListItem>
+                          <ListItem>
+                            <Link to={"/reservations-list"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Your reservations</span>
+                              </ListItemText>
+                            </Link>
+                          </ListItem>
+                          <ListItem>
+                            <Link to={"/plan-trip"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Plan your trip</span>
+                              </ListItemText>
+                            </Link>
                         </ListItem>
+                        </div>
                       ) : (
                         <ListItem>
                           <Link to={"/login-required"} className="item-link" onClick={() => setShowSiteBar(false)}>
@@ -326,6 +343,13 @@ const App = () => {
                       </ListItemText>
                       </Link>
                     </ListItem>
+                    <ListItem>
+                      <Link to={"/plan-trip"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                      <ListItemText>
+                        Plan Your Trip
+                      </ListItemText>
+                      </Link>
+                    </ListItem>
                   </div>
                 ): (
                     <ListItem>
@@ -357,7 +381,7 @@ const App = () => {
           <Route exact path="/reservation" component={Reservation}></Route>
           <Route exact path="/login-required" component={LoginRequired}></Route>
           <Route exact path="/reservations-list" component={ReservationsList}></Route>
-          
+          <Route exact path="/plan-trip" component={PlanTrip}></Route>          
         </Switch>
       </Box>
     </ThemeProvider>
