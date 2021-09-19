@@ -7,8 +7,10 @@ import {
 } from "react-google-maps";
 
 const Map = () => {
-    const [directions, setDirections] = useState(null);
+    const [directions, setDirections] = useState();
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
+    const [isGeocodingError, setIsGeocodingError] = useState(false);
+    const [addressInput, setAddressInput] = useState('');
     const [loading, setLoading] = useState(true);
     //50.663284796426524, 17.93085360027239
     //52.229004552708055, 21.003209269628638
@@ -43,7 +45,9 @@ const Map = () => {
             }
         }
         );
-    }, []);
+    }, [userLocation]);
+
+   
 
     const center = {
         //lat: 40.756795,
@@ -63,12 +67,80 @@ const Map = () => {
         </GoogleMap>
     ));
 
+    const geocodeAddress = (address) => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': address }, function handleResults(results, status) {
+
+            if (status === google.maps.GeocoderStatus.OK) {
+                setIsGeocodingError(false);
+                setUserLocation({ lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng() })
+                return;
+            }
+
+            setIsGeocodingError(true);
+
+        });
+    };
+
+    const handleAddressSubmit = (e) => {
+        e.preventDefault();
+
+        geocodeAddress(addressInput);
+    };
+
+    const onAddressInput = (e) => {
+    setAddressInput(e.target.value);
+  };
+
   return (
-    <div>
+      <div>
+          
         <GoogleMapExample
-          containerElement={<div style={{ height: `500px`, width: "500px" }} />}
+          containerElement={<div style={{ height: `50vh`, width: "50vw" }} />}
           mapElement={<div style={{ height: `100%` }} />}
         />
+        <div>
+            <div>
+                <div>
+                <label htmlFor="addressInput">Address</label>
+                    <input
+                        type="text"
+                        id="addressInput"
+                        value={addressInput}
+                        placeholder="Type your address"
+                        onChange={onAddressInput}
+                        required />
+                </div>
+
+            </div>
+            <div>
+                <button onClick={handleAddressSubmit}>
+                    Search route
+                </button>
+            </div>
+        </div>
+        {/*<form onSubmit={handleAddressSubmit}>
+            <div>
+                <div>
+                    <div>
+                    <label htmlFor="address">Address</label>
+                        <input
+                            type="text"
+                            id="address"
+                            value={addressInput}
+                            placeholder="Type your address"
+                            onChange={onAddressInput}
+                            required />
+                    </div>
+
+                </div>
+                <div>
+                    <button type="submit">
+                        Search route
+                    </button>
+                </div>
+            </div>
+  </form>*/}
       </div>
   );
 };
