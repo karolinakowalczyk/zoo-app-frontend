@@ -25,7 +25,7 @@ const ReservationsList = () => {
           setSuccessful(false); 
       }
     );
-  }, []);
+  }, [currentUser.id]);
 
 const displayReservations = reservationsData.map((reservation, index) =>
     <div key={index}>

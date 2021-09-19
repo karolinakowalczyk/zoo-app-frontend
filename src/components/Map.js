@@ -119,29 +119,7 @@ const Map = () => {
                 </button>
             </div>
         </div>
-        {/*<form onSubmit={handleAddressSubmit}>
-            <div>
-                <div>
-                    <div>
-                    <label htmlFor="address">Address</label>
-                        <input
-                            type="text"
-                            id="address"
-                            value={addressInput}
-                            placeholder="Type your address"
-                            onChange={onAddressInput}
-                            required />
-                    </div>
-
-                </div>
-                <div>
-                    <button type="submit">
-                        Search route
-                    </button>
-                </div>
-            </div>
-  </form>*/}
-      </div>
+    </div>
   );
 };
 
