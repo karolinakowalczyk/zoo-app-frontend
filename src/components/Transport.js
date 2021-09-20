@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import TrainIcon from '@material-ui/icons/Train';
 
@@ -36,6 +37,34 @@ const Transport = (props) => {
         setLongTransport("train");
         props.onLongTransportChange(longTransport); 
     };
+    const shortTramButtonClicked = () => {
+        setShortTransport("tram");
+        props.onShortTransportChange(shortTransport); 
+    }
+    const shortBusButtonClicked = () => {
+        setShortTransport("bus");
+        props.onShortTransportChange(shortTransport); 
+    }
+
+    const bikeButtonClicked = () => {
+        setShortTransport("bike");
+        setLongTransport("")
+        props.onShortTransportChange(shortTransport);
+        props.onLongTransportChange(longTransport); 
+    }
+    const tramButtonClicked = () => {
+        setShortTransport("tram");
+        setLongTransport("")
+        props.onShortTransportChange(shortTransport);
+        props.onLongTransportChange(longTransport); 
+    }
+
+    const busButtonClicked = () => {
+        setShortTransport("bus");
+        setLongTransport("")
+        props.onShortTransportChange(shortTransport);
+        props.onLongTransportChange(longTransport); 
+    }
 
   return (
       <div>  
@@ -43,17 +72,20 @@ const Transport = (props) => {
         {props.distance <= 20 ?
             <div>
                 <Button
-                className={classes.transportButton}
+                    className={classes.transportButton}
+                    onClick={bikeButtonClicked}
                 >
                     <DirectionsBikeIcon />  
                 </Button>
                 <Button
-                className={classes.transportButton}
+                    className={classes.transportButton}
+                    onClick={tramButtonClicked}
                 >
                     <TramIcon/>
                 </Button>
                 <Button
-                className={classes.transportButton}
+                    className={classes.transportButton}
+                    onClick={busButtonClicked}
                 >
                     <DirectionsBusIcon/>
                 </Button>
@@ -61,8 +93,8 @@ const Transport = (props) => {
             :
             <div>
                 <Button
-                className={classes.transportButton}
-                onClick={carButtonClicked}
+                    className={classes.transportButton}
+                    onClick={carButtonClicked}
                 >
                     <DirectionsCarIcon />  
                 </Button>
@@ -76,6 +108,7 @@ const Transport = (props) => {
                 <Button
                     disabled={disable}
                     className={classes.transportButton}
+                    onClick={shortTramButtonClicked}
                 >
                     <TramIcon />
                     <span>Number 2, 16</span>
@@ -83,6 +116,7 @@ const Transport = (props) => {
                 <Button
                     disabled={disable}
                     className={classes.transportButton}
+                    onClick={shortBusButtonClicked}
                 >
                     <DirectionsBusIcon />
                     <span>Number 145, 146</span>

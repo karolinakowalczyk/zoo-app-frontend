@@ -6,7 +6,8 @@ import {
   DirectionsRenderer
 } from "react-google-maps";
 
-//import convertMinsToTime from "../helpers/convertMinsToTime";
+import { makeStyles } from '@material-ui/core/styles';
+
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import TrainIcon from '@material-ui/icons/Train';
 
@@ -14,8 +15,6 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import TramIcon from '@material-ui/icons/Tram';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
 import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Transport from "./Transport";
 
 const useStyles = makeStyles((theme) => ({
     transportButton: {
@@ -134,18 +133,36 @@ const Map = (props) => {
     const onAddressInput = (e) => {
     setAddressInput(e.target.value);
     };
-    /*const onCarButtonClicked = () => {
+
+    const carButtonClicked = () => {
+        setDisable(true);
         setLongTransport("car");
+        setShortTransport("");
     };
-    const onTrainButtonClicked = () => {
+    const trainButtonClicked = () => {
+        setDisable(false);
         setLongTransport("train");
-    };*/
-    const onLongTransportChange = (transport) => {
-         setLongTransport(transport);
+        setShortTransport("");
+    };
+    const shortTramButtonClicked = () => {
+        setShortTransport("tram");
+    }
+    const shortBusButtonClicked = () => {
+        setShortTransport("bus");
     }
 
-    const onShortTransportChange = (transport) => {
-         setShortTransport(transport);
+    const bikeButtonClicked = () => {
+        setShortTransport("bike");
+        setLongTransport("")
+    }
+    const tramButtonClicked = () => {
+        setShortTransport("tram");
+        setLongTransport("");
+    }
+
+    const busButtonClicked = () => {
+        setShortTransport("bus");
+        setLongTransport("")
     }
 
   return (
@@ -175,61 +192,66 @@ const Map = (props) => {
             </div>
             <div>
                 <h2>Parameters of your route</h2>
-                  <p>Total distance: {distance} km</p>
-                  {/*<p>Total time: {convertMinsToTime(time)} </p>*/}
-              </div>
-              <div>
-                  {/*{distance <= 20 ?
-                      <div>
-                          <Button
-                            className={classes.transportButton}
-                          >
-                              <DirectionsBikeIcon />  
-                          </Button>
-                          <Button
-                            className={classes.transportButton}
-                          >
-                              <TramIcon/>
-                          </Button>
-                          <Button
-                            className={classes.transportButton}
-                          >
-                              <DirectionsBusIcon/>
-                          </Button>
-                      </div>
-                      :
-                      <div>
-                          <Button
-                            className={classes.transportButton}
-                            onClick={carButtonClicked}
-                          >
-                              <DirectionsCarIcon />  
-                          </Button>
-                          <Button
-                              className={classes.transportButton}
-                              onClick={trainButtonClicked}
-                          >
-                              <TrainIcon/>
-                          </Button>
-                          <h2>And from Main Station: </h2>
-                          <Button
-                              disabled={disable}
-                              className={classes.transportButton}
-                          >
-                              <TramIcon />
-                              <span>Number 2, 16</span>
-                          </Button>
-                          <Button
-                              disabled={disable}
-                              className={classes.transportButton}
-                          >
-                              <DirectionsBusIcon />
-                              <span>Number 145, 146</span>
-                          </Button>
-                      </div>
-                }*/}
-                  <Transport distance = {distance} onLongTransportChange={onLongTransportChange} onShortTransportChange={onShortTransportChange}></Transport>
-                  
+                <p>Total distance: {distance} km</p>
+                {/*<p>Total time: {convertMinsToTime(time)} </p>*/}
+            </div>
+            <div>
+                <p>long transport: {longTransport}</p>
+                <p>short transport: {shortTransport}</p>
+            {distance <= 20 ?
+                <div>
+                    <Button
+                        className={classes.transportButton}
+                        onClick={bikeButtonClicked}
+                    >
+                        <DirectionsBikeIcon />  
+                    </Button>
+                    <Button
+                        className={classes.transportButton}
+                        onClick={tramButtonClicked}
+                    >
+                        <TramIcon/>
+                    </Button>
+                    <Button
+                        className={classes.transportButton}
+                        onClick={busButtonClicked}
+                    >
+                        <DirectionsBusIcon/>
+                    </Button>
+                </div>
+                :
+                <div>
+                    <Button
+                        className={classes.transportButton}
+                        onClick={carButtonClicked}
+                    >
+                        <DirectionsCarIcon />  
+                    </Button>
+                    <Button
+                        className={classes.transportButton}
+                        onClick={trainButtonClicked}
+                    >
+                        <TrainIcon/>
+                    </Button>
+                    <h2>And from Main Station: </h2>
+                    <Button
+                        disabled={disable}
+                        className={classes.transportButton}
+                        onClick={shortTramButtonClicked}
+                    >
+                        <TramIcon />
+                        <span>Number 2, 16</span>
+                    </Button>
+                    <Button
+                        disabled={disable}
+                        className={classes.transportButton}
+                        onClick={shortBusButtonClicked}
+                    >
+                        <DirectionsBusIcon />
+                        <span>Number 145, 146</span>
+                    </Button>
+                </div>
+            }            
             </div>
         </div>
     </div>
