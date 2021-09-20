@@ -4,6 +4,7 @@ import createUUID from "../helpers/createUUID";
 import { Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import AuthService from "../services/auth.service";
+import convertMinsToTime from "../helpers/convertMinsToTime";
 
 const Attractions = (props) => {
   const [attractionsData, setAttractionsData] = useState([]);
@@ -28,13 +29,6 @@ const Attractions = (props) => {
       }
     );
   }, []);
-
-  const convertMinsToTime = (mins) => {
-    let hours = Math.floor(mins / 60);
-    let minutes = mins % 60;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    return `${hours ? `${hours}:` : ''}${minutes}`;
-  }
 
 const displayAttractions = attractionsData.map((attraction, index) =>
   <div key={index}>

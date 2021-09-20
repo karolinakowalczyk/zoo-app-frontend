@@ -6,14 +6,41 @@ import {
   DirectionsRenderer
 } from "react-google-maps";
 
-const Map = () => {
+//import convertMinsToTime from "../helpers/convertMinsToTime";
+import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
+import TrainIcon from '@material-ui/icons/Train';
+
+import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
+import TramIcon from '@material-ui/icons/Tram';
+import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
+import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Transport from "./Transport";
+
+const useStyles = makeStyles((theme) => ({
+    transportButton: {
+      background: '#FFF',
+        '&:focus': {
+        background: "#777777",
+    },
+   
+  },
+}));
+
+const Map = (props) => {
     const [directions, setDirections] = useState();
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
     const [isGeocodingError, setIsGeocodingError] = useState(false);
     const [addressInput, setAddressInput] = useState('');
     const [loading, setLoading] = useState(true);
+    const [distance, setDistance] = useState(0);
+    //const [time, setTime] = useState(0);
+    const [shortTransport, setShortTransport] = useState("");
+    const [longTransport, setLongTransport] = useState("");
+    const [disable, setDisable] = useState(true);
     //50.663284796426524, 17.93085360027239
     //52.229004552708055, 21.003209269628638
+    const classes = useStyles();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
@@ -40,6 +67,23 @@ const Map = () => {
         (result, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
                 setDirections(result);
+                //let route = result.routes[0];
+            //var summaryPanel = document.getElementById("directions_panel");
+            //summaryPanel.innerHTML = "";
+            // For each route, display summary information.
+            
+            let totalDist = 0;
+            //let totalTime = 0;
+            let route = result.routes[0];
+            for (let i = 0; i < route.legs.length; i++) {
+                totalDist += route.legs[i].distance.value;
+                //totalTime += myroute.legs[i].duration.value;
+            }
+                //totalDist = totalDist / 1000.
+                //totalTime = (totalTime / 60).toFixed(2)
+                setDistance(totalDist / 1000);
+                //setTime((totalTime / 60).toFixed(2));
+   
             } else {
             console.error(`error fetching directions ${result}`);
             }
@@ -84,17 +128,28 @@ const Map = () => {
 
     const handleAddressSubmit = (e) => {
         e.preventDefault();
-
         geocodeAddress(addressInput);
     };
 
     const onAddressInput = (e) => {
     setAddressInput(e.target.value);
-  };
+    };
+    /*const onCarButtonClicked = () => {
+        setLongTransport("car");
+    };
+    const onTrainButtonClicked = () => {
+        setLongTransport("train");
+    };*/
+    const onLongTransportChange = (transport) => {
+         setLongTransport(transport);
+    }
+
+    const onShortTransportChange = (transport) => {
+         setShortTransport(transport);
+    }
 
   return (
-      <div>
-          
+      <div>  
         <GoogleMapExample
           containerElement={<div style={{ height: `50vh`, width: "50vw" }} />}
           mapElement={<div style={{ height: `100%` }} />}
@@ -117,6 +172,64 @@ const Map = () => {
                 <button onClick={handleAddressSubmit}>
                     Search route
                 </button>
+            </div>
+            <div>
+                <h2>Parameters of your route</h2>
+                  <p>Total distance: {distance} km</p>
+                  {/*<p>Total time: {convertMinsToTime(time)} </p>*/}
+              </div>
+              <div>
+                  {/*{distance <= 20 ?
+                      <div>
+                          <Button
+                            className={classes.transportButton}
+                          >
+                              <DirectionsBikeIcon />  
+                          </Button>
+                          <Button
+                            className={classes.transportButton}
+                          >
+                              <TramIcon/>
+                          </Button>
+                          <Button
+                            className={classes.transportButton}
+                          >
+                              <DirectionsBusIcon/>
+                          </Button>
+                      </div>
+                      :
+                      <div>
+                          <Button
+                            className={classes.transportButton}
+                            onClick={carButtonClicked}
+                          >
+                              <DirectionsCarIcon />  
+                          </Button>
+                          <Button
+                              className={classes.transportButton}
+                              onClick={trainButtonClicked}
+                          >
+                              <TrainIcon/>
+                          </Button>
+                          <h2>And from Main Station: </h2>
+                          <Button
+                              disabled={disable}
+                              className={classes.transportButton}
+                          >
+                              <TramIcon />
+                              <span>Number 2, 16</span>
+                          </Button>
+                          <Button
+                              disabled={disable}
+                              className={classes.transportButton}
+                          >
+                              <DirectionsBusIcon />
+                              <span>Number 145, 146</span>
+                          </Button>
+                      </div>
+                }*/}
+                  <Transport distance = {distance} onLongTransportChange={onLongTransportChange} onShortTransportChange={onShortTransportChange}></Transport>
+                  
             </div>
         </div>
     </div>
