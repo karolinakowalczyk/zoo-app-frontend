@@ -15,6 +15,12 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import TramIcon from '@material-ui/icons/Tram';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
 import { Button } from '@material-ui/core';
+import AuthService from "../services/auth.service";
+
+import PlansService from "../services/plans.service";
+import Reservation from './Reservation'
+import Attractions from './Attractions'
+
 
 const useStyles = makeStyles((theme) => ({
     transportButton: {
@@ -41,10 +47,22 @@ const Map = (props) => {
     //52.229004552708055, 21.003209269628638
     const classes = useStyles();
 
+
+    const [message, setMessage] = useState("");
+    const [successful, setSuccessful] = useState(false);
+
+    const currentUser = AuthService.getCurrentUser();
+
+    const [reservation, setReservation] = useState({});
+    const [transport, setTransport] = useState({});
+    const [attractions, setAttractions] = useState({});
+
+    
+
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
         position => {
-            const { latitude, longitude } = position.coords;
+                const { latitude, longitude } = position.coords;
                 setUserLocation({ lat: latitude, lng: longitude })
                 setLoading(false);
         },
@@ -90,7 +108,58 @@ const Map = (props) => {
         );
     }, [userLocation]);
 
-   
+    useEffect(() => {
+        setTransport({
+            shortTransport: shortTransport,
+            longTransport: longTransport,
+        })
+    }, [shortTransport, longTransport]);
+    
+  const changeReservation = (value) => {
+    setReservation(value);
+    }
+    
+   const changeAttractions = (value) => {
+    setAttractions(value);
+    }
+    
+    const handleCreatePlan = (e) => {
+        e.preventDefault();
+
+        setMessage("");
+        setLoading(true);
+        setSuccessful(false);
+    console.log("handle create plan");
+    ///console.log("reservation" + reservation);
+    //console.log("transport" + transport);
+    //const attractionsArray = []
+    /*attractions.filter((a) => (
+          attractionsArray.concat([a])
+    ))}*/
+  //console.log("attractions " + attractions[0].name);
+  //console.log("attractions array " + attractionsArray);
+    
+    
+    PlansService.createPlan(currentUser.id, reservation, transport, attractions).then(
+      (response) => {
+        setLoading(false);
+        setMessage(response.data.message);
+        setSuccessful(true);
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        setLoading(false);
+        setMessage(resMessage);
+        setSuccessful(false);
+      }
+    );
+
+  };
 
     const center = {
         //lat: 40.756795,
@@ -99,7 +168,7 @@ const Map = (props) => {
         lng: 17.074593965353543,
         //51.10430767042046, 17.074593965353543
     };
-    const GoogleMapExample = withGoogleMap(props => (
+    const GoogleMapRender = withGoogleMap(props => (
         <GoogleMap
             defaultCenter={center}
             defaultZoom={8}
@@ -166,8 +235,9 @@ const Map = (props) => {
     }
 
   return (
-      <div>  
-        <GoogleMapExample
+      <div>
+        <Reservation changeReservation={changeReservation}></Reservation>
+        <GoogleMapRender
           containerElement={<div style={{ height: `50vh`, width: "50vw" }} />}
           mapElement={<div style={{ height: `100%` }} />}
         />
@@ -253,7 +323,12 @@ const Map = (props) => {
                 </div>
             }            
             </div>
-        </div>
+          </div>
+          <Attractions changeAttractions={changeAttractions}></Attractions>
+          
+        <Button onClick={handleCreatePlan}>
+            Create Plan
+        </Button>
     </div>
   );
 };

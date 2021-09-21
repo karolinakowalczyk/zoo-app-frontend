@@ -31,6 +31,10 @@ const Attractions = (props) => {
     );
   }, []);
 
+  useEffect(() => {
+    props.changeAttractions(addedAttractions);
+  }, [addedAttractions, props]);
+
   const addAttraction = (attraction) => {
     const conflictAttractionsList = addedAttractions.filter((attr) => ( ((attraction.hour >= attr.hour) && (attraction.hour <= attr.hour + attr.duration))) || (((attraction.hour + attraction.duration) >= attr.hour) && ((attraction.hour + attraction.duration) <= (attr.hour + attr.duration))) );
     if (conflictAttractionsList.length > 0) {
@@ -42,6 +46,8 @@ const Attractions = (props) => {
     setAddedAttractions(addedAttractions.concat([attraction]))
     setMessage("");
   }
+
+  
 
   const removeAttraction = (attraction) => {
     const actualAddedAttractions = addedAttractions.filter((attr) => attr !== attraction);

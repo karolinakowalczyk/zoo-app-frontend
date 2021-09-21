@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import AuthService from "../services/auth.service";
 import { Box, Button, Link, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-const Reservation = () => {
+const Reservation = (props) => {
     const classes = useStyles();
     const currentUser = AuthService.getCurrentUser();
     const days = 2;
@@ -48,6 +48,12 @@ const Reservation = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [quantity, setQuantity] = useState(1);
+
+    const [currentReservation, setCurrentReservation] = useState([]);
+
+    useEffect(() => {
+        props.changeReservation(currentReservation);
+    }, [currentReservation, props]);
 
     const increment = () => {
         setQuantity(quantity + 1);
@@ -112,6 +118,11 @@ const Reservation = () => {
                 setLoading(false);
                 setMessage(response.data.message);
                 setSuccessful(true);
+                setCurrentReservation({
+                    userId: currentUser.id,
+                    date: date.toString(),
+                    expirationDate: expiredDate.toString()
+                })
             },
             (error) => {
                 const resMessage =
