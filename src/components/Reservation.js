@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import AuthService from "../services/auth.service";
-import { Box, Button, Link, CircularProgress } from '@material-ui/core';
+import { Box, Button, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Calendar from 'react-calendar';
 import ReservationsService from "../services/reservations.service";
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-const Reservation = () => {
+const Reservation = (props) => {
     const classes = useStyles();
     const currentUser = AuthService.getCurrentUser();
     const days = 2;
@@ -48,6 +48,12 @@ const Reservation = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [quantity, setQuantity] = useState(1);
+
+    const [currentReservation, setCurrentReservation] = useState([]);
+
+    useEffect(() => {
+        props.changeReservation(currentReservation);
+    }, [currentReservation, props]);
 
     const increment = () => {
         setQuantity(quantity + 1);
@@ -112,6 +118,11 @@ const Reservation = () => {
                 setLoading(false);
                 setMessage(response.data.message);
                 setSuccessful(true);
+                setCurrentReservation({
+                    userId: currentUser.id,
+                    date: date.toString(),
+                    expirationDate: expiredDate.toString()
+                })
             },
             (error) => {
                 const resMessage =
@@ -162,21 +173,12 @@ const Reservation = () => {
             </Button>
             {message && successful && (
                 <div className={classes.alert}>
-                <Alert severity="success" >{message}</Alert>
-                <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}>
-                    <Link className={classes.link} href={"/reservations-list"} variant="body2">
-                    {"See your reservations"}
-                    </Link>
-                </Button>
+                    <Alert severity="success" >{message}</Alert>
                 </div>
             )}
             {message && !successful && (
                 <div className={classes.alert}>
-                <Alert severity="error" >{message}</Alert>
+                    <Alert severity="error" >{message}</Alert>
                 </div>
             )}
         </Box>

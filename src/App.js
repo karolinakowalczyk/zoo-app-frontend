@@ -25,6 +25,8 @@ import ResetPassword from "./components/ResetPassword";
 import Reservation from "./components/Reservation";
 import LoginRequired from "./components/LoginRequired";
 import ReservationsList from "./components/ReservationsList";
+import PlanTrip from "./components/PlanTrip";
+import PlansList from "./components/PlansList";
 
 const theme = createTheme({
   palette: {
@@ -58,7 +60,12 @@ const App = () => {
   const [showSiteBar, setShowSiteBar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [appReservation, setAppReservation] = useState({});
   const classes = useStyles();
+
+  const changeReservation = (value) => {
+    setAppReservation(value);
+  }
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -205,22 +212,46 @@ const App = () => {
                             </ListItemText>
                           </Link>
                         </ListItem>
-                        <ListItem>
-                          <Link to={"/attractions"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                            <ListItemText>
-                              <span className="item-text nested-text">Attracions</span>
-                            </ListItemText>
-                          </Link>
-                      </ListItem>
                       {currentUser ? (
+                        <div>
+                          <ListItem>
+                            <Link to={"/reservation"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Make Reservation</span>
+                              </ListItemText>
+                            </Link>
+                          </ListItem>
+                          <ListItem>
+                            <Link to={"/reservations-list"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Your reservations</span>
+                              </ListItemText>
+                            </Link>
+                          </ListItem>
+                          <ListItem>
+                            <Link to={"/plan-trip"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Plan your trip</span>
+                              </ListItemText>
+                            </Link>
+                      </ListItem>
+                      <ListItem>
+                            <Link to={"/plans-list"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Your Trip Plans</span>
+                              </ListItemText>
+                            </Link>
+                      </ListItem>
+                    </div>
+                  ) : (
+                      <div>
                         <ListItem>
-                          <Link to={"/reservation"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                            <ListItemText>
-                              <span className="item-text nested-text">Make Reservation</span>
-                            </ListItemText>
-                          </Link>
+                            <Link to={"/attractions"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Attracions</span>
+                              </ListItemText>
+                            </Link>
                         </ListItem>
-                      ) : (
                         <ListItem>
                           <Link to={"/login-required"} className="item-link" onClick={() => setShowSiteBar(false)}>
                             <ListItemText>
@@ -228,6 +259,7 @@ const App = () => {
                             </ListItemText>
                           </Link>
                         </ListItem>
+                      </div>
                       )}
                       </List> 
                     )}
@@ -303,13 +335,6 @@ const App = () => {
                   </ListItemText>
                   </Link>
                 </ListItem>
-                <ListItem>
-                  <Link to={"/attractions"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
-                  <ListItemText>
-                    Attractions
-                  </ListItemText>
-                  </Link>
-                </ListItem>
                 {currentUser ? (
                   <div>
                     <ListItem>
@@ -326,15 +351,38 @@ const App = () => {
                       </ListItemText>
                       </Link>
                     </ListItem>
-                  </div>
-                ): (
                     <ListItem>
-                      <Link to={"/login-required"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                      <Link to={"/plan-trip"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
                       <ListItemText>
-                        Make Reservation
+                        Plan Your Trip
                       </ListItemText>
                       </Link>
                     </ListItem>
+                    <ListItem>
+                      <Link to={"/plans-list"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                      <ListItemText>
+                        Your Trip Plans
+                      </ListItemText>
+                      </Link>
+                    </ListItem>
+                  </div>
+                ) : (
+                    <div>
+                      <ListItem>
+                        <Link to={"/attractions"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                        <ListItemText>
+                          Attractions
+                        </ListItemText>
+                        </Link>
+                      </ListItem>
+                      <ListItem>
+                        <Link to={"/login-required"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                        <ListItemText>
+                          Make Reservation
+                        </ListItemText>
+                        </Link>
+                      </ListItem>
+                    </div>
                   )}
               </List>
             </Popper>
@@ -354,10 +402,11 @@ const App = () => {
           <Route exact path="/attractions" component={Attractions}></Route>
           <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
           <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
-          <Route exact path="/reservation" component={Reservation}></Route>
+          <Route exact path="/reservation"><Reservation changeReservation={changeReservation}></Reservation></Route>
           <Route exact path="/login-required" component={LoginRequired}></Route>
           <Route exact path="/reservations-list" component={ReservationsList}></Route>
-          
+          <Route exact path="/plan-trip" component={PlanTrip}></Route>         
+          <Route exact path="/plans-list" component={PlansList}></Route> 
         </Switch>
       </Box>
     </ThemeProvider>
