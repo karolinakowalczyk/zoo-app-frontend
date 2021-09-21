@@ -206,13 +206,6 @@ const App = () => {
                             </ListItemText>
                           </Link>
                         </ListItem>
-                        <ListItem>
-                          <Link to={"/attractions"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                            <ListItemText>
-                              <span className="item-text nested-text">Attracions</span>
-                            </ListItemText>
-                          </Link>
-                      </ListItem>
                       {currentUser ? (
                         <div>
                           <ListItem>
@@ -237,7 +230,15 @@ const App = () => {
                             </Link>
                         </ListItem>
                         </div>
-                      ) : (
+                  ) : (
+                      <div>
+                        <ListItem>
+                            <Link to={"/attractions"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Attracions</span>
+                              </ListItemText>
+                            </Link>
+                        </ListItem>
                         <ListItem>
                           <Link to={"/login-required"} className="item-link" onClick={() => setShowSiteBar(false)}>
                             <ListItemText>
@@ -245,6 +246,7 @@ const App = () => {
                             </ListItemText>
                           </Link>
                         </ListItem>
+                      </div>
                       )}
                       </List> 
                     )}
@@ -320,13 +322,6 @@ const App = () => {
                   </ListItemText>
                   </Link>
                 </ListItem>
-                <ListItem>
-                  <Link to={"/attractions"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
-                  <ListItemText>
-                    Attractions
-                  </ListItemText>
-                  </Link>
-                </ListItem>
                 {currentUser ? (
                   <div>
                     <ListItem>
@@ -351,14 +346,23 @@ const App = () => {
                       </Link>
                     </ListItem>
                   </div>
-                ): (
-                    <ListItem>
-                      <Link to={"/login-required"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
-                      <ListItemText>
-                        Make Reservation
-                      </ListItemText>
-                      </Link>
-                    </ListItem>
+                ) : (
+                    <div>
+                      <ListItem>
+                        <Link to={"/attractions"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                        <ListItemText>
+                          Attractions
+                        </ListItemText>
+                        </Link>
+                      </ListItem>
+                      <ListItem>
+                        <Link to={"/login-required"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                        <ListItemText>
+                          Make Reservation
+                        </ListItemText>
+                        </Link>
+                      </ListItem>
+                    </div>
                   )}
               </List>
             </Popper>
