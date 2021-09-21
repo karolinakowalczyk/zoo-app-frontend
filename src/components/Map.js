@@ -20,6 +20,7 @@ import AuthService from "../services/auth.service";
 import PlansService from "../services/plans.service";
 import Reservation from './Reservation'
 import Attractions from './Attractions'
+import Alert from '@material-ui/lab/Alert';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -328,7 +329,17 @@ const Map = (props) => {
           
         <Button onClick={handleCreatePlan}>
             Create Plan
-        </Button>
+          </Button>
+          {message && successful && (
+                <div className={classes.alert}>
+                    <Alert severity="success" >{message}</Alert>
+                </div>
+            )}
+            {message && !successful && (
+                <div className={classes.alert}>
+                    <Alert severity="error" >{message}</Alert>
+                </div>
+            )}
     </div>
   );
 };

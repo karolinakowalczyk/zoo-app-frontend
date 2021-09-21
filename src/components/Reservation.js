@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 //import AuthService from "../services/auth.service";
-import { Box, Button, Link, CircularProgress } from '@material-ui/core';
+import { Box, Button, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Calendar from 'react-calendar';
 import ReservationsService from "../services/reservations.service";
@@ -173,21 +173,12 @@ const Reservation = (props) => {
             </Button>
             {message && successful && (
                 <div className={classes.alert}>
-                <Alert severity="success" >{message}</Alert>
-                <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}>
-                    <Link className={classes.link} href={"/reservations-list"} variant="body2">
-                    {"See your reservations"}
-                    </Link>
-                </Button>
+                    <Alert severity="success" >{message}</Alert>
                 </div>
             )}
             {message && !successful && (
                 <div className={classes.alert}>
-                <Alert severity="error" >{message}</Alert>
+                    <Alert severity="error" >{message}</Alert>
                 </div>
             )}
         </Box>
