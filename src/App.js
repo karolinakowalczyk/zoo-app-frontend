@@ -26,6 +26,7 @@ import Reservation from "./components/Reservation";
 import LoginRequired from "./components/LoginRequired";
 import ReservationsList from "./components/ReservationsList";
 import PlanTrip from "./components/PlanTrip";
+import PlansList from "./components/PlansList";
 
 const theme = createTheme({
   palette: {
@@ -233,8 +234,15 @@ const App = () => {
                                 <span className="item-text nested-text">Plan your trip</span>
                               </ListItemText>
                             </Link>
-                        </ListItem>
-                        </div>
+                      </ListItem>
+                      <ListItem>
+                            <Link to={"/plans-list"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                              <ListItemText>
+                                <span className="item-text nested-text">Your Trip Plans</span>
+                              </ListItemText>
+                            </Link>
+                      </ListItem>
+                    </div>
                   ) : (
                       <div>
                         <ListItem>
@@ -350,6 +358,13 @@ const App = () => {
                       </ListItemText>
                       </Link>
                     </ListItem>
+                    <ListItem>
+                      <Link to={"/plans-list"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                      <ListItemText>
+                        Your Trip Plans
+                      </ListItemText>
+                      </Link>
+                    </ListItem>
                   </div>
                 ) : (
                     <div>
@@ -390,7 +405,8 @@ const App = () => {
           <Route exact path="/reservation"><Reservation changeReservation={changeReservation}></Reservation></Route>
           <Route exact path="/login-required" component={LoginRequired}></Route>
           <Route exact path="/reservations-list" component={ReservationsList}></Route>
-          <Route exact path="/plan-trip" component={PlanTrip}></Route>          
+          <Route exact path="/plan-trip" component={PlanTrip}></Route>         
+          <Route exact path="/plans-list" component={PlansList}></Route> 
         </Switch>
       </Box>
     </ThemeProvider>

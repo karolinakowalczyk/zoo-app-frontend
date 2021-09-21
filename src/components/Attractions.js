@@ -64,7 +64,7 @@ const displayAttractions = attractionsData.map((attraction, index) =>
         {attraction.hours.map((hour) => (
             <li key={createUUID(hour)}>{convertMinsToTime(hour)}</li>
         ))}
-        </ul>*/}
+      </ul>*/}
     <li key={createUUID(attraction.name)}>Duration: {attraction.duration} min</li>
     {currentUser &&
         <Button onClick={() => addAttraction(attraction)}>Add to plan</Button>}

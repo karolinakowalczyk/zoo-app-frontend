@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React from 'react';
 import { withScriptjs } from 'react-google-maps';
 import Map from './Map';
 
