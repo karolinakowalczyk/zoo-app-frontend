@@ -27,6 +27,8 @@ import LoginRequired from "./components/LoginRequired";
 import ReservationsList from "./components/ReservationsList";
 import PlanTrip from "./components/PlanTrip";
 import PlansList from "./components/PlansList";
+//import ShelterMap from "./components/ShelterMap";
+import RenderMap from "./components/RenderMap";
 
 const theme = createTheme({
   palette: {
@@ -143,6 +145,13 @@ const App = () => {
                     <span className="item-text">Home</span>
                   </ListItemText>
                 </Link>
+              </ListItem>
+              <ListItem>
+                  <Link to={"/help-animals"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                    <ListItemText>
+                      <span className="item-text">How to help animals?</span>
+                    </ListItemText>
+                  </Link>
               </ListItem>
               {showAdminBoard && (
                 <ListItem>
@@ -262,7 +271,7 @@ const App = () => {
                       </div>
                       )}
                       </List> 
-                    )}
+                  )}
               </List>
           </Drawer>
           
@@ -275,6 +284,11 @@ const App = () => {
           <Typography className="typography-links">
             <Link to={"/home"} className="nav-link">
               HOME
+            </Link>
+          </Typography>
+          <Typography className="typography-links">
+            <Link to={"/help-animals"} className="nav-link">
+              HOW TO HELP ANIMALS?
             </Link>
           </Typography>
 
@@ -386,7 +400,7 @@ const App = () => {
                   )}
               </List>
             </Popper>
-          </Typography> 
+          </Typography>
         </Toolbar>
       </AppBar>
       <Box className="main-container">
@@ -406,7 +420,8 @@ const App = () => {
           <Route exact path="/login-required" component={LoginRequired}></Route>
           <Route exact path="/reservations-list" component={ReservationsList}></Route>
           <Route exact path="/plan-trip" component={PlanTrip}></Route>         
-          <Route exact path="/plans-list" component={PlansList}></Route> 
+          <Route exact path="/plans-list" component={PlansList}></Route>
+          <Route exact path="/help-animals" component={RenderMap}></Route>
         </Switch>
       </Box>
     </ThemeProvider>

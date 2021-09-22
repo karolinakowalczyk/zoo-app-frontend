@@ -32,8 +32,10 @@ const Attractions = (props) => {
   }, []);
 
   useEffect(() => {
-    props.changeAttractions(addedAttractions);
-  }, [addedAttractions, props]);
+    if (currentUser) {
+      props.changeAttractions(addedAttractions);
+    }
+  }, [addedAttractions, props, currentUser]);
 
   const addAttraction = (attraction) => {
     const conflictAttractionsList = addedAttractions.filter((attr) => ( ((attraction.hour >= attr.hour) && (attraction.hour <= attr.hour + attr.duration))) || (((attraction.hour + attraction.duration) >= attr.hour) && ((attraction.hour + attraction.duration) <= (attr.hour + attr.duration))) );
