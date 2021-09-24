@@ -1,9 +1,8 @@
+   
 /*import React from 'react';
 import { withScriptjs } from 'react-google-maps';
 import Map from './Map';
-
 const PlanTrip = () => {
-
   const MapLoader = withScriptjs(Map);
   return (
     <div>
@@ -15,7 +14,6 @@ const PlanTrip = () => {
     </div>
   );
 };
-
 export default PlanTrip;*/
 
 
@@ -25,7 +23,7 @@ import { LoadScript } from '@react-google-maps/api';
 import Map from './Map';
 
 const lib = ['places', 'geometry'];
-const key = 'AIzaSyBrr30UaRvX5w5wWWbw5cR-E7qnWSa9yxA'; // PUT GMAP API KEY HERE
+const key = `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 const RenderMap = ()  => {
   
   return (

@@ -36,13 +36,10 @@ const Map = (props) => {
     const [addressInput, setAddressInput] = useState('');
     const [loading, setLoading] = useState(true);
     const [distance, setDistance] = useState(0);
-    //const [time, setTime] = useState(0);
     const [shortTransport, setShortTransport] = useState("");
     const [longTransport, setLongTransport] = useState("");
     const [disable, setDisable] = useState(true);
     const [firstLoad, setFirstLoad] = useState(true);
-    //50.663284796426524, 17.93085360027239
-    //52.229004552708055, 21.003209269628638
     const classes = useStyles();
 
 
@@ -55,11 +52,59 @@ const Map = (props) => {
     const [transport, setTransport] = useState({});
     const [attractions, setAttractions] = useState({});
 
-    const [center, setCenter] = useState({lat: userLocation.lat, lng: userLocation.lng,});
+    const [center, setCenter] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
+    const [mapLoaded, setMapLoaded] = useState(false);
 
+    const onMapLoad = () => {
+        //zapytaj o udostępnianie lokalizacji??
+        setMapLoaded(true);
 
+    }
     useEffect(() => {
-        if (firstLoad) {
+        if (mapLoaded) {
+            console.log("map loaded");
+            if (firstLoad) {
+                    console.log("first load" + firstLoad)
+                    navigator.geolocation.getCurrentPosition(
+                    position => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ lat: latitude, lng: longitude })
+                    //setCenter({ lat: userLocation.lat, lng: userLocation.lng });
+                            setLoading(false);
+                            //setFirstLoad(false);
+                }
+                );
+            }
+                
+            
+            
+            const directionsService = new google.maps.DirectionsService();
+            const origin = { lat: userLocation.lat, lng: userLocation.lng };
+            const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
+            setCenter({ lat: ((userLocation.lat - 51.10430767042046)/2), lng: ((userLocation.lng - 51.10430767042046)/2) });
+            directionsService.route(
+            {
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING
+            },
+            (result, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    setDirections(result);
+                let totalDist = 0;
+                let route = result.routes[0];
+                for (let i = 0; i < route.legs.length; i++) {
+                    totalDist += route.legs[i].distance.value;
+                }
+                    setDistance(totalDist / 1000);
+    
+                } else {
+                console.error(`error fetching directions ${result}`);
+                }
+            }
+            );
+        }
+        /*if (mapLoaded && firstLoad) {
             console.log("first load!");
             navigator.geolocation.getCurrentPosition(
             position => {
@@ -71,10 +116,9 @@ const Map = (props) => {
                     setLoading(false);
             }
             );
-        }
+        }*/
         
-        const directionsService = new google.maps.DirectionsService();
-        //const origin = { lat: 51.10430767042046, lng: 17.074593965353543 };
+        /*const directionsService = new google.maps.DirectionsService();
         const origin = { lat: userLocation.lat, lng: userLocation.lng };
         const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
         setCenter({ lat: ((userLocation.lat - 51.10430767042046)/2), lng: ((userLocation.lng - 51.10430767042046)/2) });
@@ -87,29 +131,19 @@ const Map = (props) => {
         (result, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
                 setDirections(result);
-                //let route = result.routes[0];
-            //var summaryPanel = document.getElementById("directions_panel");
-            //summaryPanel.innerHTML = "";
-            // For each route, display summary information.
-            
             let totalDist = 0;
-            //let totalTime = 0;
             let route = result.routes[0];
             for (let i = 0; i < route.legs.length; i++) {
                 totalDist += route.legs[i].distance.value;
-                //totalTime += myroute.legs[i].duration.value;
             }
-                //totalDist = totalDist / 1000.
-                //totalTime = (totalTime / 60).toFixed(2)
                 setDistance(totalDist / 1000);
-                //setTime((totalTime / 60).toFixed(2));
    
             } else {
             console.error(`error fetching directions ${result}`);
             }
         }
-        );
-    }, [firstLoad, userLocation.lat, userLocation.lng]);
+        );*/
+    }, [firstLoad, mapLoaded, userLocation.lat, userLocation.lng]);
 
     useEffect(() => {
         setTransport({
@@ -132,17 +166,7 @@ const Map = (props) => {
         setMessage("");
         setLoading(true);
         setSuccessful(false);
-    //console.log("handle create plan");
-    ///console.log("reservation" + reservation);
-    //console.log("transport" + transport);
-    //const attractionsArray = []
-    /*attractions.filter((a) => (
-          attractionsArray.concat([a])
-    ))}*/
-  //console.log("attractions " + attractions[0].name);
-  //console.log("attractions array " + attractionsArray);
-    
-    
+
     PlansService.createPlan(currentUser.id, reservation, transport, attractions).then(
       (response) => {
         setLoading(false);
@@ -164,23 +188,6 @@ const Map = (props) => {
 
   };
 
-    /*const center = {
-        //lat: 40.756795,
-        //lng: -73.954298,
-        lat: userLocation.lat,
-        lng: userLocation.lng,
-        //51.10430767042046, 17.074593965353543
-    };*/
-    /*const GoogleMapRender = withGoogleMap(props => (
-        <GoogleMap
-            defaultCenter={center}
-            defaultZoom={8}
-        >
-        <DirectionsRenderer
-            directions={directions}
-        />
-        </GoogleMap>
-    ));*/
 
     const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();
@@ -244,6 +251,7 @@ const Map = (props) => {
           <GoogleMap
             center={center}
             zoom={8}
+            onLoad={onMapLoad}
             mapContainerStyle={{ height: "400px", width: "800px" }}
         >
         <DirectionsRenderer
@@ -272,7 +280,6 @@ const Map = (props) => {
             <div>
                 <h2>Parameters of your route</h2>
                 <p>Total distance: {distance} km</p>
-                {/*<p>Total time: {convertMinsToTime(time)} </p>*/}
             </div>
             <div>
                 <p>long transport: {longTransport}</p>
