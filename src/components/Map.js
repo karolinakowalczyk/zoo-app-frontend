@@ -1,10 +1,6 @@
 /*global google*/
 import React, { useEffect, useState } from "react";
-import {
-  withGoogleMap,
-  GoogleMap,
-  DirectionsRenderer
-} from "react-google-maps";
+import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -44,6 +40,7 @@ const Map = (props) => {
     const [shortTransport, setShortTransport] = useState("");
     const [longTransport, setLongTransport] = useState("");
     const [disable, setDisable] = useState(true);
+    const [firstLoad, setFirstLoad] = useState(true);
     //50.663284796426524, 17.93085360027239
     //52.229004552708055, 21.003209269628638
     const classes = useStyles();
@@ -58,24 +55,29 @@ const Map = (props) => {
     const [transport, setTransport] = useState({});
     const [attractions, setAttractions] = useState({});
 
-    
+    const [center, setCenter] = useState({lat: userLocation.lat, lng: userLocation.lng,});
+
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-        position => {
-                const { latitude, longitude } = position.coords;
-                setUserLocation({ lat: latitude, lng: longitude })
-                setLoading(false);
-        },
-            () => {
-                setLoading(false);
+        if (firstLoad) {
+            console.log("first load!");
+            navigator.geolocation.getCurrentPosition(
+            position => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ lat: latitude, lng: longitude });
+                    setLoading(false);
+            },
+                () => {
+                    setLoading(false);
+            }
+            );
         }
-        );
+        
         const directionsService = new google.maps.DirectionsService();
         //const origin = { lat: 51.10430767042046, lng: 17.074593965353543 };
         const origin = { lat: userLocation.lat, lng: userLocation.lng };
         const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
-
+        setCenter({ lat: ((userLocation.lat - 51.10430767042046)/2), lng: ((userLocation.lng - 51.10430767042046)/2) });
         directionsService.route(
         {
             origin: origin,
@@ -107,7 +109,7 @@ const Map = (props) => {
             }
         }
         );
-    }, [userLocation]);
+    }, [firstLoad, userLocation.lat, userLocation.lng]);
 
     useEffect(() => {
         setTransport({
@@ -130,7 +132,7 @@ const Map = (props) => {
         setMessage("");
         setLoading(true);
         setSuccessful(false);
-    console.log("handle create plan");
+    //console.log("handle create plan");
     ///console.log("reservation" + reservation);
     //console.log("transport" + transport);
     //const attractionsArray = []
@@ -162,14 +164,14 @@ const Map = (props) => {
 
   };
 
-    const center = {
+    /*const center = {
         //lat: 40.756795,
         //lng: -73.954298,
-        lat: 51.10430767042046,
-        lng: 17.074593965353543,
+        lat: userLocation.lat,
+        lng: userLocation.lng,
         //51.10430767042046, 17.074593965353543
-    };
-    const GoogleMapRender = withGoogleMap(props => (
+    };*/
+    /*const GoogleMapRender = withGoogleMap(props => (
         <GoogleMap
             defaultCenter={center}
             defaultZoom={8}
@@ -178,7 +180,7 @@ const Map = (props) => {
             directions={directions}
         />
         </GoogleMap>
-    ));
+    ));*/
 
     const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();
@@ -198,6 +200,7 @@ const Map = (props) => {
     const handleAddressSubmit = (e) => {
         e.preventDefault();
         geocodeAddress(addressInput);
+        setFirstLoad(false);
     };
 
     const onAddressInput = (e) => {
@@ -238,10 +241,15 @@ const Map = (props) => {
   return (
       <div>
         <Reservation changeReservation={changeReservation}></Reservation>
-        <GoogleMapRender
-          containerElement={<div style={{ height: `50vh`, width: "50vw" }} />}
-          mapElement={<div style={{ height: `100%` }} />}
+          <GoogleMap
+            center={center}
+            zoom={8}
+            mapContainerStyle={{ height: "400px", width: "800px" }}
+        >
+        <DirectionsRenderer
+            directions={directions}
         />
+        </GoogleMap>
         <div>
             <div>
                 <div>

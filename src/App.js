@@ -422,6 +422,7 @@ const App = () => {
           <Route exact path="/plan-trip" component={PlanTrip}></Route>         
           <Route exact path="/plans-list" component={PlansList}></Route>
           <Route exact path="/help-animals" component={RenderMap}></Route>
+          <Route render={() => { return <p> Not Found</p>}} />
         </Switch>
       </Box>
     </ThemeProvider>

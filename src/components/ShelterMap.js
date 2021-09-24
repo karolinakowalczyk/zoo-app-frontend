@@ -1,138 +1,95 @@
-/*import React from 'react';
-import { withScriptjs } from 'react-google-maps';
-import ShelterMap from './ShelterMap';
-
-const RenderMap = () => {
-
-  const MapLoader = withScriptjs(ShelterMap);
-  return (
-    <div>
-      <h2>plan trip</h2>
-      <MapLoader
-        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`}
-        loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: `400px` }} />}
-        mapElement={<div style={{ height: `100%` }} />}
-      />
-    </div>
-  );
-};
-
-export default RenderMap;*/
-
-
 /*global google*/
-import React, {useState, useEffect} from "react";
-import { GoogleMap, withGoogleMap } from "react-google-maps";
-import Search from "./Search";
+import React, {useState, useEffect, useCallback} from "react";
 
+import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 
-let service;
-//const libraries = ["places"];
-
-const mapContainerStyle = {
-  height: "100vh",
-  width: "100vw"
-};
-const options = {
-  disableDefaultUI: true,
-  zoomControl: true
-};
-const center = {
-  lat: 52.229004552708055,
-  lng: 21.003209269628638
-};
-
-const ShelterMap = () => {
-
+let coords = [];
+const ShelterMap =() => {
+  /*state = {
+    center: { lat: -33.867, lng: 151.195 },
+    coordsResult: []
+  };*/
+  const [center, setCenter] = useState({ lat: 52.229004552708055, lng: 21.00320926962863 });
   const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
-  /*const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "YOUR_API_KEY",
-    libraries
-  });*/
-  const mapRef = React.useRef();
-  const h2Ref = React.useRef();
-  const onMapLoad = React.useCallback(map => {
-    mapRef.current = map;
-     console.log("map " + map);
-  }, []);
+  const [coordsResult, setCordsResult] = useState([]);
+  const [addressInput, setAddressInput] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const [mapVariable, setMapVariable] = useState();
+
+  const onMapLoad = useCallback((map) => {
+    //console.log("MAP" + map);
+    setMapVariable(map);
+    const place = new google.maps.LatLng(userLocation.lat, userLocation.lng);
+    console.log("user loc in map load " + userLocation.lat);
+    var request = {
+      location: place,
+      radius: '30000', //30km
+      type: ['pet_store']
+    };
+
+
+    let service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          //console.log(i + " " + results[i].name);
+          coords.push(results[i]);
+        }
+        setCordsResult(coords);
+        setCenter(results[0].geometry.location);
+      }
+    });
+    setMapLoaded(true);
+  }, [userLocation.lat, userLocation.lng]);
+
 
   useEffect(() => {
-    let map = mapRef.current;
-    console.log("mapRef " + mapRef.current);
-
-
-    let request = {
-      location: { lat: userLocation.lat, lng: userLocation.lng },
-      radius: "500",
-      type: ["animal shelter"]
-    };
-
-    service = new google.maps.places.PlacesService(mapRef.current);
-    service.nearbySearch(request, callback);
-    function callback(results, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          let place = results[i];
-          new google.maps.Marker({
-            position: place.geometry.location,
-            map
-          });
+    
+    if (mapLoaded) {
+      console.log("jest mapa" + mapVariable.center);
+      //console.log("przed " + coordsResult[0].names);
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords;
+          //50.66782964076724, 17.922259267598527
+          setUserLocation({ lat: latitude, lng: longitude })
+          //setUserLocation({ lat: 50.66782964076724, lng: longitude })
+          //console.log(latitude, longitude)
+          setCenter({ lat: userLocation.lat, lng: userLocation.lng });
+          //setCenter({ lat: 50.66782964076724, lng: 17.922259267598527 });
+          setLoading(false);
+        },
+        () => {
+          setLoading(false);
         }
-      }
+      );
+      onMapLoad(mapVariable);
+      //console.log("po " + coordsResult[0].name)
+      
+      
     }
-  },[mapRef] );
-
-
-  /*const panTo = React.useCallback(({ lat, lng }) => {
-    mapRef.current.panTo({ lat, lng });
-    mapRef.current.setZoom(12);
-    let map = mapRef.current;
-
-    let request = {
-      location: { lat, lng },
-      radius: "500",
-      type: ["animal shelter"]
-    };
-
-    service = new google.maps.places.PlacesService(mapRef.current);
-    service.nearbySearch(request, callback);
-    function callback(results, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          let place = results[i];
-          new google.maps.Marker({
-            position: place.geometry.location,
-            map
-          });
-        }
-      }
-    }
-  }, []);*/
-
-  const GoogleMapRender = withGoogleMap(props => (
-    <GoogleMap
-        ref={mapRef}
-        id="map"
-        mapContainerStyle={mapContainerStyle}
-        zoom={8}
-        center={center}
-        options={options}
-        onTilesLoaded={map => {
-          console.log("map " + map);
-        }}
-      />
-    ));
+    
+  }, [userLocation, mapLoaded, mapVariable, onMapLoad, coordsResult]);
 
   return (
     <div>
-      {/*<Search panTo={panTo} />*/}
-      <GoogleMapRender
-          containerElement={<div style={{ height: `50vh`, width: "50vw" }} />}
-          mapElement={<div style={{ height: `100%` }} />}
-        />
-      <h2>rendermap</h2>
-  </div>
+      <GoogleMap
+        center={center}
+        zoom={13}
+        onLoad={map => onMapLoad(map)}
+        mapContainerStyle={{ height: "400px", width: "800px" }}
+      >
+        {coordsResult !== [] &&
+          coordsResult.map(function (results, i) {
+            return (
+              <Marker key={i} position={results.geometry.location}>
+              </Marker>
+            );
+          })}
+      </GoogleMap>
+    </div>
   );
 }
 
