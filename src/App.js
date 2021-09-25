@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import MenuIcon from '@material-ui/icons/Menu';
 import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@material-ui/core';
@@ -29,6 +29,8 @@ import PlanTrip from "./components/PlanTrip";
 import PlansList from "./components/PlansList";
 //import ShelterMap from "./components/ShelterMap";
 import RenderMap from "./components/RenderMap";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute"
+import AuthenticatedRoute from "./components/AuthenticatedRoute"
 
 const theme = createTheme({
   palette: {
@@ -63,20 +65,44 @@ const App = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [appReservation, setAppReservation] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const classes = useStyles();
 
   const changeReservation = (value) => {
     setAppReservation(value);
   }
 
+
+  const onLoad = async () =>  {
+    try {
+      
+      const user =  await AuthService.getCurrentUser();
+      if (user) {
+        setIsAuthenticated(true);
+      }
+      else {
+        setIsAuthenticated(false);
+      }
+      
+    } catch (e) {
+      alert(e);
+    }
+  }
+
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-
+    onLoad();
     if (user) {
       setCurrentUser(user);
       setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+      //setIsAuthenticated(true);
     }
-  }, []);
+    /*else {
+      setIsAuthenticated(false);
+    }*/
+    console.log("is auth " + isAuthenticated);
+    
+  }, [isAuthenticated]);
 
   const logOut = () => {
     AuthService.logout();
@@ -406,6 +432,78 @@ const App = () => {
       <Box className="main-container">
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
+          <Route exact path="/opening-hours" component={OpeningHours} />
+          {/*<UnauthenticatedRoute
+            path={["/", "/home"]}
+            component={Home}
+            appProps={{ isAuthenticated }}
+          />*/}
+          <UnauthenticatedRoute
+            path="/login"
+            component={Login}
+            appProps={{ isAuthenticated }}
+          />
+          {/*<UnauthenticatedRoute
+            path="/opening-hours"
+            component={OpeningHours}
+            appProps={{ isAuthenticated }}
+          />*/}
+
+          {/*<AuthenticatedRoute
+            path={["/", "/home"]}
+            component={Home}
+            appProps={{ isAuthenticated }}
+          />
+          <AuthenticatedRoute
+            path="/opening-hours"
+            component={OpeningHours}
+            appProps={{ isAuthenticated }}
+          />*/}
+          <AuthenticatedRoute
+            path="/profile"
+            component={Profile}
+            appProps={{ isAuthenticated }}
+          />
+          {/*<Route component={NotFound} />*/}
+        </Switch>
+        {/*<Switch>
+          
+         
+          {currentUser ? (
+            <div>
+              <Route exact path={["/", "/home"]} component={Home} />
+              <Route exact path="/opening-hours" component={OpeningHours} />
+              <Route exact path="/attractions" component={Attractions}></Route>
+              <Route exact path="/help-animals" component={RenderMap}></Route>
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/user" component={BoardUser} />
+              <Route exact path="/reservation"><Reservation changeReservation={changeReservation}></Reservation></Route>
+              <Route exact path="/reservations-list" component={ReservationsList}></Route>
+              <Route exact path="/plan-trip" component={PlanTrip}></Route>         
+              <Route exact path="/plans-list" component={PlansList}></Route>
+              
+            </div>) : (
+              <div>
+              <Route exact path={["/", "/home"]} component={Home} />
+              <Route exact path="/opening-hours" component={OpeningHours} />
+              <Route exact path="/attractions" component={Attractions}></Route>
+              <Route exact path="/help-animals" component={RenderMap}></Route>
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
+              <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
+              <Route exact path="/login-required" component={LoginRequired}></Route>
+              
+            </div>
+            )}
+
+          
+          {currentUser && showAdminBoard && (<Route exact path="/admin" component={BoardAdmin} />)}
+          <Route component={NotFound} />
+      
+            </Switch>*/}
+        {/*<Switch>
+          <Route exact path={["/", "/home"]} component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/profile" component={Profile} />
@@ -423,7 +521,7 @@ const App = () => {
           <Route exact path="/plans-list" component={PlansList}></Route>
           <Route exact path="/help-animals" component={RenderMap}></Route>
           <Route render={() => { return <p> Not Found</p>}} />
-        </Switch>
+        </Switch>*/}
       </Box>
     </ThemeProvider>
   );

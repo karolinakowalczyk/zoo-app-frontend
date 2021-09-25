@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Register = (props) => {
+const LoginRequired = (props) => {
     const classes = useStyles();
 
 
@@ -80,4 +80,4 @@ const Register = (props) => {
     );
 }
 
-export default Register;
+export default LoginRequired;
