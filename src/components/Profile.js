@@ -94,14 +94,14 @@ const Profile = () => {
     setLoading(false);
 
     if (checkBtn.current.context._errors.length === 0) {
-      AuthService.editProfile(currentUser.email, name, surname, address, postalCode, city, phoneNumber).then(
+      AuthService.editProfile(currentUser.id, currentUser.email, name, surname, address, postalCode, city, phoneNumber).then(
         (response) => {
           setLoading(false);
           setMessage(response.data.message);
           setSuccessful(true);
           setDisable(true);
           const data = ({
-            id: currentUser._id,
+            id: currentUser.id,
             username: currentUser.username,
             email: currentUser.email,
             name: name,

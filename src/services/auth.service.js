@@ -35,8 +35,9 @@ const resetPassword = async (hash, password) => {
   });
 }
 
-const editProfile = async (email, name, surname, address, postalCode, city, phonenumber) => {
+const editProfile = async (id, email, name, surname, address, postalCode, city, phonenumber) => {
   return axios.put(API_URL + "editProfile", {
+    id,
     email,
     name,
     surname,
