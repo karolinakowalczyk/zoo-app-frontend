@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AttractionsService from "../services/attractions.service";
 import createUUID from "../helpers/createUUID";
-import { Button } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Button, Alert } from '@mui/material/';
 import AuthService from "../services/auth.service";
 import convertMinsToTime from "../helpers/convertMinsToTime";
 

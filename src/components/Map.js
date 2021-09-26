@@ -24,15 +24,17 @@ const useStyles = makeStyles((theme) => ({
       background: '#FFF',
         '&:focus': {
         background: "#777777",
+        },
     },
-   
-  },
+    alert: {
+        marginTop: theme.spacing(1),
+    },
 }));
 
 const Map = (props) => {
     const [directions, setDirections] = useState();
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
-    const [, setIsGeocodingError] = useState(false);
+    const [isGeocodingError, setIsGeocodingError] = useState(false);
     const [addressInput, setAddressInput] = useState('');
     const [, setLoading] = useState(true);
     const [distance, setDistance] = useState(0);
@@ -75,9 +77,7 @@ const Map = (props) => {
                 }
                 );
             }
-                
-            
-            
+
             const directionsService = new google.maps.DirectionsService();
             const origin = { lat: userLocation.lat, lng: userLocation.lng };
             const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
@@ -277,6 +277,11 @@ const Map = (props) => {
                     Search route
                 </button>
             </div>
+              {isGeocodingError && (
+                <div className={classes.alert}>
+                    <Alert severity="error" >There were problems retrieving the address</Alert>
+                </div>
+            )}
             <div>
                 <h2>Parameters of your route</h2>
                 <p>Total distance: {distance} km</p>
