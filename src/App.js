@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import MenuIcon from '@material-ui/icons/Menu';
 import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@material-ui/core';
@@ -66,7 +66,7 @@ const App = () => {
   const [showSiteBar, setShowSiteBar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [appReservation, setAppReservation] = useState({});
+  const [ , setAppReservation] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
   const classes = useStyles();
 
