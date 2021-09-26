@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LoginRequired = (props) => {
+const NotFound = () => {
     const classes = useStyles();
 
 
@@ -64,20 +64,11 @@ const LoginRequired = (props) => {
         <Container component="main" maxWidth="sm">
             <div className={classes.paper}>
                 <div className={classes.alert}>
-                    <Alert severity="success" >You must log in to make a reservation</Alert>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}>
-                        <Link className={classes.link} href={"/login"} variant="body2">
-                            {"Login"}
-                        </Link>
-                    </Button>
+                    <Alert severity="error" >Not Found</Alert>
                 </div>
             </div>
         </Container>
     );
 }
 
-export default LoginRequired;
+export default NotFound;

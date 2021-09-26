@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
 const Map = (props) => {
     const [directions, setDirections] = useState();
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
-    const [isGeocodingError, setIsGeocodingError] = useState(false);
+    const [, setIsGeocodingError] = useState(false);
     const [addressInput, setAddressInput] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
     const [distance, setDistance] = useState(0);
     const [shortTransport, setShortTransport] = useState("");
     const [longTransport, setLongTransport] = useState("");

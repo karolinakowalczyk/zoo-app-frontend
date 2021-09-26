@@ -27,8 +27,12 @@ import LoginRequired from "./components/LoginRequired";
 import ReservationsList from "./components/ReservationsList";
 import PlanTrip from "./components/PlanTrip";
 import PlansList from "./components/PlansList";
-//import ShelterMap from "./components/ShelterMap";
 import RenderMap from "./components/RenderMap";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute"
+import AuthenticatedRoute from "./components/AuthenticatedRoute"
+import AuthenticatedRouteWithProps from "./components/AuthenticatedRouteWithProps"
+import AuthenticatedAdminRoute from "./components/AuthenticatedAdminRoute"
+import NotFound from "./components/NotFound"
 
 const theme = createTheme({
   palette: {
@@ -62,7 +66,8 @@ const App = () => {
   const [showSiteBar, setShowSiteBar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [appReservation, setAppReservation] = useState({});
+  const [ , setAppReservation] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
   const classes = useStyles();
 
   const changeReservation = (value) => {
@@ -70,13 +75,22 @@ const App = () => {
   }
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
 
-    if (user) {
-      setCurrentUser(user);
-      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+    const onLoad = async () => {
+      const user = await AuthService.getCurrentUser();
+      if (user) {
+        setCurrentUser(user);
+        setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+        setIsAuthenticated(true);
+      }
+      else {
+        setIsAuthenticated(false);
+      }
     }
-  }, []);
+    onLoad();
+ 
+  }, [isAuthenticated]);
+
 
   const logOut = () => {
     AuthService.logout();
@@ -406,23 +420,75 @@ const App = () => {
       <Box className="main-container">
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/profile" component={Profile} />
-          <Route path="/user" component={BoardUser} />
-          <Route path="/admin" component={BoardAdmin} />
           <Route exact path="/opening-hours" component={OpeningHours} />
-          
           <Route exact path="/attractions" component={Attractions}></Route>
-          <Route exact path="/request-reset-password" component={RequestResetPassword}></Route>
-          <Route exact path="/reset-password/:hash" component={ResetPassword}></Route>
-          <Route exact path="/reservation"><Reservation changeReservation={changeReservation}></Reservation></Route>
-          <Route exact path="/login-required" component={LoginRequired}></Route>
-          <Route exact path="/reservations-list" component={ReservationsList}></Route>
-          <Route exact path="/plan-trip" component={PlanTrip}></Route>         
-          <Route exact path="/plans-list" component={PlansList}></Route>
           <Route exact path="/help-animals" component={RenderMap}></Route>
-          <Route render={() => { return <p> Not Found</p>}} />
+
+          <UnauthenticatedRoute
+            path="/login"
+            component={Login}
+            appProps={{ isAuthenticated }}
+          />
+          <UnauthenticatedRoute
+            path="/register"
+            component={Register}
+            appProps={{ isAuthenticated }}
+          />
+          <UnauthenticatedRoute
+            path="/request-reset-password"
+            component={RequestResetPassword}
+            appProps={{ isAuthenticated }}
+          />
+          <UnauthenticatedRoute
+            path="/reset-password/:hash"
+            component={ResetPassword}
+            appProps={{ isAuthenticated }}
+          />
+          <UnauthenticatedRoute
+            path="/login-required"
+            component={LoginRequired}
+            appProps={{ isAuthenticated }}
+          />   
+
+
+          <AuthenticatedRoute
+            path="/profile"
+            component={Profile}
+            appProps={{ isAuthenticated }}
+          />
+          <AuthenticatedRoute
+            path="/user"
+            component={BoardUser}
+            appProps={{ isAuthenticated }}
+          />
+          <AuthenticatedRouteWithProps
+            path="/reservation"
+            element={Reservation}
+            appProps={{ isAuthenticated, changeReservation }}
+          />
+          <AuthenticatedRoute
+            path="/reservations-list"
+            component={ReservationsList}
+            appProps={{ isAuthenticated }}
+          />
+          <AuthenticatedRoute
+            path="/plan-trip"
+            component={PlanTrip}
+            appProps={{ isAuthenticated }}
+          />
+          <AuthenticatedRoute
+            path="/plans-list"
+            component={PlansList}
+            appProps={{ isAuthenticated }}
+          />
+
+          <AuthenticatedAdminRoute
+            path="/admin"
+            component={BoardAdmin}
+            appProps={{ isAuthenticated }}
+          />
+
+          <Route component={NotFound} />
         </Switch>
       </Box>
     </ThemeProvider>
