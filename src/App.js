@@ -31,6 +31,8 @@ import PlansList from "./components/PlansList";
 import RenderMap from "./components/RenderMap";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute"
 import AuthenticatedRoute from "./components/AuthenticatedRoute"
+import AuthenticatedRouteWithProps from "./components/AuthenticatedRouteWithProps"
+import NotFound from "./components/NotFound"
 
 const theme = createTheme({
   palette: {
@@ -433,38 +435,33 @@ const App = () => {
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
           <Route exact path="/opening-hours" component={OpeningHours} />
-          {/*<UnauthenticatedRoute
-            path={["/", "/home"]}
-            component={Home}
-            appProps={{ isAuthenticated }}
-          />*/}
+          <Route exact path="/attractions" component={Attractions}></Route>
+          <Route exact path="/help-animals" component={RenderMap}></Route>
+
           <UnauthenticatedRoute
             path="/login"
             component={Login}
             appProps={{ isAuthenticated }}
           />
-          {/*<UnauthenticatedRoute
-            path="/opening-hours"
-            component={OpeningHours}
-            appProps={{ isAuthenticated }}
-          />*/}
-
-          {/*<AuthenticatedRoute
-            path={["/", "/home"]}
-            component={Home}
-            appProps={{ isAuthenticated }}
-          />
-          <AuthenticatedRoute
-            path="/opening-hours"
-            component={OpeningHours}
-            appProps={{ isAuthenticated }}
-          />*/}
+         
           <AuthenticatedRoute
             path="/profile"
             component={Profile}
             appProps={{ isAuthenticated }}
           />
-          {/*<Route component={NotFound} />*/}
+          <AuthenticatedRoute
+            path="/user"
+            component={BoardUser}
+            appProps={{ isAuthenticated }}
+          />
+           <AuthenticatedRouteWithProps
+            path="/reservation"
+            element={Reservation}
+            appProps={{ isAuthenticated, changeReservation }}
+            //additionalProps={{ changeReservation }}
+          />
+
+          <Route component={NotFound} />
         </Switch>
         {/*<Switch>
           
