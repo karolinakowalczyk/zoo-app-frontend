@@ -67,44 +67,36 @@ const App = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [appReservation, setAppReservation] = useState({});
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  //const [isAuthenticated, setIsAuthenticated] = useState(JSON.parse(window.localStorage.getItem('isAuthenticatedStorage')) || false );
+  const [isAuthenticated, setIsAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
   const classes = useStyles();
 
   const changeReservation = (value) => {
     setAppReservation(value);
   }
 
+  useEffect(() => {
 
-  const onLoad = async () =>  {
-    try {
-      
-      const user =  await AuthService.getCurrentUser();
+    const onLoad = async () => {
+      const user = await AuthService.getCurrentUser();
+      console.log(isAuthenticated);
       if (user) {
+        setCurrentUser(user);
+        setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
         setIsAuthenticated(true);
+        //window.localStorage.setItem('isAuthenticatedStorage', true);
       }
       else {
         setIsAuthenticated(false);
+        //window.localStorage.setItem('isAuthenticatedStorage', false);
       }
-      
-    } catch (e) {
-      alert(e);
+     
+      //setIsAuthenticated(JSON.parse(window.localStorage.getItem('isAuthenticatedStorage')));
     }
-  }
-
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
     onLoad();
-    if (user) {
-      setCurrentUser(user);
-      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
-      //setIsAuthenticated(true);
-    }
-    /*else {
-      setIsAuthenticated(false);
-    }*/
-    console.log("is auth " + isAuthenticated);
-    
+ 
   }, [isAuthenticated]);
+
 
   const logOut = () => {
     AuthService.logout();
@@ -443,6 +435,11 @@ const App = () => {
             component={Login}
             appProps={{ isAuthenticated }}
           />
+          <UnauthenticatedRoute
+            path="/register"
+            component={Register}
+            appProps={{ isAuthenticated }}
+          />
          
           <AuthenticatedRoute
             path="/profile"
@@ -454,12 +451,12 @@ const App = () => {
             component={BoardUser}
             appProps={{ isAuthenticated }}
           />
-           <AuthenticatedRouteWithProps
+          <AuthenticatedRouteWithProps
             path="/reservation"
             element={Reservation}
             appProps={{ isAuthenticated, changeReservation }}
             //additionalProps={{ changeReservation }}
-          />
+           />
 
           <Route component={NotFound} />
         </Switch>
