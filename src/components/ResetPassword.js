@@ -7,6 +7,7 @@ import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import AuthService from "../services/auth.service";
 import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const required = (value) => {
   if (!value) {
@@ -114,6 +115,10 @@ const ResetPassword = (props) => {
       );
     }
   };
+  const history = useHistory();
+  const goToPage = (path) =>{ 
+    history.push(path);
+  }
 
   return (
     <Container component="main" maxWidth="sm">
@@ -151,16 +156,10 @@ const ResetPassword = (props) => {
                   )}
                   {message && successful && (   
                       <div className={classes.alert}>
-                            <Alert severity="success" >{message}</Alert>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}>
-                                <Link className={classes.link} href={"/login"} variant="body2">
-                                {"Login with new password"}
-                                </Link>
-                            </Button>
+                          <Alert severity="success" >{message}</Alert>
+                          <Button variant="contained" color="primary" onClick={() => goToPage(`/login`)}>
+                            Login with new password
+                          </Button>
                         </div>
                     )}
                     {message && !successful && (

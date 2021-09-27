@@ -178,12 +178,12 @@ const Login = (props) => {
           </Button>
           <Grid container>
             <Grid item xs={6} container justifyContent="flex-start">
-            <Button variant="contained" color="primary" onClick={() => goToPage(`request-reset-password`)}>
+            <Button  onClick={() => goToPage(`request-reset-password`)}>
               Forgot password?
             </Button>
             </Grid>
             <Grid item xs={6} container justifyContent="flex-end">
-              <Button variant="contained" color="primary" onClick={() => goToPage(`register`)}>
+              <Button onClick={() => goToPage(`register`)}>
                 Don't have an account? Sign Up
               </Button>
             </Grid>

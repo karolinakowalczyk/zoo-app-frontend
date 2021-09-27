@@ -2,10 +2,11 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
-import { Container, Typography, Button, CircularProgress, Link, Alert } from '@mui/material/';
+import { Container, Typography, Button, CircularProgress, Alert } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import AuthService from "../services/auth.service";
+import { useHistory } from "react-router-dom";
 
 const required = (value) => {
   if (!value) {
@@ -110,6 +111,10 @@ const RequestResetPassword = (props) => {
       );
     }
   };
+  const history = useHistory();
+  const goToPage = (path) =>{ 
+    history.push(path);
+  }
 
   return (
     <Container component="main" maxWidth="sm">
@@ -147,16 +152,10 @@ const RequestResetPassword = (props) => {
                   {message && successful && (
                         
                       <div className={classes.alert}>
-                            <Alert severity="success" >{message}</Alert>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}>
-                                <Link className={classes.link} href={"/"} variant="body2">
-                                {"Back to main site"}
-                                </Link>
-                            </Button>
+                        <Alert severity="success" >{message}</Alert>
+                          <Button variant="contained" color="primary" onClick={() => goToPage(`/`)}>
+                            Back to main site
+                          </Button>
                         </div>
                     )}
                     {message && !successful && (
