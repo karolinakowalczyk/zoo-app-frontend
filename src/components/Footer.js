@@ -20,8 +20,8 @@ const Footer = () => {
             <Box textAlign="center" sx={{
                 fontSize: '1rem'
             }}>
-                      <p>Icons made by <Link href="https://www.freepik.com">Freepik</Link> from <Link href="https://www.flaticon.com/">www.flaticon.com</Link></p>
-                      <p>Images made by <Link href="https://pixabay.com/pl/">Pixabay</Link></p>
+                <p>Icons made by <Link href="https://www.freepik.com">Freepik</Link> from <Link href="https://www.flaticon.com/">www.flaticon.com</Link></p>
+                <p>Images made by <Link href="https://pixabay.com/pl/">Pixabay</Link></p>
             </Box>
           <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
             Zoo App &reg; {new Date().getFullYear()}
