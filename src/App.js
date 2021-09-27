@@ -33,6 +33,8 @@ import AuthenticatedRoute from "./components/AuthenticatedRoute"
 import AuthenticatedRouteWithProps from "./components/AuthenticatedRouteWithProps"
 import AuthenticatedAdminRoute from "./components/AuthenticatedAdminRoute"
 import NotFound from "./components/NotFound"
+import Tickets from "./components/Tickets"
+import Footer from "./components/Footer"
 
 const theme = createTheme({
   palette: {
@@ -238,6 +240,13 @@ const App = () => {
                             </ListItemText>
                           </Link>
                         </ListItem>
+                        <ListItem>
+                          <Link to={"/tickets"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                            <ListItemText>
+                              <span className="item-text nested-text">Tickets</span>
+                            </ListItemText>
+                          </Link>
+                        </ListItem>
                       {currentUser ? (
                         <div>
                           <ListItem>
@@ -366,6 +375,13 @@ const App = () => {
                   </ListItemText>
                   </Link>
                 </ListItem>
+                <ListItem>
+                  <Link to={"/tickets"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                  <ListItemText>
+                    Tickets
+                  </ListItemText>
+                  </Link>
+                </ListItem>
                 {currentUser ? (
                   <div>
                     <ListItem>
@@ -426,6 +442,7 @@ const App = () => {
           <Route exact path="/opening-hours" component={OpeningHours} />
           <Route exact path="/attractions" component={Attractions}></Route>
           <Route exact path="/help-animals" component={AnimalHelper}></Route>
+          <Route exact path="/tickets" component={Tickets}></Route>
 
           <UnauthenticatedRoute
             path="/login"
@@ -493,6 +510,7 @@ const App = () => {
 
           <Route component={NotFound} />
         </Switch>
+        <Footer/>
       </Box>
     </ThemeProvider>
   );
