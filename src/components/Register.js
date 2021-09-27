@@ -3,15 +3,14 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-import { Container, Avatar, Typography, Button, Link, CircularProgress  } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
-import PersonIcon from '@material-ui/icons/Person';
+import { Container, Typography, Button, Link, CircularProgress, Alert  } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthService from "../services/auth.service";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(20),
+    marginTop: '10rem',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -22,21 +21,17 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginTop: '0.5rem',
+    marginBottom: '0.5rem',
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main,
-  },
   form: {
     width: '100%',
-    marginTop: theme.spacing(1),
+    marginTop: 1,
   },
   submit: {
-    marginTop: theme.spacing(1),
+    marginTop: 1,
     width: "101.25%",
     '&:hover': {
       background: "#777777",
@@ -174,9 +169,7 @@ const Register = (props) => {
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <PersonIcon />
-        </Avatar>
+        <AccountCircleIcon sx={{ color: '#81B214', fontSize: '36px'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
           Sign up
         </Typography>

@@ -2,10 +2,9 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
-import { Container, Avatar, Typography, Button, CircularProgress, Link  } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import MailIcon from '@material-ui/icons/Mail';
-import Alert from '@material-ui/lab/Alert';
+import { Container, Typography, Button, CircularProgress, Link, Alert  } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
+import EmailIcon from '@mui/icons-material/Email';
 import AuthService from "../services/auth.service";
 import { useParams } from "react-router-dom";
 
@@ -36,10 +35,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: '100%',
@@ -123,9 +118,7 @@ const ResetPassword = (props) => {
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <MailIcon />
-        </Avatar>
+          <EmailIcon sx={{ color: '#81B214', fontSize: '36px'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
           Request Reset Password
         </Typography>

@@ -27,13 +27,12 @@ import LoginRequired from "./components/LoginRequired";
 import ReservationsList from "./components/ReservationsList";
 import PlanTrip from "./components/PlanTrip";
 import PlansList from "./components/PlansList";
-import RenderMap from "./components/RenderMap";
+import AnimalHelper from "./components/AnimalHelper";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute"
 import AuthenticatedRoute from "./components/AuthenticatedRoute"
 import AuthenticatedRouteWithProps from "./components/AuthenticatedRouteWithProps"
 import AuthenticatedAdminRoute from "./components/AuthenticatedAdminRoute"
 import NotFound from "./components/NotFound"
-import { ImportantDevices } from "@material-ui/icons";
 
 const theme = createTheme({
   palette: {
@@ -426,7 +425,7 @@ const App = () => {
           <Route exact path={["/", "/home"]} component={Home} />
           <Route exact path="/opening-hours" component={OpeningHours} />
           <Route exact path="/attractions" component={Attractions}></Route>
-          <Route exact path="/help-animals" component={RenderMap}></Route>
+          <Route exact path="/help-animals" component={AnimalHelper}></Route>
 
           <UnauthenticatedRoute
             path="/login"

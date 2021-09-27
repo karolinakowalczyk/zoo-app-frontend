@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import Alert from '@material-ui/lab/Alert';
+import { Alert } from '@mui/material/';
 
 const ReservationsList = () => {
   const [reservationsData, setReservationsData] = useState([]);

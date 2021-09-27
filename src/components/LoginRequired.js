@@ -21,10 +21,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
   },
-  avatar: {
-    margin: 1,
-    backgroundColor: theme.palette.primary.main,
-  },
   form: {
     width: '100%',
     marginTop: 1,
@@ -55,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginRequired = (props) => {
   const history = useHistory();
-    const classes = useStyles();
-    const goToLoginPage = () =>{ 
-      let path = `login`; 
-      history.push(path);
-    }
+  const classes = useStyles();
+  const goToLoginPage = () =>{ 
+    let path = `login`; 
+    history.push(path);
+  }
 
     return (
         <Container component="main" maxWidth="sm">

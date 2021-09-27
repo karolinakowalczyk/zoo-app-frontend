@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PlansService from "../services/plans.service";
 import AuthService from "../services/auth.service";
-import Alert from '@material-ui/lab/Alert';
+import { Alert } from '@mui/material/';
 import createUUID from "../helpers/createUUID";
 import convertMinsToTime from "../helpers/convertMinsToTime";
 

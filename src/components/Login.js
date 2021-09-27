@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
+import { useHistory } from "react-router-dom";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
-import { Container, Avatar, Typography, FormControlLabel, Checkbox, Button, Grid, Link, CircularProgress  } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import PersonIcon from '@material-ui/icons/Person';
-import Alert from '@material-ui/lab/Alert';
+import { Container, Typography, FormControlLabel, Checkbox, Button, Grid, CircularProgress, Alert  } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import AuthService from "../services/auth.service";
 
@@ -19,9 +19,9 @@ const required = (value) => {
   }
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
-    marginTop: theme.spacing(20),
+    marginTop: '10rem',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -32,23 +32,19 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginTop: 2,
+    marginBottom: 2,
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main,
-  },
   form: {
     width: '100%',
-    marginTop: theme.spacing(1),
+    marginTop: 1,
   },
   submit: {
     width: "101.25%",
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    marginTop: 1,
+    marginBottom: 1,
     '&:hover': {
       background: "#777777",
     },
@@ -57,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#FFF',
   },
   alert: {
-    marginTop: theme.spacing(1),
+    marginTop: 1,
   },
   h1: {
     color: '#000'
@@ -131,12 +127,15 @@ const Login = (props) => {
     }
   };
 
+  const history = useHistory();
+  const goToPage = (path) =>{ 
+    history.push(path);
+  }
+
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <PersonIcon />
-        </Avatar>
+        <AccountCircleIcon sx={{ color: '#81B214', fontSize: '36px'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
           Login
         </Typography>
@@ -179,14 +178,14 @@ const Login = (props) => {
           </Button>
           <Grid container>
             <Grid item xs={6} container justifyContent="flex-start">
-              <Link href="/request-reset-password" variant="body2">
-                {"Forgot password?"}
-              </Link>
+            <Button variant="contained" color="primary" onClick={() => goToPage(`request-reset-password`)}>
+              Forgot password?
+            </Button>
             </Grid>
             <Grid item xs={6} container justifyContent="flex-end">
-              <Link href={"/register"} variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Button variant="contained" color="primary" onClick={() => goToPage(`register`)}>
+                Don't have an account? Sign Up
+              </Button>
             </Grid>
           </Grid>
           {message && (

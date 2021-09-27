@@ -1,26 +1,7 @@
 import React from "react";
 import "./OpeningHours.css";
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material/'
 
-const useStyles = makeStyles((theme) => ({
-  tableContainer: {
-    width: '50%',
-    margin: 'auto',
-    "@media (max-width: 48rem)": {
-      width: '100%',
-    },
-  },
-  tableHeadCell: {
-    fontWeight: "bold",
-  },
-   
-}));
 
 function createData(id, month, days, entry, sightseeing) {
   return { id, month, days, entry, sightseeing};
@@ -37,18 +18,17 @@ const rows = [
 ];
 
 const OpeningHours = () => {
-  const classes = useStyles();
   return (
     <div>
       <h1 className="greyTitle">Opening hours</h1>
-      <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="simple table">
+      <TableContainer>
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableHeadCell} align="center">Month</TableCell>
-              <TableCell className={classes.tableHeadCell} align="center">Days</TableCell>
-              <TableCell className={classes.tableHeadCell} align="center">Entry</TableCell>
-              <TableCell className={classes.tableHeadCell} align="center">Open Till</TableCell>
+              <TableCell sx={{fontWeight: "bold"}} align="center">Month</TableCell>
+              <TableCell sx={{fontWeight: "bold"}} align="center">Days</TableCell>
+              <TableCell sx={{fontWeight: "bold"}} align="center">Entry</TableCell>
+              <TableCell sx={{fontWeight: "bold"}} align="center">Open Till</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

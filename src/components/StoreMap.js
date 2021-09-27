@@ -2,28 +2,27 @@
 import React, {useState, useEffect, useCallback} from "react";
 
 import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
-import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
-
+import { Alert } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
 
 let coords = [];
 
 const useStyles = makeStyles((theme) => ({
     
   alert: {
-      marginTop: theme.spacing(1),
+      marginTop: 1,
   },
 
 }));
 
-const ShelterMap = () => {
+const StoreMap = () => {
   //add info window, adddres input, delete markers? and link to sites
   const [center, setCenter] = useState({ lat: 52.229004552708055, lng: 21.00320926962863 });
   const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
   const [isGeocodingError, setIsGeocodingError] = useState(false);
   const [coordsResult, setCordsResult] = useState([]);
   const [addressInput, setAddressInput] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
 
@@ -33,7 +32,7 @@ const ShelterMap = () => {
 
   const onMapLoad = useCallback((map) => {
     setMapVariable(map);
-    const place = new google.maps.LatLng(userLocation.lat, userLocation.lng);
+    const place = new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
     var request = {
       location: place,
       radius: '30000', //30km
@@ -58,21 +57,25 @@ const ShelterMap = () => {
   useEffect(() => {
     
     if (mapLoaded) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude })
-          setCenter({ lat: userLocation.lat, lng: userLocation.lng });
-          setLoading(false);
-        },
-        () => {
-          setLoading(false);
-        }
-      );
+      console.log("map loaded")
+      if (firstLoad) {
+        console.log("firstLoad")
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ lat: latitude, lng: longitude })
+            setCenter({ lat: userLocation.lat, lng: userLocation.lng });
+            setLoading(false);
+          },
+          () => {
+            setLoading(false);
+          }
+        );
+      }
       onMapLoad(mapVariable);
     }
     
-  }, [userLocation, mapLoaded, mapVariable, onMapLoad, coordsResult]);
+  }, [userLocation, mapLoaded, mapVariable, onMapLoad, coordsResult, firstLoad]);
 
   const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();
@@ -101,7 +104,6 @@ const ShelterMap = () => {
 
   return (
     <div>
-      <h2>Check where the nearest pet store is: </h2>
       <GoogleMap
         center={center}
         zoom={13}
@@ -128,7 +130,7 @@ const ShelterMap = () => {
       </div>
       <div>
           <button onClick={handleAddressSubmit}>
-              Search route
+              Search store
           </button>
       </div>
         {isGeocodingError && (
@@ -136,12 +138,8 @@ const ShelterMap = () => {
               <Alert severity="error" >There were problems retrieving the address</Alert>
           </div>
       )}
-      <h2>You can buy food, blankets or toys or </h2>
-      <h2>do you have a blanket that you don't need? Take it to the nearest shelter!</h2>
-      <h2>You can adopt animals in our ZOO. CHECK</h2>
-      <h2>Would you like a pet? Find the closest ones in your area!</h2>
     </div>
   );
 }
 
-export default ShelterMap;
+export default StoreMap;

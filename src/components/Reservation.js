@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
-//import AuthService from "../services/auth.service";
-import { Box, Button, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Button, CircularProgress, Alert } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
 import Calendar from 'react-calendar';
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import Alert from '@material-ui/lab/Alert';
 
 
 const useStyles = makeStyles((theme) => ({
   submit: {
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
     width: "101.25%",
     '&:hover': {
       background: "#777777",
     },
   },
   alert: {
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
     },
     link: {
         '&:hover': {

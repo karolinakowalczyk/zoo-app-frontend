@@ -2,21 +2,21 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 
-import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
-import TrainIcon from '@material-ui/icons/Train';
 
-import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
-import TramIcon from '@material-ui/icons/Tram';
-import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
-import { Button } from '@material-ui/core';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import TrainIcon from '@mui/icons-material/Train';
+
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import TramIcon from '@mui/icons-material/Tram';
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import { Button, Alert } from '@mui/material/';
 import AuthService from "../services/auth.service";
 
 import PlansService from "../services/plans.service";
 import Reservation from './Reservation'
 import Attractions from './Attractions'
-import Alert from '@material-ui/lab/Alert';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     alert: {
-        marginTop: theme.spacing(1),
+        marginTop: 1,
     },
 }));
 
