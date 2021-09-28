@@ -511,8 +511,9 @@ const App = () => {
 
           <Route component={NotFound} />
         </Switch>
-        <Footer/>
+        
       </Box>
+      <Footer/>
     </ThemeProvider>
   );
 };

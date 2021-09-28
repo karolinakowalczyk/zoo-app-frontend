@@ -1,9 +1,9 @@
 import React from "react";
-import { Container, Grid, Box, Link } from '@mui/material/';
+import { Container, Box, Link } from '@mui/material/';
 
 const Footer = () => {
   return (
-    <footer>
+    <footer style={{position:'sticky', top: '100%', marginRight: '-0.5rem', marginLeft: '-0.5rem', marginBottom: '-0.5rem'}}>
         <Box
         px={{ xs: 3, sm: 10 }}
         py={{ xs: 5, sm: 10 }}
@@ -11,7 +11,7 @@ const Footer = () => {
         bgcolor="#777777"
         color="white"
       >
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" >
           <Box textAlign="center" sx={{
                     fontSize: '2rem'
             }}>

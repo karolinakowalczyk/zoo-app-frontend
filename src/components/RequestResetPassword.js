@@ -20,7 +20,7 @@ const required = (value) => {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(20),
+    marginTop: '10rem',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -31,24 +31,24 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginTop: '2rem',
+    marginBottom: '2rem',
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
   },
   form: {
     width: '100%',
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
   },
   submit: {
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
     width: "101.25%",
     '&:hover': {
       background: "#777777",
     },
   },
   alert: {
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
   },
   h1: {
     color: '#000'

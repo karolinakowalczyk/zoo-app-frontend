@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider, List, ListItem, ListSubheader, ListItemText, ListItemIcon } from '@mui/material/'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, List, ListItem, ListSubheader, ListItemText, ListItemIcon } from '@mui/material/'
 
 import penguin from '../assets/images/penguin.png';
 

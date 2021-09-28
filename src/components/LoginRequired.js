@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: 20,
+    marginTop: '10rem',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
