@@ -440,6 +440,7 @@ const App = () => {
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
           <Route exact path="/opening-hours" component={OpeningHours} />
+          {/*<Route exact path="/attractions" component={Attractions}></Route>*/}
           <Route exact path="/attractions" component={Attractions}></Route>
           <Route exact path="/help-animals" component={AnimalHelper}></Route>
           <Route exact path="/tickets" component={Tickets}></Route>
