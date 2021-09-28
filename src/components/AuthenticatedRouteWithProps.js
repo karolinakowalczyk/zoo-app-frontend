@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-export default function AuthenticatedRouteWithProps({ element: Element, appProps, ...rest }) {
+const AuthenticatedRouteWithProps = ({ element: Element, appProps, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -13,3 +13,4 @@ export default function AuthenticatedRouteWithProps({ element: Element, appProps
     />
   );
 }
+export default AuthenticatedRouteWithProps

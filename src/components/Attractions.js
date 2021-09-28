@@ -7,34 +7,9 @@ import convertMinsToTime from "../helpers/convertMinsToTime";
 import { visuallyHidden } from '@mui/utils';
 import PropTypes from 'prop-types';
 import SearchIcon from '@mui/icons-material/Search';
+import getComparator from "../helpers/getComparator";
+import stableSort from "../helpers/stableSort";
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 
 const headCells = [
   {
@@ -60,7 +35,7 @@ const headCells = [
 ];
   
 
-function EnhancedTableHead(props) {
+const TableHeadFunc = (props) => {
   const { order, orderBy,  onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
@@ -77,7 +52,7 @@ function EnhancedTableHead(props) {
             padding='normal'
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            {headCell.sorted && <TableSortLabel
+            <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -88,7 +63,7 @@ function EnhancedTableHead(props) {
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
-            </TableSortLabel>}
+            </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -96,7 +71,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-EnhancedTableHead.propTypes = {
+TableHeadFunc.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
@@ -226,7 +201,7 @@ const Attractions = (props) => {
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
           >
-            <EnhancedTableHead
+            <TableHeadFunc
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}

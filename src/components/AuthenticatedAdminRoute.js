@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import AuthService from "../services/auth.service";
 
-export default function AuthenticatedAdminRoute({ component: Component, appProps, ...rest }) {
+const AuthenticatedAdminRoute = ({ component: Component, appProps, ...rest }) => {
 
 const currentUser = AuthService.getCurrentUser();
   return (
@@ -16,3 +16,5 @@ const currentUser = AuthService.getCurrentUser();
       />
   );
 }
+
+export default AuthenticatedAdminRoute;
