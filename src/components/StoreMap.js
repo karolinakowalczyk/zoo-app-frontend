@@ -1,9 +1,10 @@
 /*global google*/
 import React, {useState, useEffect, useCallback} from "react";
 
-import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
-import { Alert } from '@mui/material/';
+import { GoogleMap, Marker } from "@react-google-maps/api";
+import { Alert, TextField, InputAdornment, Button } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
+import SearchIcon from '@mui/icons-material/Search';
 
 let coords = [];
 
@@ -118,20 +119,24 @@ const StoreMap = () => {
             );
           })}
       </GoogleMap>
+        <TextField
+          sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
+          id="addressInput"
+          label="Type your address"
+          onChange={onAddressInput}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+      />
       <div>
-        <label htmlFor="addressInput">Address</label>
-            <input
-                type="text"
-                id="addressInput"
-                value={addressInput}
-                placeholder="Type your address"
-                onChange={onAddressInput}
-                required />
-      </div>
-      <div>
-          <button onClick={handleAddressSubmit}>
-              Search store
-          </button>
+        <Button onClick={handleAddressSubmit} sx={{backgroundColor: 'primary.main', color: 'secondary.light', '&:hover': { backgroundColor: 'secondary.main',},marginBottom: "0.5rem"}}>
+            Search store
+        </Button>
       </div>
         {isGeocodingError && (
           <div className={classes.alert}>

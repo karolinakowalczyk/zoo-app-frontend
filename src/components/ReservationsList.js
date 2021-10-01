@@ -140,18 +140,18 @@ const ReservationsList = () => {
             <h2>Your reservations</h2>
             <Toolbar>
               <TextField
-              id="search-reservations"
+                id="search-reservations"
                 label="Search Reservations by date"
                 onChange={handeSearchReservations}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-          variant="standard"
-        />
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
             </Toolbar>
           <TableContainer>
             <Table
