@@ -5,7 +5,7 @@ import { Alert, Card, CardContent, Typography, List, ListItem, ListItemText, Tex
 import createUUID from "../helpers/createUUID";
 import SearchIcon from '@mui/icons-material/Search';
 import convertMinsToTime from "../helpers/convertMinsToTime";
-//import getComparator from "../helpers/getComparator";
+import getMonthName from "../helpers/getMonthName";
 //import stableSort from "../helpers/stableSort";
 
 
@@ -16,7 +16,6 @@ const searchPlans = (array) => {
 
 const PlanList = () => {
   const [plansData, setPlansData] = useState([]);
-  const [plansReservationData, setPlansReservationData] = useState([]);
   const [successful, setSuccessful] = useState(true);
   const [message, setMessage] = useState("");
   const currentUser = AuthService.getCurrentUser();
@@ -38,7 +37,8 @@ const PlanList = () => {
           setSuccessful(false); 
       }
     );
-  }, [currentUser.id]);
+    }, [currentUser.id]);
+
 
   const displayPlans = plansData.map((plan, index) =>
   
@@ -111,11 +111,70 @@ const PlanList = () => {
           return items;
         }
         else {
-          return items.filter(x => x.reservation.date.toLowerCase().includes(currentValue));
+          return items.filter(x => x.reservation.date.toLowerCase().includes(currentValue) );
         }
       }
     })
   }
+
+  const handeSearchLongTransport = (e) => {
+    const currentValue = e.target.value;
+    setSearch({
+      searchFun: items => {
+        if (currentValue === "") {
+          return items;
+        }
+        else {
+          return items.filter(x => x.transport.longTransport.toLowerCase().includes(currentValue));
+        }
+      }
+    })
+  }
+
+  const handeSearchShortTransport = (e) => {
+    const currentValue = e.target.value;
+    setSearch({
+      searchFun: items => {
+        if (currentValue === "") {
+          return items;
+        }
+        else {
+          return items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue));
+        }
+      }
+    })
+  }
+const handeSearchAttractions = (e) => {
+    const currentValue = e.target.value;
+    setSearch({
+      searchFun: items => {
+        if (currentValue === "") {
+          return items;
+        }
+        else {
+          let newArr = []
+          items.map((x) => {
+            return x.attractions.map((y, i) => {
+              //console.log(y.name)
+              newArr.push(y.name);
+              
+              //return y.name;
+              //return items.filter((z, iter) => y.name.toLowerCase().includes(currentValue));
+            })
+          });
+          //console.log(attrNameArray);
+          //console.log(newArr);
+          //console.log("newArr" + newArr.filter(x => x.toLowerCase().includes(currentValue)));
+          newArr.filter(x => x.toLowerCase().includes(currentValue));
+
+          console.log("return" + items.filter((x, index) => x.attractions.map((y, i) => (y.name.toLowerCase().includes(currentValue)))));
+          return items;
+          //return items.filter((x, index) => x.attractions[index].name.toLowerCase().includes(currentValue));
+        }
+      }
+    })
+  }
+
 
   return (
     <div>
@@ -130,7 +189,7 @@ const PlanList = () => {
       <Toolbar>
         <TextField
         id="search-reservations"
-          label="Search Plan with Reservation by date"
+          label="Search plan with reservation by date"
           onChange={handeSearchReservations}
           InputProps={{
             startAdornment: (
@@ -141,16 +200,62 @@ const PlanList = () => {
           }}
           variant="standard"
         />
+        <TextField
+          sx={{marginLeft: '1rem'}}
+          id="search-long-transport"
+          label="Search plan with long transport type"
+          onChange={handeSearchLongTransport}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+        />
+        <TextField
+          sx={{marginLeft: '1rem'}}
+          id="search-long-transport"
+          label="Search plan with short transport type"
+          onChange={handeSearchShortTransport}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+        />
+        <TextField
+          sx={{marginLeft: '1rem'}}
+          id="search-attractions"
+          label="Search Attractions by name"
+          onChange={handeSearchAttractions}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+      />
       </Toolbar>
       {plansData.length > 0 ? 
         <div>
           {searchPlans(search.searchFun(plansData))
-          .map((plan, index) => {
+            .map((plan, index) => {
+              let reservationDate = new Date(plan.reservation['date']);
+              let reservationDay = reservationDate.getDate().toString();
+              let reservationMonth = reservationDate.getMonth().toString();
+              let reservationYear = reservationDate.getFullYear().toString();
           return (
               <Card sx={{ minWidth: 275 }} key={index}>
                 <CardContent>
                   <Typography variant="h5" component="div">
-                    Plan {index}
+                    Plan {reservationDay} {getMonthName(reservationMonth)} {reservationYear}
                   </Typography>
                   <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     Reservation
