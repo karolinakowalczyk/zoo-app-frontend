@@ -139,11 +139,14 @@ const PlanList = () => {
           return items;
         }
         else {
+          console.log("short transport" + items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue)));
           return items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue));
         }
       }
     })
   }
+
+  //nie działa
 const handeSearchAttractions = (e) => {
     const currentValue = e.target.value;
     setSearch({
@@ -164,12 +167,11 @@ const handeSearchAttractions = (e) => {
           });
           //console.log(attrNameArray);
           //console.log(newArr);
-          //console.log("newArr" + newArr.filter(x => x.toLowerCase().includes(currentValue)));
-          newArr.filter(x => x.toLowerCase().includes(currentValue));
+          console.log("newArr" + newArr.filter(x => x.toLowerCase().includes(currentValue)));
+          //newArr.filter(x => x.toLowerCase().includes(currentValue));
 
           console.log("return" + items.filter((x, index) => x.attractions.map((y, i) => (y.name.toLowerCase().includes(currentValue)))));
-          return items;
-          //return items.filter((x, index) => x.attractions[index].name.toLowerCase().includes(currentValue));
+          return items.filter((x, index) => x.attractions.map((y, i) => { return (y.name.toLowerCase().includes(currentValue))}));
         }
       }
     })
