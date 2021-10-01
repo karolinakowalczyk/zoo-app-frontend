@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
-import { Container, Typography, FormControlLabel, Checkbox, Button, Grid, CircularProgress, Alert  } from '@mui/material/';
+import { Container, Typography, Button, Grid, CircularProgress, Alert  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -158,10 +158,6 @@ const Login = (props) => {
             type="password"
             value={password}
             onChange={onChangePassword}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button
             type="submit"

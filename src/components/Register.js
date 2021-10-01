@@ -3,10 +3,11 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-import { Container, Typography, Button, Link, CircularProgress, Alert  } from '@mui/material/';
+import { Container, Typography, Button, CircularProgress, Alert  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthService from "../services/auth.service";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -85,13 +86,38 @@ const vusername = (value) => {
 };
 
 const vpassword = (value) => {
-  if (value.length < 6 || value.length > 40) {
+  const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  const oneNumber = /^(?=.*[0-9])/;
+  const oneSpecialCharacter = /^(?=.*[!@#$%^&*])/;
+  const appropriateLength = /[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  if (!appropriateLength.test(value)) {
+    return (
+      <div>
+        <p style={{color: "red", margin: "0"}}>Password must be between 6 and 16 characters.</p>
+      </div>
+    );
+  }
+  else if (!oneNumber.test(value)) {
+    return (
+      <div>
+        <p style={{color: "red", margin: "0"}}>Password should have at least one number.</p>
+      </div>
+    );
+  }
+  else if (!oneSpecialCharacter.test(value)) {
+    return (
+      <div>
+        <p style={{color: "red", margin: "0"}}>Password should have at least one special character.</p>
+      </div>
+    );
+  }
+  /*if (value.length < 6 || value.length > 40) {
     return (
       <div>
         <p style={{color: "red", margin: "0"}}>The password must be between 6 and 40 characters.</p>
       </div>
     );
-  }
+  }*/
 };
 
 const Register = (props) => {
@@ -166,6 +192,11 @@ const Register = (props) => {
     }
   };
 
+   const history = useHistory();
+  const goToPage = (path) =>{ 
+    history.push(path);
+  }
+
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
@@ -231,14 +262,8 @@ const Register = (props) => {
           {message && successful && (
             <div className={classes.alert}>
               <Alert severity="success" >{message}</Alert>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}>
-                <Link className={classes.link} href={"/login"} variant="body2">
-                  {"Login"}
-                </Link>
+              <Button onClick={() => goToPage(`login`)}>
+                LOGIN
               </Button>
               
             </div>
