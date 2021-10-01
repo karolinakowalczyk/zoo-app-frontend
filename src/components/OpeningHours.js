@@ -25,10 +25,10 @@ const OpeningHours = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{fontWeight: "bold"}} align="center">Month</TableCell>
-              <TableCell sx={{fontWeight: "bold"}} align="center">Days</TableCell>
-              <TableCell sx={{fontWeight: "bold"}} align="center">Entry</TableCell>
-              <TableCell sx={{fontWeight: "bold"}} align="center">Open Till</TableCell>
+              <TableCell sx={{fontWeight: "bold", borderBottom:"none"}} align="center">Month</TableCell>
+              <TableCell sx={{fontWeight: "bold", borderBottom:"none"}} align="center">Days</TableCell>
+              <TableCell sx={{fontWeight: "bold", borderBottom:"none"}} align="center">Entry</TableCell>
+              <TableCell sx={{fontWeight: "bold", borderBottom:"none"}} align="center">Open Till</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

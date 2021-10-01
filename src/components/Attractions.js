@@ -27,11 +27,6 @@ const headCells = [
     label: 'Duration (min)',
     sorted: true,
   },
-  {
-    id: 'add',
-    label: 'Action',
-    sorted: false,
-  },
 ];
   
 
@@ -51,6 +46,7 @@ const TableHeadFunc = (props) => {
             align='center'
             padding='normal'
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{borderBottom:"none"}}
           >
             <TableSortLabel
               active={orderBy === headCell.id}

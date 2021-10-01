@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import { Button, Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, Toolbar, TextField, InputAdornment} from '@mui/material/';
+import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, Toolbar, TextField, InputAdornment} from '@mui/material/';
 import PropTypes from 'prop-types';
 import { visuallyHidden } from '@mui/utils';
 import getComparator from "../helpers/getComparator";
@@ -134,84 +134,86 @@ const ReservationsList = () => {
             <Alert severity="error" >{message}</Alert>
         </div>
       )}
-      <Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          <h2>Your reservations</h2>
-          <Toolbar>
-            <TextField
-            id="search-reservations"
-              label="Search Reservations by name"
-              onChange={handeSearchReservations}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-        variant="standard"
-      />
-          </Toolbar>
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-          >
-            <TableHeadFunc
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={reservationsData.length}
-            />
-            <TableBody>
-              {stableSort(search.searchFun(reservationsData), getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                 .map((reservation, index) => {
-                  return (
-    
-                   <TableRow
-                     hover
-                     tabIndex={-1}
-                     key={reservation.id}
-                   >
-                     <TableCell
-                      component="th"
-                      align='center'
-                      id={`enhanced-table-checkbox-${index}`}
-                      scope="row"
-                      padding="none"
-                     >
-                      Reservation {index}
-                     </TableCell>
-                      <TableCell align='center'>{reservation.date}</TableCell>
-                     <TableCell align='center'>{reservation.expirationDate}</TableCell>
-                   </TableRow>
-                 );
-               })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={reservationsData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+      {reservationsData.length > 0 ?  
+        <Box sx={{ width: '100%' }}>
+          <Paper sx={{ width: '100%', mb: 2 }}>
+            <h2>Your reservations</h2>
+            <Toolbar>
+              <TextField
+              id="search-reservations"
+                label="Search Reservations by date"
+                onChange={handeSearchReservations}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+          variant="standard"
         />
-      </Paper>
-    </Box>     
-    </div>
+            </Toolbar>
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+            >
+              <TableHeadFunc
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={reservationsData.length}
+              />
+              <TableBody>
+                {stableSort(search.searchFun(reservationsData), getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((reservation, index) => {
+                    return (
+      
+                    <TableRow
+                      hover
+                      tabIndex={-1}
+                      key={index}
+                    >
+                      <TableCell
+                        component="th"
+                        align='center'
+                        id={`enhanced-table-checkbox-${index}`}
+                        scope="row"
+                        padding="none"
+                      >
+                        Reservation {index}
+                      </TableCell>
+                        <TableCell align='center'>{reservation.date}</TableCell>
+                      <TableCell align='center'>{reservation.expirationDate}</TableCell>
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: 53 * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={reservationsData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>    
+    : <Alert severity="info" >You haven't made your reservations yet</Alert>}      
+  </div>
   );
 };
 

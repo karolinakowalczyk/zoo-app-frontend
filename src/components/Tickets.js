@@ -28,9 +28,9 @@ const Tickets = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{fontWeight: "bold"}} align="center">Type of ticket</TableCell>
-              <TableCell sx={{fontWeight: "bold"}} align="center">Price</TableCell>
-              <TableCell sx={{fontWeight: "bold"}} align="center">Days</TableCell>
+              <TableCell sx={{fontWeight: "bold", borderBottom:"none"}} align="center">Type of ticket</TableCell>
+              <TableCell sx={{fontWeight: "bold", borderBottom:"none"}} align="center">Price</TableCell>
+              <TableCell sx={{fontWeight: "bold", borderBottom:"none"}} align="center">Days</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
