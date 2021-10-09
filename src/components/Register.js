@@ -86,7 +86,6 @@ const vusername = (value) => {
 };
 
 const vpassword = (value) => {
-  const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
   const oneNumber = /^(?=.*[0-9])/;
   const oneSpecialCharacter = /^(?=.*[!@#$%^&*])/;
   const appropriateLength = /[a-zA-Z0-9!@#$%^&*]{6,16}$/;
@@ -111,13 +110,6 @@ const vpassword = (value) => {
       </div>
     );
   }
-  /*if (value.length < 6 || value.length > 40) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>The password must be between 6 and 40 characters.</p>
-      </div>
-    );
-  }*/
 };
 
 const Register = (props) => {
