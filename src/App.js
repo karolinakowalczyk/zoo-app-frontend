@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import MenuIcon from '@material-ui/icons/Menu';
-import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@material-ui/core';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { makeStyles } from "@material-ui/core/styles";
+import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
 import penguin from './assets/images/penguin.png';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import "./App.css";
 
@@ -27,18 +27,24 @@ import LoginRequired from "./components/LoginRequired";
 import ReservationsList from "./components/ReservationsList";
 import PlanTrip from "./components/PlanTrip";
 import PlansList from "./components/PlansList";
-import RenderMap from "./components/RenderMap";
+import AnimalHelper from "./components/AnimalHelper";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute"
 import AuthenticatedRoute from "./components/AuthenticatedRoute"
 import AuthenticatedRouteWithProps from "./components/AuthenticatedRouteWithProps"
 import AuthenticatedAdminRoute from "./components/AuthenticatedAdminRoute"
 import NotFound from "./components/NotFound"
+import Tickets from "./components/Tickets"
+import Footer from "./components/Footer"
 
 const theme = createTheme({
   palette: {
     primary: {
       main: '#81B214'
-    }
+    },
+    secondary: {
+      main: '#777777',
+      light: '#FFF'
+    },
   }
 })
 
@@ -48,8 +54,8 @@ const useStyles = makeStyles((theme) => ({
   },
   popper: {
     backgroundColor: '#777777',
-    marginTop: theme.spacing(1),
-    padding: theme.spacing(1),
+    marginTop: 1,
+    padding: 1,
   },
   popperLink: {
     color: '#FFF',
@@ -57,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: '#81B214',
     },
+  },
+  visitZooBtn: {
+    backgroundColor: '#FFF',
   }
 }));
 
@@ -224,7 +233,7 @@ const App = () => {
                   <ListItemText>
                     <span className="item-text">Visit Zoo</span>
                   </ListItemText>
-                  {mobileOpen ? <ExpandLess className="arrow"/> : <ExpandMore className="arrow" />}
+                  {mobileOpen ? <ExpandLessIcon className="arrow"/> : <ExpandMoreIcon className="arrow" />}
                   </ListItem>
                     {mobileOpen && (
                       <List component="div" disablePadding>
@@ -232,6 +241,13 @@ const App = () => {
                           <Link to={"/opening-hours"} className="item-link" onClick={() => setShowSiteBar(false)}>
                             <ListItemText>
                               <span className="item-text nested-text">Opening hours</span>
+                            </ListItemText>
+                          </Link>
+                        </ListItem>
+                        <ListItem>
+                          <Link to={"/tickets"} className="item-link" onClick={() => setShowSiteBar(false)}>
+                            <ListItemText>
+                              <span className="item-text nested-text">Tickets</span>
                             </ListItemText>
                           </Link>
                         </ListItem>
@@ -350,9 +366,9 @@ const App = () => {
             </Toolbar>
           )}
           <Typography className="typography-links">
-            <Button  aria-describedby={id} type="button" onClick={handleVisitZooButton}>
+            <Button color="inherit" aria-describedby={id} onClick={handleVisitZooButton} className={classes.visitZooBtn} sx={{ zIndex: '50000' }}>
               VISIT ZOO
-              {open ? <ExpandLess /> : <ExpandMore />}
+              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </Button>
             <Popper id={id} open={open} anchorEl={anchorEl} style={{zIndex: "1101"}}>
               <List component="div" className={classes.popper}>
@@ -360,6 +376,13 @@ const App = () => {
                   <Link to={"/opening-hours"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
                   <ListItemText>
                     Opening hours
+                  </ListItemText>
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to={"/tickets"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
+                  <ListItemText>
+                    Tickets
                   </ListItemText>
                   </Link>
                 </ListItem>
@@ -421,8 +444,10 @@ const App = () => {
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
           <Route exact path="/opening-hours" component={OpeningHours} />
+          {/*<Route exact path="/attractions" component={Attractions}></Route>*/}
           <Route exact path="/attractions" component={Attractions}></Route>
-          <Route exact path="/help-animals" component={RenderMap}></Route>
+          <Route exact path="/help-animals" component={AnimalHelper}></Route>
+          <Route exact path="/tickets" component={Tickets}></Route>
 
           <UnauthenticatedRoute
             path="/login"
@@ -490,7 +515,9 @@ const App = () => {
 
           <Route component={NotFound} />
         </Switch>
+        
       </Box>
+      <Footer/>
     </ThemeProvider>
   );
 };

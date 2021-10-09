@@ -2,21 +2,21 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 
-import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
-import TrainIcon from '@material-ui/icons/Train';
 
-import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
-import TramIcon from '@material-ui/icons/Tram';
-import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
-import { Button } from '@material-ui/core';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import TrainIcon from '@mui/icons-material/Train';
+
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import TramIcon from '@mui/icons-material/Tram';
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import { Button, Alert } from '@mui/material/';
 import AuthService from "../services/auth.service";
 
 import PlansService from "../services/plans.service";
 import Reservation from './Reservation'
 import Attractions from './Attractions'
-import Alert from '@material-ui/lab/Alert';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,15 +24,17 @@ const useStyles = makeStyles((theme) => ({
       background: '#FFF',
         '&:focus': {
         background: "#777777",
+        },
     },
-   
-  },
+    alert: {
+        marginTop: 1,
+    },
 }));
 
 const Map = (props) => {
     const [directions, setDirections] = useState();
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
-    const [, setIsGeocodingError] = useState(false);
+    const [isGeocodingError, setIsGeocodingError] = useState(false);
     const [addressInput, setAddressInput] = useState('');
     const [, setLoading] = useState(true);
     const [distance, setDistance] = useState(0);
@@ -75,9 +77,7 @@ const Map = (props) => {
                 }
                 );
             }
-                
-            
-            
+
             const directionsService = new google.maps.DirectionsService();
             const origin = { lat: userLocation.lat, lng: userLocation.lng };
             const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
@@ -277,6 +277,11 @@ const Map = (props) => {
                     Search route
                 </button>
             </div>
+              {isGeocodingError && (
+                <div className={classes.alert}>
+                    <Alert severity="error" >There were problems retrieving the address</Alert>
+                </div>
+            )}
             <div>
                 <h2>Parameters of your route</h2>
                 <p>Total distance: {distance} km</p>

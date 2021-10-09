@@ -2,11 +2,11 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
-import { Container, Avatar, Typography, Button, CircularProgress, Link  } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import MailIcon from '@material-ui/icons/Mail';
-import Alert from '@material-ui/lab/Alert';
+import { Container, Typography, Button, CircularProgress, Alert } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
+import EmailIcon from '@mui/icons-material/Email';
 import AuthService from "../services/auth.service";
+import { useHistory } from "react-router-dom";
 
 const required = (value) => {
   if (!value) {
@@ -20,7 +20,7 @@ const required = (value) => {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(20),
+    marginTop: '10rem',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -31,28 +31,24 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginTop: '2rem',
+    marginBottom: '2rem',
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main,
-  },
   form: {
     width: '100%',
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
   },
   submit: {
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
     width: "101.25%",
     '&:hover': {
       background: "#777777",
     },
   },
   alert: {
-    marginTop: theme.spacing(1),
+    marginTop: '1rem',
   },
   h1: {
     color: '#000'
@@ -115,13 +111,15 @@ const RequestResetPassword = (props) => {
       );
     }
   };
+  const history = useHistory();
+  const goToPage = (path) =>{ 
+    history.push(path);
+  }
 
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <MailIcon />
-        </Avatar>
+        <EmailIcon sx={{ color: '#81B214', fontSize: '36px'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
           Request Reset Password
         </Typography>
@@ -154,16 +152,10 @@ const RequestResetPassword = (props) => {
                   {message && successful && (
                         
                       <div className={classes.alert}>
-                            <Alert severity="success" >{message}</Alert>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}>
-                                <Link className={classes.link} href={"/"} variant="body2">
-                                {"Back to main site"}
-                                </Link>
-                            </Button>
+                        <Alert severity="success" >{message}</Alert>
+                          <Button variant="contained" color="primary" onClick={() => goToPage(`/`)}>
+                            Back to main site
+                          </Button>
                         </div>
                     )}
                     {message && !successful && (

@@ -1,12 +1,11 @@
 import React, { useState, useRef } from "react";
 import AuthService from "../services/auth.service";
-import { Box, Button, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Button, CircularProgress, Alert } from '@mui/material/';
+import { makeStyles } from '@mui/styles';
 import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
-import EditIcon from '@material-ui/icons/Edit';
-import CancelIcon from '@material-ui/icons/Cancel';
-import Alert from '@material-ui/lab/Alert';
+import EditIcon from '@mui/icons-material/Edit';
+import CancelIcon from '@mui/icons-material/Cancel';
 import CheckButton from "react-validation/build/button";
 
 const useStyles = makeStyles((theme) => ({
@@ -202,13 +201,11 @@ const Profile = () => {
                 type="text" disabled={disable}
                 value={phoneNumber}
                 onChange={onChangePhoneNumber}
-                //value={disable ? (currentUser.phoneNumber || '') : phoneNumber }
-                //onChange={disable ? setEntryPhoneNumber : onChangePhoneNumber }
                 name="phonenumber"
               />
             </div>
             <Button type="button" onClick={handleEditButton}>
-              {disable ? <EditIcon /> : <CancelIcon />}
+              {disable ? <EditIcon sx={{ color: '#FFF',}}/> : <CancelIcon sx={{color: '#FFF',}}/>}
             </Button>
             <Button
                 type="submit"
