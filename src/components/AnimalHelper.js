@@ -43,7 +43,7 @@ const AnimalHelper = ()  => {
           </Typography>
           <Typography component="p" sx={{ marginLeft: "0.5rem" }}>
             <Button sx={{backgroundColor: 'primary.main', color: 'secondary.light', '&:hover': { backgroundColor: 'secondary.main',} ,marginBottom: "0.5rem"}}>
-              <Link sx={{color: 'secondary.light', '&:hover': { textDecoration: 'none',}}}href="https://otoz.pl/wykaz-schronisk-w-polsce/">Take it to the nearest shelter!</Link>
+              <Link sx={{color: 'secondary.light', '&:hover': { textDecoration: 'none',}}} target="_blank" href="https://otoz.pl/wykaz-schronisk-w-polsce/">Take it to the nearest shelter!</Link>
             </Button>
           </Typography>
         </Card>

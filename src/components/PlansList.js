@@ -40,7 +40,7 @@ const PlanList = () => {
     }, [currentUser.id]);
 
 
-  const displayPlans = plansData.map((plan, index) =>
+  /*const displayPlans = plansData.map((plan, index) =>
   
      <Card sx={{ minWidth: 275 }} key={index}>
       <CardContent>
@@ -102,7 +102,7 @@ const PlanList = () => {
       </CardContent>
     </Card>
     
-  );
+  );*/
   const handeSearchReservations = (e) => {
     const currentValue = e.target.value;
     setSearch({
