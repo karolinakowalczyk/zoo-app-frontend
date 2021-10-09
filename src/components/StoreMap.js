@@ -1,7 +1,7 @@
 /*global google*/
 import React, {useState, useEffect, useCallback} from "react";
 
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import { Alert, TextField, InputAdornment, Button } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import SearchIcon from '@mui/icons-material/Search';
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StoreMap = () => {
-  //add info window, adddres input, delete markers? and link to sites
+
   const [center, setCenter] = useState({ lat: 52.229004552708055, lng: 21.00320926962863 });
   const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
   const [isGeocodingError, setIsGeocodingError] = useState(false);
@@ -28,6 +28,7 @@ const StoreMap = () => {
   const [firstLoad, setFirstLoad] = useState(true);
 
   const [mapVariable, setMapVariable] = useState();
+  const [markerId, setMarkerId] = useState('');
 
   const classes = useStyles();
 
@@ -58,9 +59,7 @@ const StoreMap = () => {
   useEffect(() => {
     
     if (mapLoaded) {
-      console.log("map loaded")
       if (firstLoad) {
-        console.log("firstLoad")
         navigator.geolocation.getCurrentPosition(
           position => {
             const { latitude, longitude } = position.coords;
@@ -101,7 +100,15 @@ const StoreMap = () => {
 
     const onAddressInput = (e) => {
     setAddressInput(e.target.value);
-    };
+  };
+  
+  const handleToggleOpen = (markerId) => {
+    setMarkerId(markerId);
+  };
+
+  const handleToggleClose = () => {
+    setMarkerId("");
+  };
 
   return (
     <div>
@@ -114,7 +121,15 @@ const StoreMap = () => {
         {coordsResult !== [] &&
           coordsResult.map(function (results, i) {
             return (
-              <Marker key={i} position={results.geometry.location}>
+              <Marker
+                key={i}
+                position={results.geometry.location}
+                onClick={() => handleToggleOpen(i)}
+              >
+                {(markerId === i) &&
+                  <InfoWindow position={results.geometry.location} onCloseClick={() => handleToggleClose()}>
+                  <span>{results.name}</span>
+                  </InfoWindow>}
               </Marker>
             );
           })}

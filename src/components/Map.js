@@ -64,16 +64,12 @@ const Map = (props) => {
     }
     useEffect(() => {
         if (mapLoaded) {
-            console.log("map loaded");
             if (firstLoad) {
-                    console.log("first load" + firstLoad)
                     navigator.geolocation.getCurrentPosition(
                     position => {
                     const { latitude, longitude } = position.coords;
                     setUserLocation({ lat: latitude, lng: longitude })
-                    //setCenter({ lat: userLocation.lat, lng: userLocation.lng });
-                            setLoading(false);
-                            //setFirstLoad(false);
+                    setLoading(false);
                 }
                 );
             }
@@ -99,50 +95,11 @@ const Map = (props) => {
                     setDistance(totalDist / 1000);
     
                 } else {
-                console.error(`error fetching directions ${result}`);
+                    setMessage(`error fetching directions ${result}`);
                 }
             }
             );
         }
-        /*if (mapLoaded && firstLoad) {
-            console.log("first load!");
-            navigator.geolocation.getCurrentPosition(
-            position => {
-                    const { latitude, longitude } = position.coords;
-                    setUserLocation({ lat: latitude, lng: longitude });
-                    setLoading(false);
-            },
-                () => {
-                    setLoading(false);
-            }
-            );
-        }*/
-        
-        /*const directionsService = new google.maps.DirectionsService();
-        const origin = { lat: userLocation.lat, lng: userLocation.lng };
-        const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
-        setCenter({ lat: ((userLocation.lat - 51.10430767042046)/2), lng: ((userLocation.lng - 51.10430767042046)/2) });
-        directionsService.route(
-        {
-            origin: origin,
-            destination: destination,
-            travelMode: google.maps.TravelMode.DRIVING
-        },
-        (result, status) => {
-            if (status === google.maps.DirectionsStatus.OK) {
-                setDirections(result);
-            let totalDist = 0;
-            let route = result.routes[0];
-            for (let i = 0; i < route.legs.length; i++) {
-                totalDist += route.legs[i].distance.value;
-            }
-                setDistance(totalDist / 1000);
-   
-            } else {
-            console.error(`error fetching directions ${result}`);
-            }
-        }
-        );*/
     }, [firstLoad, mapLoaded, userLocation.lat, userLocation.lng]);
 
     useEffect(() => {
