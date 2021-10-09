@@ -65,9 +65,6 @@ const Home = () => {
             </Button>
         </Box>
       </Box>
-      <Box>
-       <h2>hey</h2>
-      </Box>
     </Box>
   );
 };
