@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
@@ -35,6 +35,8 @@ import AuthenticatedAdminRoute from "./components/AuthenticatedAdminRoute"
 import NotFound from "./components/NotFound"
 import Tickets from "./components/Tickets"
 import Footer from "./components/Footer"
+
+export const AuthContext = createContext();
 
 const theme = createTheme({
   palette: {
@@ -79,9 +81,36 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
   const classes = useStyles();
 
+  const [accessToken, setAccessToken] = useState(null);
+
+
   const changeReservation = (value) => {
     setAppReservation(value);
   }
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      const params = new URLSearchParams();
+      params.append("grant_type", "client_credentials");
+      params.append("client_id", "HS5962v4NTN1Mo4StTNQ4sxlVPsCXnIZRz0KQLR9Ihi0xJTota");
+      params.append("client_secret", "6TwCtSlk1lwO5w4HbFprjxMy6qWpWZeUgf7esv4D");
+      const petfinderRes = await fetch(
+        "https://api.petfinder.com/v2/oauth2/token",
+        {
+          method: "POST",
+          body: params,
+        }
+      );
+      const data = await petfinderRes.json();
+      setAccessToken(data.access_token);
+    //res.send(data);
+      //const res = await fetch("/api/oauth-token");
+      //const json = await res.json();
+      //setAccessToken(json.access_token);
+    };
+    fetchAccessToken();
+  }, []);
+
 
   useEffect(() => {
 
@@ -440,6 +469,7 @@ const App = () => {
           </Typography>
         </Toolbar>
       </AppBar>
+      <AuthContext.Provider value={accessToken}>
       <Box className="main-container">
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
@@ -517,6 +547,7 @@ const App = () => {
         </Switch>
         
       </Box>
+      </AuthContext.Provider>
       <Footer/>
     </ThemeProvider>
   );
