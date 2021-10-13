@@ -1,12 +1,13 @@
 import React, { useState, createContext, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@mui/material/';
+import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar, Alert } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import penguin from './assets/images/penguin.png';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PetFinderService from "../src/services/petfinder.service";
 
 import "./App.css";
 
@@ -80,6 +81,7 @@ const App = () => {
   const [ , setAppReservation] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
   const classes = useStyles();
+  const[message, setMessage] = useState('');
 
   const [accessToken, setAccessToken] = useState(null);
 
@@ -90,10 +92,28 @@ const App = () => {
 
   useEffect(() => {
     const fetchAccessToken = async () => {
-      const params = new URLSearchParams();
+      PetFinderService.getAccessToken().then(
+      (response) => {
+          setAccessToken(response.data);
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+          setMessage(resMessage);
+      }
+    );
+      /*const params = new URLSearchParams();
+      console.log(process.env.REACT_APP_PET_FINDER_API_SECRET);
       params.append("grant_type", "client_credentials");
       params.append("client_id", "HS5962v4NTN1Mo4StTNQ4sxlVPsCXnIZRz0KQLR9Ihi0xJTota");
+      
       params.append("client_secret", "6TwCtSlk1lwO5w4HbFprjxMy6qWpWZeUgf7esv4D");
+
+      
       const petfinderRes = await fetch(
         "https://api.petfinder.com/v2/oauth2/token",
         {
@@ -102,11 +122,7 @@ const App = () => {
         }
       );
       const data = await petfinderRes.json();
-      setAccessToken(data.access_token);
-    //res.send(data);
-      //const res = await fetch("/api/oauth-token");
-      //const json = await res.json();
-      //setAccessToken(json.access_token);
+      setAccessToken(data.access_token);*/
     };
     fetchAccessToken();
   }, []);
@@ -544,7 +560,12 @@ const App = () => {
           />
 
           <Route component={NotFound} />
-        </Switch>
+          </Switch>
+      {message && (
+        <div>
+          <Alert severity="error">{message}</Alert>
+        </div>
+      )}
         
       </Box>
       </AuthContext.Provider>
