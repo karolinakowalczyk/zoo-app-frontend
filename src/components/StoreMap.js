@@ -116,7 +116,7 @@ const StoreMap = () => {
         center={center}
         zoom={13}
         onLoad={map => onMapLoad(map)}
-        mapContainerStyle={{ height: "400px", width: "800px" }}
+        mapContainerStyle={{ height: "30rem", width: "100%" }}
       >
         {coordsResult !== [] &&
           coordsResult.map(function (results, i) {
