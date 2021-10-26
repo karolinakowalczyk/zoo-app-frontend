@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { LoadScript } from '@react-google-maps/api';
 import StoreMap from './StoreMap';
-import shelterDog from '../assets/images/shlelterDog.jpg';
 import { AuthContext } from "../App";
-import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Alert } from '@mui/material/';
+import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Alert, Box } from '@mui/material/';
 import createUUID from "../helpers/createUUID";
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import SearchIcon from '@mui/icons-material/Search';
@@ -17,6 +16,8 @@ const AnimalHelper = () => {
   const [zipCode, setZipCode] = useState('');
   const accessToken = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (accessToken === null) return;
     const fetchPets = async () => {
@@ -27,9 +28,13 @@ const AnimalHelper = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         }
-      );
-      const json = await petResults.json();
-      setResults(json.animals);
+      )
+      .then(res => res.json())
+        .then(data => { setResults(data.animals) })
+      .catch(err => { setErrorMessage(err) });
+      //const json = await petResults.json();
+      //setResults(json.animals);
+      setLoading(true);
     };
     fetchPets();
   }, [accessToken]);
@@ -59,7 +64,7 @@ const AnimalHelper = () => {
     )
       .then(res => res.json())
       .then(data => setResults(data.animals))
-      .catch(err => { console.log("err" + err); });
+      .catch(err => { setErrorMessage(err) });
     
   };
   const onZipCodeChange = (e) => {
@@ -102,9 +107,38 @@ const AnimalHelper = () => {
 );*/
   
   return (
-    <div style={{ marginTop: '20rem' }}>
+    <div sx={{ marginTop: '8rem' }}>
+      <Box sx={{ backgroundColor: 'primary.main', paddingLeft: '8rem', paddingBottom: '3rem',}}>
+            <h3>See how</h3>
+            <h1>YOU</h1>
+            <h1>CAN HELP ANIMALS</h1>
+      </Box>
+      <Box sx={{ backgroundColor: 'secondary.light', paddingLeft: '8rem', paddingBottom: '3rem', paddingTop: '3rem' }}>
+         <Typography gutterBottom variant="h3" component="div" color="primary.white">
+          1. Check where the nearest pet store is. 
+        </Typography>
+        <Typography gutterBottom variant="h6" component="div" color="primary.white">
+          You can buy there food, blankets or toys and take it to the nearest shelter!
+        </Typography>
+      </Box>
+      
+       <Box>
+        <Box style={{marginLeft: "1rem", marginRight: "1rem", marginTop: "3rem"}}>
+        <LoadScript googleMapsApiKey={key} libraries={lib} sensor={sensor}>
+          <StoreMap />
+        </LoadScript>
+          </Box>
+      </Box>
+      <Box sx={{ backgroundColor: 'secondary.light', paddingLeft: '8rem', paddingBottom: '3rem', paddingTop: '3rem' }}>
+         <Typography gutterBottom variant="h3" component="div" color="primary.white">
+          2. Look for an animal
+        </Typography>
+        <Typography gutterBottom variant="h6" component="div" color="primary.white">
+          for adoption nearby!
+        </Typography>
+      </Box>
       <TextField
-          sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
+          sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}
           id="zipCodeInput"
           label="Type your zip code"
           onChange={onZipCodeChange}
@@ -128,10 +162,9 @@ const AnimalHelper = () => {
       spacing={4}
       justifyContent="center"
       >
-      {results && results.map((result, index) =>
-   
-    <Grid item xs={10} sm={4} key={index}>
-      <Card key={createUUID(result.id)} style={{ height: '100%' }}>
+    {results && results.map((result, index) =>
+    <Grid item xs={10} sm={4} key={index} sx={{marginBottom: "2rem"}}>
+      <Card key={createUUID(result.id)} style={{ height: '100%', marginLeft: "1rem", marginRight: "1rem" }}>
         {result.photos.length > 0 ?
           <CardMedia
           component="img"
@@ -150,19 +183,20 @@ const AnimalHelper = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{ marginLeft: "0.5rem"}} key={createUUID(result.name)}>
           {result.name} 
         </Typography>
+        <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
+          {result.type}
+        </Typography>
+        <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
+          {result.gender}
+        </Typography>
+        <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
+          {Math.round(result.distance * 1.60934 * 100) / 100 } km from you
+        </Typography>
       </Card>
     </Grid>
         )}
         {!results && <p>no results</p>}
-      </Grid>
-      <div>
-        <div style={{width: '90%', margin: '0 auto'}}>
-        
-        <LoadScript googleMapsApiKey={key} libraries={lib} sensor={sensor}>
-          <StoreMap />
-        </LoadScript>
-          </div>
-      </div>  
+      </Grid>  
     </div>   
   );
 }

@@ -42,12 +42,13 @@ export const AuthContext = createContext();
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#81B214'
+      main: '#81B214',
+      white: '#FFF'
     },
     secondary: {
       main: '#777777',
-      light: '#FFF'
-    },
+      light: '#D3D3D3'
+  },
   }
 })
 

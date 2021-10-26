@@ -2,7 +2,7 @@
 import React, {useState, useEffect, useCallback} from "react";
 
 import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
-import { Alert, TextField, InputAdornment, Button } from '@mui/material/';
+import { Alert, TextField, InputAdornment, Button  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -18,12 +18,11 @@ const useStyles = makeStyles((theme) => ({
 
 const StoreMap = () => {
 
-  const [center, setCenter] = useState({ lat: 52.229004552708055, lng: 21.00320926962863 });
-  const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
+  const [center, setCenter] = useState({ lat: parseFloat(52.229004552708055), lng: parseFloat(21.00320926962863) });
+  const [userLocation, setUserLocation] = useState({ lat: parseFloat(52.229004552708055), lng: parseFloat(21.003209269628638) });
   const [isGeocodingError, setIsGeocodingError] = useState(false);
   const [coordsResult, setCordsResult] = useState([]);
   const [addressInput, setAddressInput] = useState('');
-  const [, setLoading] = useState(true);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
 
@@ -57,18 +56,13 @@ const StoreMap = () => {
 
 
   useEffect(() => {
-    
     if (mapLoaded) {
       if (firstLoad) {
         navigator.geolocation.getCurrentPosition(
           position => {
             const { latitude, longitude } = position.coords;
-            setUserLocation({ lat: latitude, lng: longitude })
-            setCenter({ lat: userLocation.lat, lng: userLocation.lng });
-            setLoading(false);
-          },
-          () => {
-            setLoading(false);
+            setUserLocation({ lat: parseFloat(latitude), lng: parseFloat(longitude) })
+            setCenter({ lat: parseFloat(userLocation.lat), lng: parseFloat(userLocation.lng) });
           }
         );
       }
@@ -83,7 +77,7 @@ const StoreMap = () => {
 
             if (status === google.maps.GeocoderStatus.OK) {
                 setIsGeocodingError(false);
-                setUserLocation({ lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng() })
+                setUserLocation({ lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) })
                 return;
             }
 
@@ -112,6 +106,25 @@ const StoreMap = () => {
 
   return (
     <div>
+      <div>
+      <TextField
+        sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
+        id="addressInput"
+        label="Type your address"
+        variant="outlined"
+        onChange={onAddressInput}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+        />    
+      <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', '&:hover': { backgroundColor: 'secondary.main',} }}>
+        Search store
+      </Button>
+      </div>
       <GoogleMap
         center={center}
         zoom={13}
@@ -128,31 +141,12 @@ const StoreMap = () => {
               >
                 {(markerId === i) &&
                   <InfoWindow position={results.geometry.location} onCloseClick={() => handleToggleClose()}>
-                  <span>{results.name}</span>
+                    <span>{results.name}</span>
                   </InfoWindow>}
               </Marker>
             );
           })}
       </GoogleMap>
-        <TextField
-          sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
-          id="addressInput"
-          label="Type your address"
-          onChange={onAddressInput}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
-      />
-      <div>
-        <Button onClick={handleAddressSubmit} sx={{backgroundColor: 'primary.main', color: 'secondary.light', '&:hover': { backgroundColor: 'secondary.main',},marginBottom: "0.5rem"}}>
-            Search store
-        </Button>
-      </div>
         {isGeocodingError && (
           <div className={classes.alert}>
               <Alert severity="error" >There were problems retrieving the address</Alert>
