@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar, Alert } from '@mui/material/';
+import { Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar, Alert } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import penguin from './assets/images/penguin.png';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -37,30 +37,19 @@ import NotFound from "./components/NotFound"
 import Tickets from "./components/Tickets"
 import Footer from "./components/Footer"
 
+import theme from "./styles/theme"
+
 export const AuthContext = createContext();
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#81B214',
-      white: '#FFF'
-    },
-    secondary: {
-      main: '#777777',
-      light: '#D3D3D3'
-  },
-  }
-})
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     width: 350
   },
-  popper: {
+  /*popper: {
     backgroundColor: '#777777',
     marginTop: 1,
     padding: 1,
-  },
+  },*/
   popperLink: {
     color: '#FFF',
     textDecoration: 'none',
@@ -107,23 +96,6 @@ const App = () => {
           setMessage(resMessage);
       }
     );
-      /*const params = new URLSearchParams();
-      console.log(process.env.REACT_APP_PET_FINDER_API_SECRET);
-      params.append("grant_type", "client_credentials");
-      params.append("client_id", "HS5962v4NTN1Mo4StTNQ4sxlVPsCXnIZRz0KQLR9Ihi0xJTota");
-      
-      params.append("client_secret", "6TwCtSlk1lwO5w4HbFprjxMy6qWpWZeUgf7esv4D");
-
-      
-      const petfinderRes = await fetch(
-        "https://api.petfinder.com/v2/oauth2/token",
-        {
-          method: "POST",
-          body: params,
-        }
-      );
-      const data = await petfinderRes.json();
-      setAccessToken(data.access_token);*/
     };
     fetchAccessToken();
   }, []);
@@ -417,7 +389,9 @@ const App = () => {
               {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </Button>
             <Popper id={id} open={open} anchorEl={anchorEl} style={{zIndex: "1101"}}>
-              <List component="div" className={classes.popper}>
+              <List component="div"
+                sx={{ backgroundColor: 'secondary.main', marginTop: 1, padding: 1, }}
+              >
                 <ListItem>
                   <Link to={"/opening-hours"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
                   <ListItemText>
