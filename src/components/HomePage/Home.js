@@ -1,12 +1,16 @@
 import React from "react";
-
-
 import "./Home.css";
+import { useHistory } from "react-router-dom";
 
 import { Button, Box } from '@mui/material/';
 
 
 const Home = () => {
+
+  const history = useHistory();
+  const goToPage = (path) =>{ 
+    history.push(path);
+  }
  
   return (
     <Box>
@@ -16,7 +20,7 @@ const Home = () => {
             <h1>ZOO</h1>
             <h1>WITH THE MOST</h1>
             <h1>AMAZING ANIMALS</h1>
-            <Button
+            <Button onClick={() => goToPage(`opening-hours`)}
               sx={{
                 background: '#FFF',
                 '&:hover': {

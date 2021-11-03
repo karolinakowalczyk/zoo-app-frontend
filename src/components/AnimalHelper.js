@@ -16,16 +16,11 @@ const AnimalHelper = () => {
   const [zipCode, setZipCode] = useState('');
   const accessToken = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
   const [pageLoad, setPageLoad] = useState(true);
 
   useEffect(() => {
+    setPageLoad(true);
     if (accessToken === null) return;
-    const displayPageLoader = async () => {
-      await new Promise((resolve) => setTimeout(() => resolve(), 3000));
-      return setPageLoad(false);
-    };
-    displayPageLoader();
     const fetchPets = async () => {
       await fetch(
         "https://api.petfinder.com/v2/animals?location=10001",
@@ -36,13 +31,14 @@ const AnimalHelper = () => {
         }
       )
       .then(res => res.json())
-        .then(data => { setResults(data.animals) })
+        .then(data => {
+          setResults(data.animals)
+          setTimeout(() => {
+            setPageLoad(false);
+        }, 1500)
+        })
       .catch(err => { setErrorMessage(err) });
-      //const json = await petResults.json();
-      //setResults(json.animals);
-      //setLoading(true);
     };
-    
     fetchPets();
   }, [accessToken]);
   if (results === null) return null;
@@ -74,19 +70,38 @@ const AnimalHelper = () => {
     fetchNewPets();
   }
 
-  if(pageLoad) { // if your component doesn't have to wait for an async action, remove this block 
-    return <LinearProgress color="success" />; // render null when app is not ready
-    //return null;
+  if (pageLoad) {
+    return(
+    <div style={{ marginTop: '10rem' }} >
+      <p style={{ marginTop: '2rem', textAlign: 'center'}}>Loading</p>
+      <LinearProgress color="success" />
+    </div>)
   }
-  
-  return (
-    <div sx={{ marginTop: '8rem' }} >
-      <Box sx={{ backgroundColor: 'primary.main', paddingLeft: '8rem', paddingBottom: '3rem',}}>
+  else {
+    return (
+      <div sx={{ marginTop: '8rem' }} >
+        <Box sx={{
+          backgroundColor: 'primary.main',
+          paddingLeft: '8rem',
+          paddingBottom: '3rem',
+          "@media (max-width: 48rem)": {
+            paddingLeft: '2rem',
+          },
+        }}>
             <h3>See how</h3>
             <h1>YOU</h1>
             <h1>CAN HELP ANIMALS</h1>
-      </Box>
-      <Box sx={{ backgroundColor: 'secondary.light', paddingLeft: '8rem', paddingBottom: '3rem', paddingTop: '3rem' }}>
+        </Box>
+        <Box sx={{
+          backgroundColor: 'secondary.light',
+          paddingLeft: '8rem',
+          paddingBottom: '3rem',
+          paddingTop: '3rem',
+          "@media (max-width: 48rem)": {
+            paddingLeft: '2rem',
+            paddingRight: '2rem'
+          },
+        }}>
          <Typography gutterBottom variant="h3" component="div" color="primary.white">
           1. Check where the nearest pet store is. 
         </Typography>
@@ -94,46 +109,60 @@ const AnimalHelper = () => {
           You can buy there food, blankets or toys and take it to the nearest shelter!
         </Typography>
       </Box>
-      
        <Box>
-        <Box style={{marginLeft: "1rem", marginRight: "1rem", marginTop: "3rem"}}>
-        <LoadScript googleMapsApiKey={key} libraries={lib} sensor={sensor}>
-          <StoreMap />
-        </LoadScript>
+        <Box style={{marginLeft: "1rem", marginRight: "1rem", marginTop: "1.5rem", marginBottom: "3rem"}}>
+          <LoadScript googleMapsApiKey={key} libraries={lib} sensor={sensor}>
+            <StoreMap />
+          </LoadScript>
           </Box>
       </Box>
-      <Box sx={{ backgroundColor: 'secondary.light', paddingLeft: '8rem', paddingBottom: '3rem', paddingTop: '3rem' }}>
+        <Box sx={{
+          backgroundColor: 'secondary.light',
+          paddingLeft: '8rem',
+          paddingBottom: '3rem',
+          paddingTop: '3rem',
+          "@media (max-width: 48rem)": {
+            paddingLeft: '2rem',
+            paddingRight: '2rem',
+          },
+        }}>
          <Typography gutterBottom variant="h3" component="div" color="primary.white">
           2. Look for an animal
         </Typography>
         <Typography gutterBottom variant="h6" component="div" color="primary.white">
           for adoption nearby!
         </Typography>
-      </Box>
+        </Box>
+        
+
+      <div style={{textAlign: 'center', marginBottom: '1rem', marginTop: "2rem",}}>
       <TextField
-          sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}
-          id="zipCodeInput"
-          label="Type your zip code"
-          onChange={onZipCodeChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
-      />
-      <Button onClick={findPets}>Find</Button>
+        sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}
+        id="zipCodeInput"
+        label="Type your zip code"
+        variant="outlined"
+        onChange={onZipCodeChange}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+        />    
+      <Button onClick={findPets} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
+        Find
+      </Button>
+        </div>
       {errorMessage && (
             <div>
               <Alert severity="error">{errorMessage}</Alert>
             </div>
-          )}
+        )}
       <Grid
       container
-        spacing={4}
-        columns={12}
+      spacing={4}
+      columns={12}
       justifyContent="center"
       >
     {results && results.map((result, index) =>
@@ -170,9 +199,12 @@ const AnimalHelper = () => {
     </Grid>
         )}
         {!results && <p>no results</p>}
-      </Grid>  
+        </Grid>
     </div>   
   );
+  }
+  
+  
 }
 
 export default AnimalHelper;

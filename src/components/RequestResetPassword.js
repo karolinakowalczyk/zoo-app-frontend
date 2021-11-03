@@ -28,21 +28,26 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   input: {
+    padding: '0.75rem',
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: '2rem',
-    marginBottom: '1rem',
+    marginTop: "1rem",
+    marginBottom: "1rem",
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
+    fontSize: '1rem',
   },
   form: {
     width: '100%',
     marginTop: '1rem',
+    paddingRight: '1.5rem'
   },
   submit: {
+    boxSizing: 'content-box',
+    padding: '0.75rem',
     marginTop: '1rem',
-    width: "101.25%",
+    marginBottom: '2rem',
     '&:hover': {
       background: "#777777",
     },

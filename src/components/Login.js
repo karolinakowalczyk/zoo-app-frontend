@@ -27,24 +27,29 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+    marginBottom: '5rem',
+    paddingRight: '2rem'
   },
   input: {
+    padding: '0.75rem',
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: "0.5rem",
-    marginBottom: "0.5rem",
+    marginTop: "1rem",
+    marginBottom: "1rem",
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
+    fontSize: '1rem',
   },
   form: {
     width: '100%',
     marginTop: 1,
   },
   submit: {
-    width: "101.25%",
-    marginTop: "0.5rem",
-    marginBottom: "0.5rem",
+    boxSizing: 'content-box',
+    padding: '0.75rem',
+    marginTop: '1rem',
+    marginBottom: '2rem',
     '&:hover': {
       background: "#777777",
     },
@@ -71,18 +76,9 @@ const Login = (props) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [isEdit, setisEdit] = useState(false);
-  
 
   const onChangeUsername = (e) => {
-    setisEdit(true);
     const username = e.target.value;
-    if (!username) {
-      setError("This filed is required");
-    }
-    else {
-      setError("");
-    }
     setUsername(username);
     
   };
@@ -99,10 +95,6 @@ const Login = (props) => {
     setMessage("");
     setLoading(true);
 
-    if (error === "" && isEdit === false) {
-      setError("This field is required!");
-    }
-
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(username, password).then(
@@ -117,7 +109,7 @@ const Login = (props) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-
+          setError(error);
           setLoading(false);
           setMessage(resMessage);
         }
@@ -140,8 +132,10 @@ const Login = (props) => {
           Login
         </Typography>
         <Form className={classes.form} onSubmit={handleLogin} ref={form}>
+         <div>
           <Input
             className={classes.input}
+            validations={[required]}
             name="username"
             value={username}
             onChange={onChangeUsername}
@@ -172,6 +166,7 @@ const Login = (props) => {
             )}
             <span className={classes.buttonText}>Login</span>
           </Button>
+         </div>
           <Grid container>
             <Grid item xs={6} container justifyContent="flex-start">
             <Button  onClick={() => goToPage(`request-reset-password`)}>

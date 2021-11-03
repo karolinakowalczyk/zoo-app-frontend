@@ -17,23 +17,29 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+    marginBottom: '5rem',
   },
   input: {
+    padding: '0.75rem',
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: '0.5rem',
-    marginBottom: '0.5rem',
+    marginTop: '1rem',
+    marginBottom: '1rem',
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
+    fontSize: '1rem',
   },
   form: {
     width: '100%',
     marginTop: 1,
+    paddingRight: '1.5rem'
   },
   submit: {
-    marginTop: 1,
-    width: "101.25%",
+    padding: '0.75rem',
+    boxSizing: 'content-box',
+    marginTop: '1rem',
+    marginBottom: '2rem',
     '&:hover': {
       background: "#777777",
     },
