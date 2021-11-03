@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     height: '3rem',
     border: '0.01rem solid #81B214',
     marginTop: '2rem',
-    marginBottom: '2rem',
+    marginBottom: '1rem',
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
   },
@@ -119,7 +119,7 @@ const RequestResetPassword = (props) => {
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
-        <EmailIcon sx={{ color: '#81B214', fontSize: '36px'}} />
+        <EmailIcon sx={{ color: 'primary.main', fontSize: '8rem'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
           Request Reset Password
         </Typography>

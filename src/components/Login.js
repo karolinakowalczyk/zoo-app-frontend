@@ -32,8 +32,8 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     height: '3rem',
     border: '0.01rem solid #81B214',
-    marginTop: 2,
-    marginBottom: 2,
+    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
     borderRadius: '0.25rem',
     backgroundColor: '#fafafa',
   },
@@ -43,8 +43,8 @@ const useStyles = makeStyles(() => ({
   },
   submit: {
     width: "101.25%",
-    marginTop: 1,
-    marginBottom: 1,
+    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
     '&:hover': {
       background: "#777777",
     },
@@ -135,7 +135,7 @@ const Login = (props) => {
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
-        <AccountCircleIcon sx={{ color: '#81B214', fontSize: '36px'}} />
+        <AccountCircleIcon sx={{ color: 'primary.main', fontSize: '8rem'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
           Login
         </Typography>

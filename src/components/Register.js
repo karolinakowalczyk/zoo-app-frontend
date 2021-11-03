@@ -184,7 +184,7 @@ const Register = (props) => {
     }
   };
 
-   const history = useHistory();
+  const history = useHistory();
   const goToPage = (path) =>{ 
     history.push(path);
   }
@@ -192,7 +192,7 @@ const Register = (props) => {
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.paper}>
-        <AccountCircleIcon sx={{ color: '#81B214', fontSize: '36px'}} />
+        <AccountCircleIcon sx={{ color: 'primary.main', fontSize: '8rem'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
           Sign up
         </Typography>
@@ -247,6 +247,9 @@ const Register = (props) => {
                   <CircularProgress color="primary" />
                 )}
                 <span className={classes.buttonText}>Sign Up</span>
+              </Button>
+              <Button onClick={() => goToPage(`login`)}>
+                Have an account? Login
               </Button>
             </div>
           )}

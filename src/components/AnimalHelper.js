@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { LoadScript } from '@react-google-maps/api';
 import StoreMap from './StoreMap';
 import { AuthContext } from "../App";
-import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Alert, Box } from '@mui/material/';
+import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Alert, Box, LinearProgress } from '@mui/material/';
 import createUUID from "../helpers/createUUID";
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import SearchIcon from '@mui/icons-material/Search';
@@ -17,11 +17,17 @@ const AnimalHelper = () => {
   const accessToken = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [pageLoad, setPageLoad] = useState(true);
 
   useEffect(() => {
     if (accessToken === null) return;
+    const displayPageLoader = async () => {
+      await new Promise((resolve) => setTimeout(() => resolve(), 3000));
+      return setPageLoad(false);
+    };
+    displayPageLoader();
     const fetchPets = async () => {
-      const petResults = await fetch(
+      await fetch(
         "https://api.petfinder.com/v2/animals?location=10001",
         {
           headers: {
@@ -34,26 +40,14 @@ const AnimalHelper = () => {
       .catch(err => { setErrorMessage(err) });
       //const json = await petResults.json();
       //setResults(json.animals);
-      setLoading(true);
+      //setLoading(true);
     };
+    
     fetchPets();
   }, [accessToken]);
   if (results === null) return null;
 
   const fetchNewPets = async () => {
-     /*const petResults = await fetch(
-        `https://api.petfinder.com/v2/animals?location=${zipCode}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-    );
-    
-    const json = await petResults.json();
-    console.log(json);
-    
-    setResults(json.animals);*/
     await fetch(
       `https://api.petfinder.com/v2/animals?location=${zipCode}`,
       {
@@ -80,34 +74,13 @@ const AnimalHelper = () => {
     fetchNewPets();
   }
 
-  /*const displayResults = results.map((result, index) =>
-   
-    <Grid item xs={10} sm={4} key={index}>
-      <Card key={createUUID(result.id)} style={{ height: '100%' }}>
-        {result.photos.length > 0 ?
-          <CardMedia
-          component="img"
-          src={result.photos[0].medium}
-          alt={result.name}
-            /> :
-          <CardMedia>
-            <div >
-            <Avatar style={{ height: '10em', width: '10em', display: 'block', margin: '0 auto', textAlign: 'center'}}>
-              <NoPhotographyIcon style={{ height: '7em', width: '7em', marginTop: '0.5em' }}></NoPhotographyIcon>
-            </Avatar>
-            </div>
-          </CardMedia>    
-          }
-        
-        <Typography gutterBottom variant="h5" component="div" sx={{ marginLeft: "0.5rem"}} key={createUUID(result.name)}>
-          {result.name} 
-        </Typography>
-      </Card>
-    </Grid>
-);*/
+  if(pageLoad) { // if your component doesn't have to wait for an async action, remove this block 
+    return <LinearProgress color="success" />; // render null when app is not ready
+    //return null;
+  }
   
   return (
-    <div sx={{ marginTop: '8rem' }}>
+    <div sx={{ marginTop: '8rem' }} >
       <Box sx={{ backgroundColor: 'primary.main', paddingLeft: '8rem', paddingBottom: '3rem',}}>
             <h3>See how</h3>
             <h1>YOU</h1>
@@ -159,24 +132,25 @@ const AnimalHelper = () => {
           )}
       <Grid
       container
-      spacing={4}
+        spacing={4}
+        columns={12}
       justifyContent="center"
       >
     {results && results.map((result, index) =>
-    <Grid item xs={10} sm={4} key={index} sx={{marginBottom: "2rem"}}>
+    <Grid item xs={10} sm={4} md={3} key={index} sx={{marginBottom: "2rem"}}>
       <Card key={createUUID(result.id)} style={{ height: '100%', marginLeft: "1rem", marginRight: "1rem" }}>
         {result.photos.length > 0 ?
           <CardMedia
-          component="img"
-          src={result.photos[0].medium}
-          alt={result.name}
+              component="img"
+              style={{ height: '250px', width: '100%', objectFit: 'cover'}}
+              src={result.photos[0].medium}
+              alt={result.name}
             /> :
-          <CardMedia>
-            <div >
-            <Avatar style={{ height: '10em', width: '10em', display: 'block', margin: '0 auto', textAlign: 'center'}}>
-              <NoPhotographyIcon style={{ height: '7em', width: '7em', marginTop: '0.5em' }}></NoPhotographyIcon>
+            <CardMedia
+              >     
+            <Avatar style={{ height: '50%', width: '50%', objectFit: 'cover', display: 'block', margin: '0 auto', textAlign: 'center', padding: '1em'}}>
+              <NoPhotographyIcon style={{ height: '100%', width: '100%', objectFit: 'cover', marginTop: '0.5em' }}></NoPhotographyIcon>
             </Avatar>
-            </div>
           </CardMedia>    
           }
         
