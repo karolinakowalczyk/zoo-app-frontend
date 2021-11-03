@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import { createTheme, Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar } from '@mui/material/';
+import { Button, Popper, ThemeProvider, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemText, Box, IconButton, AppBar, Alert } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import penguin from './assets/images/penguin.png';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PetFinderService from "../src/services/petfinder.service";
 
 import "./App.css";
 
@@ -36,27 +37,19 @@ import NotFound from "./components/NotFound"
 import Tickets from "./components/Tickets"
 import Footer from "./components/Footer"
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#81B214'
-    },
-    secondary: {
-      main: '#777777',
-      light: '#FFF'
-    },
-  }
-})
+import theme from "./styles/theme"
 
-const useStyles = makeStyles((theme) => ({
+export const AuthContext = createContext();
+
+const useStyles = makeStyles(() => ({
   paper: {
     width: 350
   },
-  popper: {
+  /*popper: {
     backgroundColor: '#777777',
     marginTop: 1,
     padding: 1,
-  },
+  },*/
   popperLink: {
     color: '#FFF',
     textDecoration: 'none',
@@ -78,10 +71,35 @@ const App = () => {
   const [ , setAppReservation] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
   const classes = useStyles();
+  const[message, setMessage] = useState('');
+
+  const [accessToken, setAccessToken] = useState(null);
+
 
   const changeReservation = (value) => {
     setAppReservation(value);
   }
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      PetFinderService.getAccessToken().then(
+      (response) => {
+          setAccessToken(response.data);
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+          setMessage(resMessage);
+      }
+    );
+    };
+    fetchAccessToken();
+  }, []);
+
 
   useEffect(() => {
 
@@ -371,7 +389,9 @@ const App = () => {
               {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </Button>
             <Popper id={id} open={open} anchorEl={anchorEl} style={{zIndex: "1101"}}>
-              <List component="div" className={classes.popper}>
+              <List component="div"
+                sx={{ backgroundColor: 'secondary.main', marginTop: 1, padding: 1, }}
+              >
                 <ListItem>
                   <Link to={"/opening-hours"} className={classes.popperLink} onClick={() => setAnchorEl(null)}>
                   <ListItemText>
@@ -440,6 +460,7 @@ const App = () => {
           </Typography>
         </Toolbar>
       </AppBar>
+      <AuthContext.Provider value={accessToken}>
       <Box className="main-container">
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
@@ -514,9 +535,15 @@ const App = () => {
           />
 
           <Route component={NotFound} />
-        </Switch>
+          </Switch>
+      {message && (
+        <div>
+          <Alert severity="error">{message}</Alert>
+        </div>
+      )}
         
       </Box>
+      </AuthContext.Provider>
       <Footer/>
     </ThemeProvider>
   );
