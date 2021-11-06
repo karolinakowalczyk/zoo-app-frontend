@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import SearchIcon from '@mui/icons-material/Search';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
-import "../styles/info.css"
+import useInfoStyles from "../styles/useInfoStyles";
 
 
 const headCells = [
@@ -19,7 +19,7 @@ const headCells = [
     sorted: true,
   },
   {
-    id: 'start_time',
+    id: 'hour',
     label: 'Start time',
     sorted: true,
   },
@@ -171,13 +171,12 @@ const Attractions = (props) => {
       }
     })
   }
-  
-
+  const classes = useInfoStyles();
   return (
     <div>
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
-          <h1 className="greyTitle">Attractions</h1>
+          <h1 className={classes.greyTitle}>Attractions</h1>
           <div style={{ textAlign: 'center', marginBottom: '1rem'}}>
             <TextField
               id="search-attractions"

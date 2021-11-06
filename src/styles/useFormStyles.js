@@ -27,7 +27,8 @@ const useFormStyles = makeStyles((theme) => ({
     width: '100%',
     marginTop: 1,
   },
-  submit: {
+    submit: {
+    backgroundColor: theme.palette.primary.main,
     boxSizing: 'content-box',
     padding: '0.75rem',
     marginTop: '1rem',
@@ -40,7 +41,7 @@ const useFormStyles = makeStyles((theme) => ({
     color: theme.palette.primary.white,
   },
   alert: {
-    marginTop: 1,
+      marginTop: 1
   },
   h1: {
     color: theme.palette.primary.black

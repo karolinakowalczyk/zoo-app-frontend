@@ -1,32 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, CircularProgress, Alert } from '@mui/material/';
-import { makeStyles } from '@mui/styles';
+import { Box, Button, CircularProgress, Alert, Grid, TextField,} from '@mui/material/';
 import Calendar from 'react-calendar';
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
+import useInfoStyles from "../styles/useInfoStyles";
+import useFormStyles from "../styles/useFormStyles";
+import getMonthName from "../helpers/getMonthName";
 
-
-const useStyles = makeStyles((theme) => ({
-  submit: {
-    marginTop: '1rem',
-    width: "101.25%",
-    '&:hover': {
-      background: "#777777",
-    },
-  },
-  alert: {
-    marginTop: '1rem',
-    },
-    link: {
-        '&:hover': {
-            textDecoration: 'none',
-        }
-    }
-  
-}));
 
 const Reservation = (props) => {
-    const classes = useStyles();
+    const infoclasses = useInfoStyles();
+    const formclasses = useFormStyles();
     const currentUser = AuthService.getCurrentUser();
     const days = 2;
 
@@ -35,7 +19,7 @@ const Reservation = (props) => {
         current.setDate(current.getDate() + days);
         return current;
     } 
-
+    const [name, setName] = useState('');
     const [date, setChangeDate] = useState(new Date());
     const [expiredDate, setExpiredDate] = useState(initalizeExpiredDate(date));
     const [currentDay, setCurrentDay] = useState(new Date().getDate().toString());
@@ -63,6 +47,10 @@ const Reservation = (props) => {
         
     }
 
+    const onNameChange = (e) => {
+        setName(e.target.value);
+    };
+
     const onDateChange = date => {
         setChangeDate(date);
         setCurrentDay((date.getDate()).toString());
@@ -74,50 +62,25 @@ const Reservation = (props) => {
         
     }
 
-    const getMonthName = (month) => {
-        switch (month) {
-            case '0':
-                return 'January'
-            case '1':
-                return 'February'
-            case '2':
-                return 'March'
-            case '3':
-                return 'April'
-            case '4':
-                return 'May'
-            case '5':
-                return 'June'
-            case '6':
-                return 'July'
-            case '7':
-                return 'August'
-            case '8':
-                return 'September'
-            case '9':
-                return 'October'
-            case '10':
-                return 'November'
-            case '11':
-                return 'December'
-            default:
-                return month + 1;
-        }
-    }
     const handleMakeReservation = (e) => {
         e.preventDefault();
 
+        if (!name) {
+            setMessage("Type your reservation name!");
+            return
+        }
         setMessage("");
         setLoading(true);
         setSuccessful(false);
     
-        ReservationsService.createReservation(currentUser.id, date.toString(), expiredDate.toString(), quantity).then(
+        ReservationsService.createReservation(currentUser.id, name, date.toString(), expiredDate.toString(), quantity).then(
             (response) => {
                 setLoading(false);
                 setMessage(response.data.message);
                 setSuccessful(true);
                 setCurrentReservation({
                     userId: currentUser.id,
+                    name: name,
                     date: date.toString(),
                     expirationDate: expiredDate.toString()
                 })
@@ -134,48 +97,89 @@ const Reservation = (props) => {
                 setSuccessful(false);
             }
         );
-
   };
-    
+
     return (
         <Box>
-            <h2>reservations</h2>
-            <Calendar
-                onChange={onDateChange}
-                value={date}
-                minDate={new Date()}
-            />
-            <h2>You choose date:</h2>
-            <p>{currentDay}</p>
-            <p>{getMonthName(currentMonth)}</p>
-            <p>{currentYear}</p>
-            <div>
-                <p>
-                    Set the quantity
-                </p>
-                <div className="quantity-input">
-                    <button className="quantity-input__modifier quantity-input__modifier--left" onClick={decrement}>
-                    -
-                    </button>
-                    <input className="quantity-input__screen" type="text" value={quantity} readOnly />
-                    <button className="quantity-input__modifier quantity-input__modifier--right" onClick={increment}>
-                    +
-                    </button>  
-                </div>  
-            </div>
-            <Button onClick={handleMakeReservation}>
-                {loading && (
-                  <CircularProgress color="primary" />
-                )}
-                <span className={classes.buttonText}>Make reservation</span>
-            </Button>
+            <h1 className={infoclasses.greyTitle}>Make reservation</h1>
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="flex-start"
+                sx={{mb: '2rem'}}>
+                <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <Grid
+                    container
+                        justifyContent="center"
+                        sx={{mt: '2rem'}}
+                    >
+                    <Calendar
+                        onChange={onDateChange}
+                        value={date}
+                        minDate={new Date()}
+                    />
+                </Grid>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={4}>
+                <div style={{ textAlign: 'center' }}>
+                    <TextField
+                        id="reservationName"
+                        label="Your reservation"
+                        variant="outlined"
+                        onChange={onNameChange}
+                        value={name}
+                    />
+                    <h2>You choose date:</h2>
+                    <p>{currentDay} {getMonthName(currentMonth)} {currentYear}</p>
+                    <p>
+                        Set the quantity
+                    </p>
+                    <div>
+                        <Button sx={{
+                            backgroundColor: 'primary.main',
+                            color: 'primary.white',
+                            borderRadius: '50%',
+                                '&:hover': {
+                                backgroundColor: 'primary.main',
+                                },
+                                marginRight: '0.5rem'
+                        }}
+                        onClick={decrement}>
+                        <span style={{ fontSize: '2rem' }}>-</span> 
+                        </Button>
+                            <TextField value={quantity} disabled variant="outlined" sx={ { mt: '0.5rem'}}/>
+                        <Button sx={{
+                            backgroundColor: 'primary.main',
+                            color: 'primary.white',
+                            borderRadius: '50%',
+                                '&:hover': {
+                            backgroundColor: 'primary.main',
+                                },
+                            marginLeft: '0.5rem'
+                            }}
+                            onClick={increment}>
+                            <span style={{ fontSize: '2rem' }}>+</span>
+                        </Button>  
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                        <Button onClick={handleMakeReservation} className={formclasses.submit}>
+                            {loading && (
+                            <CircularProgress color="primary" />
+                            )}
+                            <span className={formclasses.buttonText}>Make reservation</span>
+                        </Button>
+                    </div>
+                </div>
+            </Grid> 
+            </Grid>
             {message && successful && (
-                <div className={classes.alert}>
+                <div className={formclasses.alert}>
                     <Alert severity="success" >{message}</Alert>
                 </div>
             )}
             {message && !successful && (
-                <div className={classes.alert}>
+                <div className={formclasses.alert}>
                     <Alert severity="error" >{message}</Alert>
                 </div>
             )}

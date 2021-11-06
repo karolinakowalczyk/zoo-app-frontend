@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, List, ListItem, ListSubheader, ListItemText, ListItemIcon } from '@mui/material/'
-
+import useInfoStyles from "../styles/useInfoStyles";
 import penguin from '../assets/images/penguin.png';
 
 function createData(id, type, price, days) {
@@ -21,9 +21,10 @@ const rows = [
 ];
 
 const Tickets = () => {
+  const classes = useInfoStyles();
   return (
     <div>
-      <h1 className="greyTitle">Tickets</h1>
+      <h1 className={classes.greyTitle}>Tickets</h1>
       <TableContainer>
         <Table aria-label="simple table">
           <TableHead>

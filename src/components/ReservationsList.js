@@ -1,27 +1,45 @@
 import React, { useState, useEffect } from "react";
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, Toolbar, TextField, InputAdornment} from '@mui/material/';
+import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer} from '@mui/material/';
 import PropTypes from 'prop-types';
 import { visuallyHidden } from '@mui/utils';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
-import SearchIcon from '@mui/icons-material/Search';
+import useInfoStyles from "../styles/useInfoStyles";
+import getMonthName from "../helpers/getMonthName"
 
 const headCells = [
   {
-    id: 'reservation',
-    label: 'Reservation',
+    id: 'name',
+    label: 'Reservation Name',
   },
   {
     id: 'date',
     label: 'Date',
   },
   {
-    id: 'exp_date',
+    id: 'expirationDate',
     label: 'Expiration Date',
   },
 ];
+
+const dateDay = (dateString) =>{
+  const date = new Date(dateString);
+  return (date.getDate()).toString();
+}
+
+const dateMonth = (dateString) =>{
+  const date = new Date(dateString);
+  const month = (date.getMonth()).toString();
+  return getMonthName(month);
+}
+
+const dateYear = (dateString) =>{
+  const date = new Date(dateString);
+  return (date.getFullYear()).toString();
+  
+}
 
 const TableHeadFunc = (props) => {
   const { order, orderBy,  onRequestSort } =
@@ -75,7 +93,6 @@ const ReservationsList = () => {
   const [orderBy, setOrderBy] = useState('reservation');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [search, setSearch] = useState({ searchFun: items => { return items; } })
 
     useEffect(() => {
     ReservationsService.getUserReservations(currentUser.id).then(
@@ -113,20 +130,8 @@ const ReservationsList = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - reservationsData.length) : 0;
 
-  const handeSearchReservations = (e) => {
-    const currentValue = e.target.value;
-    setSearch({
-      searchFun: items => {
-        if (currentValue === "") {
-          return items;
-        }
-        else {
-          return items.filter(x => x.date.toLowerCase().includes(currentValue));
-        }
-      }
-    })
-  }
 
+  const classes = useInfoStyles();
   return (
     <div>
       {!successful && (
@@ -137,22 +142,7 @@ const ReservationsList = () => {
       {reservationsData.length > 0 ?  
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>
-            <h2>Your reservations</h2>
-            <Toolbar>
-              <TextField
-                id="search-reservations"
-                label="Search Reservations by date"
-                onChange={handeSearchReservations}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              />
-            </Toolbar>
+            <h1 className={classes.greyTitle}>Your reservations</h1>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -165,15 +155,14 @@ const ReservationsList = () => {
                 rowCount={reservationsData.length}
               />
               <TableBody>
-                {stableSort(search.searchFun(reservationsData), getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                {stableSort(reservationsData, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((reservation, index) => {
                     return (
-      
                     <TableRow
                       hover
                       tabIndex={-1}
-                      key={index}
+                      key={reservation.name}
                     >
                       <TableCell
                         component="th"
@@ -182,10 +171,10 @@ const ReservationsList = () => {
                         scope="row"
                         padding="none"
                       >
-                        Reservation {index}
+                        {reservation.name}
                       </TableCell>
-                        <TableCell align='center'>{reservation.date}</TableCell>
-                      <TableCell align='center'>{reservation.expirationDate}</TableCell>
+                      <TableCell align='center'>{dateDay(reservation.date)} {dateMonth(reservation.date)} {dateYear(reservation.date) }</TableCell>
+                      <TableCell align='center'>{dateDay(reservation.expirationDate)} {dateMonth(reservation.expirationDate)} {dateYear(reservation.expirationDate) }</TableCell>
                     </TableRow>
                   );
                 })}

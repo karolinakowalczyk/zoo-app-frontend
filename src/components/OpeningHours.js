@@ -1,6 +1,6 @@
 import React from "react";
-import "../styles/info.css";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material/'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material/'
+import useInfoStyles from "../styles/useInfoStyles";
 
 
 function createData(id, month, days, entry, sightseeing) {
@@ -18,9 +18,10 @@ const rows = [
 ];
 
 const OpeningHours = () => {
+  const classes = useInfoStyles();
   return (
     <div>
-      <h1 className="greyTitle">Opening hours</h1>
+      <h1 className={classes.greyTitle}>Opening hours</h1>
       <TableContainer sx={{mb: 5}}>
         <Table aria-label="simple table">
           <TableHead>
