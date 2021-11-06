@@ -6,6 +6,8 @@ import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdor
 import createUUID from "../helpers/createUUID";
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import SearchIcon from '@mui/icons-material/Search';
+import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const lib = ['places', 'geometry'];
 const key = `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
@@ -17,6 +19,7 @@ const AnimalHelper = () => {
   const accessToken = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('');
   const [pageLoad, setPageLoad] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setPageLoad(true);
@@ -55,25 +58,27 @@ const AnimalHelper = () => {
       .then(res => res.json())
       .then(data => setResults(data.animals))
       .catch(err => { setErrorMessage(err) });
-    
+    setLoading(false);
   };
   const onZipCodeChange = (e) => {
     setZipCode(e.target.value);
   }
 
-  const findPets = () => {
+  const findPets = async() => {
     if (zipCode === '') {
       console.log('you must type your addres');
       return;
     }
+    setLoading(!loading);
     if (accessToken === null) return;
-    fetchNewPets();
+    await fetchNewPets();
+    
   }
 
   if (pageLoad) {
     return(
     <div style={{ marginTop: '10rem' }} >
-      <p style={{ marginTop: '2rem', textAlign: 'center'}}>Loading</p>
+      <p style={{ marginTop: '2rem', textAlign: 'center', color: '#777'}}>Loading</p>
       <LinearProgress color="success" />
     </div>)
   }
@@ -135,7 +140,7 @@ const AnimalHelper = () => {
         </Box>
         
 
-      <div style={{textAlign: 'center', marginBottom: '1rem', marginTop: "2rem",}}>
+      <div style={{textAlign: 'center', marginBottom: '3rem', marginTop: "3rem",}}>
       <TextField
         sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}
         id="zipCodeInput"
@@ -149,10 +154,31 @@ const AnimalHelper = () => {
             </InputAdornment>
           ),
         }}
-        />    
-      <Button onClick={findPets} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
+          />
+      {loading ?
+      <LoadingButton
+        loading
+        loadingPosition="start"
+        startIcon={<SaveIcon />}
+        variant="outlined"
+        sx={{
+          height: '3.5rem',
+          marginTop: '0.5rem',
+          marginLeft: '1rem',
+          backgroundColor: 'primary.main',
+          color: 'primary.white',
+          paddingLeft: '1rem',
+          paddingRight: '1rem',
+          '&:hover':
+            { backgroundColor: 'secondary.main', }
+        }}
+      >
         Find
-      </Button>
+      </LoadingButton> :  <Button onClick={findPets} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
+        Find
+      </Button>}  
+     
+      
         </div>
       {errorMessage && (
             <div>

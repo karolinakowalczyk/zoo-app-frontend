@@ -3,74 +3,15 @@ import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
 import { Container, Typography, Button, CircularProgress, Alert } from '@mui/material/';
-import { makeStyles } from '@mui/styles';
+import useFormStyles from "../styles/useFormStyles";
 import EmailIcon from '@mui/icons-material/Email';
 import AuthService from "../services/auth.service";
 import { useHistory } from "react-router-dom";
+import required from "../helpers/requiredField";
+import validEmail from "../helpers/validEmail";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>This field is required!</p>
-      </div>
-    );
-  }
-};
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: '10rem',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-  },
-  input: {
-    padding: '0.75rem',
-    width: '100%',
-    height: '3rem',
-    border: '0.01rem solid #81B214',
-    marginTop: "1rem",
-    marginBottom: "1rem",
-    borderRadius: '0.25rem',
-    backgroundColor: '#fafafa',
-    fontSize: '1rem',
-  },
-  form: {
-    width: '100%',
-    marginTop: '1rem',
-    paddingRight: '1.5rem'
-  },
-  submit: {
-    boxSizing: 'content-box',
-    padding: '0.75rem',
-    marginTop: '1rem',
-    marginBottom: '2rem',
-    '&:hover': {
-      background: "#777777",
-    },
-  },
-  alert: {
-    marginTop: '1rem',
-  },
-  h1: {
-    color: '#000'
-  },
-  buttonText: {
-    color: '#FFF',
-  },
-  link: {
-    '&:hover': {
-      textDecoration: 'none',
-    },
-    color: "#FFF",
-  }
-}));
-
-const RequestResetPassword = (props) => {
-  const classes = useStyles();
+const RequestResetPassword = () => {
+  const classes = useFormStyles();
 
   const form = useRef();
   const checkBtn = useRef();
@@ -92,10 +33,14 @@ const RequestResetPassword = (props) => {
 
     setMessage("");
     setLoading(true);
-    setSuccessful(false);
 
     form.current.validateAll();
+    if (!form.current.validateAll()) {
+      setLoading(false);
+    }
+   
     if (checkBtn.current.context._errors.length === 0) {
+      
       AuthService.requestResetPassword(email).then(
         (response) => {
           setLoading(false);
@@ -137,7 +82,7 @@ const RequestResetPassword = (props) => {
                               value={email}
                               onChange={onChangeEmail}
                               placeholder="Email"
-                              validations={[required]}
+                              validations={[required, validEmail]}
                           />
                           <Button
                               type="submit"

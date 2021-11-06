@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AttractionsService from "../services/attractions.service";
 import createUUID from "../helpers/createUUID";
-import { Button, Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, Toolbar, TextField, InputAdornment} from '@mui/material/';
+import { Button, Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField, InputAdornment } from '@mui/material/';
 import AuthService from "../services/auth.service";
 import convertMinsToTime from "../helpers/convertMinsToTime";
 import { visuallyHidden } from '@mui/utils';
@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import SearchIcon from '@mui/icons-material/Search';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
+import "../styles/info.css"
 
 
 const headCells = [
@@ -176,22 +177,22 @@ const Attractions = (props) => {
     <div>
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
-          <h2>attractions</h2>
-          <Toolbar>
+          <h1 className="greyTitle">Attractions</h1>
+          <div style={{ textAlign: 'center', marginBottom: '1rem'}}>
             <TextField
-            id="search-attractions"
+              id="search-attractions"
               label="Search Attractions by name"
+              variant="outlined"
               onChange={handeSearchAttractions}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-        variant="standard"
-      />
-          </Toolbar>
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+         </div>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

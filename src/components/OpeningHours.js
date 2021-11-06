@@ -1,5 +1,5 @@
 import React from "react";
-import "./OpeningHours.css";
+import "../styles/info.css";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material/'
 
 
@@ -21,7 +21,7 @@ const OpeningHours = () => {
   return (
     <div>
       <h1 className="greyTitle">Opening hours</h1>
-      <TableContainer>
+      <TableContainer sx={{mb: 5}}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>

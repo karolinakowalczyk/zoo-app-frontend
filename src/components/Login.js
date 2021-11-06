@@ -4,69 +4,17 @@ import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
 import { Container, Typography, Button, Grid, CircularProgress, Alert  } from '@mui/material/';
-import { makeStyles } from '@mui/styles';
+
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import AuthService from "../services/auth.service";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>This field is required!</p>
-      </div>
-    );
-  }
-};
+import useFormStyles from "../styles/useFormStyles";
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    marginTop: '10rem',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    marginBottom: '5rem',
-    paddingRight: '2rem'
-  },
-  input: {
-    padding: '0.75rem',
-    width: '100%',
-    height: '3rem',
-    border: '0.01rem solid #81B214',
-    marginTop: "1rem",
-    marginBottom: "1rem",
-    borderRadius: '0.25rem',
-    backgroundColor: '#fafafa',
-    fontSize: '1rem',
-  },
-  form: {
-    width: '100%',
-    marginTop: 1,
-  },
-  submit: {
-    boxSizing: 'content-box',
-    padding: '0.75rem',
-    marginTop: '1rem',
-    marginBottom: '2rem',
-    '&:hover': {
-      background: "#777777",
-    },
-  },
-  buttonText: {
-    color: '#FFF',
-  },
-  alert: {
-    marginTop: 1,
-  },
-  h1: {
-    color: '#000'
-  },
-}));
+import required from "../helpers/requiredField";
 
 const Login = (props) => {
-  const classes = useStyles();
+  const classes = useFormStyles();
 
   const form = useRef();
   const checkBtn = useRef();
@@ -75,7 +23,6 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
 
   const onChangeUsername = (e) => {
     const username = e.target.value;
@@ -109,7 +56,6 @@ const Login = (props) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          setError(error);
           setLoading(false);
           setMessage(resMessage);
         }
@@ -141,9 +87,6 @@ const Login = (props) => {
             onChange={onChangeUsername}
             placeholder="User name"
           />
-          <div>
-            { error }
-          </div>
           <Input
             className={classes.input}
             validations={[required]}

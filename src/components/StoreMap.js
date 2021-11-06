@@ -106,7 +106,7 @@ const StoreMap = () => {
 
   return (
     <div>
-      <div style={{textAlign: 'center', marginBottom: '1rem'}}>
+      <div style={{textAlign: 'center', marginBottom: '3rem', marginTop: '3rem'}}>
       <TextField
         sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
         id="addressInput"
