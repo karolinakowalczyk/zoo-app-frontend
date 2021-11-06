@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from "react";
-
-import UserService from "../../services/user.service";
-
+import React from "react";
 import "./Home.css";
+import { useHistory } from "react-router-dom";
 
 import { Button, Box } from '@mui/material/';
 
 
 const Home = () => {
-  const [content, setContent] = useState("");
 
-  useEffect(() => {
-    UserService.getPublicContent().then(
-      (response) => {
-        setContent(response.data);
-      },
-      (error) => {
-        const _content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-
-        setContent(_content);
-      }
-    );
-  }, []);
-   
+  const history = useHistory();
+  const goToPage = (path) =>{ 
+    history.push(path);
+  }
+ 
   return (
     <Box>
       <Box className="container">
@@ -34,7 +20,7 @@ const Home = () => {
             <h1>ZOO</h1>
             <h1>WITH THE MOST</h1>
             <h1>AMAZING ANIMALS</h1>
-            <Button
+            <Button onClick={() => goToPage(`opening-hours`)}
               sx={{
                 background: '#FFF',
                 '&:hover': {

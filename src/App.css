@@ -13,16 +13,6 @@
   min-height: 47vh;
 }
 
-/*.page-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content-wrap{
-  flex: 1;
-}*/
-
 .logo-link {
   color: #FFF;
   font-family: 'Rammetto One', 'Montserrat',
@@ -64,7 +54,7 @@
 .menu-btn {
   display: none !important;
 }
-@media (max-width: 48rem){
+@media (max-width: 74rem){
   .menu-btn {
     display: block !important;
   }
@@ -121,31 +111,6 @@
   width: 3rem !important;
   height: auto !important;
 }
-
-.paper {
-  width: 350;
-}
-
-.popper {
-  background-color: '#777777';
-  margin-top: 1;
-  padding: 1;
-}
-
-.popperLink {
-  color: '#FFF';
-  text-decoration: 'none';
-}
-
-.popperLink:hover {
-  color: '#81B214';
-}
-
-
-.visitZooBtn {
-  background-color: '#FFF',
-}
-
 
 
 

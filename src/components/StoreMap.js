@@ -106,7 +106,7 @@ const StoreMap = () => {
 
   return (
     <div>
-      <div>
+      <div style={{textAlign: 'center', marginBottom: '3rem', marginTop: '3rem'}}>
       <TextField
         sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
         id="addressInput"
@@ -121,7 +121,7 @@ const StoreMap = () => {
           ),
         }}
         />    
-      <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', '&:hover': { backgroundColor: 'secondary.main',} }}>
+      <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
         Search store
       </Button>
       </div>

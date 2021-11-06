@@ -58,9 +58,7 @@ const Map = (props) => {
     const [mapLoaded, setMapLoaded] = useState(false);
 
     const onMapLoad = () => {
-        //zapytaj o udostępnianie lokalizacji??
         setMapLoaded(true);
-
     }
     useEffect(() => {
         if (mapLoaded) {
