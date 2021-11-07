@@ -4,6 +4,7 @@ import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
 import { makeStyles } from '@mui/styles';
 
+import useInfoStyles from "../styles/useInfoStyles";
 
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import TrainIcon from '@mui/icons-material/Train';
@@ -11,7 +12,8 @@ import TrainIcon from '@mui/icons-material/Train';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import TramIcon from '@mui/icons-material/Tram';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import { Button, Alert } from '@mui/material/';
+import { Button, Alert, Grid, TextField, InputAdornment, Box } from '@mui/material/';
+import SearchIcon from '@mui/icons-material/Search';
 import AuthService from "../services/auth.service";
 
 import PlansService from "../services/plans.service";
@@ -21,10 +23,11 @@ import Attractions from './Attractions'
 
 const useStyles = makeStyles((theme) => ({
     transportButton: {
-      background: '#FFF',
+      background: theme.palette.primary.white,
         '&:focus': {
-        background: "#777777",
+        background: theme.palette.secondary.main,
         },
+        width: '50%'
     },
     alert: {
         marginTop: 1,
@@ -42,8 +45,9 @@ const Map = (props) => {
     const [longTransport, setLongTransport] = useState("");
     const [disable, setDisable] = useState(true);
     const [firstLoad, setFirstLoad] = useState(true);
-    const classes = useStyles();
 
+    const classes = useStyles();
+    const infoclasses = useInfoStyles();
 
     const [message, setMessage] = useState("");
     const [successful, setSuccessful] = useState(false);
@@ -201,49 +205,64 @@ const Map = (props) => {
     }
 
   return (
-      <div>
-        <Reservation changeReservation={changeReservation}></Reservation>
+      <Box>
+          <Reservation changeReservation={changeReservation}></Reservation>
+          <h1 className={infoclasses.greyTitle}>Check transport</h1>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="flex-start"
+            sx={{mb: '2rem'}}>
           <GoogleMap
             center={center}
             zoom={8}
             onLoad={onMapLoad}
-            mapContainerStyle={{ height: "400px", width: "800px" }}
+            mapContainerStyle={{ height: "40rem", width: "100%" }}
         >
         <DirectionsRenderer
             directions={directions}
         />
         </GoogleMap>
-        <div>
+        </Grid>
             <div>
-                <div>
-                <label htmlFor="addressInput">Address</label>
-                    <input
-                        type="text"
-                        id="addressInput"
-                        value={addressInput}
-                        placeholder="Type your address"
+                <div style={{textAlign: 'center', marginBottom: '3rem', marginTop: '3rem'}}>
+                    <TextField
+                        sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
+                        id="reservationName"
+                        label="Your address"
+                        variant="outlined"
                         onChange={onAddressInput}
-                        required />
+                        value={addressInput}
+                        InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                            <SearchIcon />
+                            </InputAdornment>
+                        ),
+                        }}
+                        />    
+                    <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
+                        Search store
+                    </Button>
                 </div>
-
-            </div>
-            <div>
-                <button onClick={handleAddressSubmit}>
-                    Search route
-                </button>
-            </div>
               {isGeocodingError && (
                 <div className={classes.alert}>
                     <Alert severity="error" >There were problems retrieving the address</Alert>
                 </div>
-            )}
-            <div>
-                <h2>Parameters of your route</h2>
-                <p>Total distance: {distance} km</p>
-            </div>
-            <div>
-                <p>long transport: {longTransport}</p>
-                <p>short transport: {shortTransport}</p>
+              )}
+            <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{mb: '2rem'}}>
+            
+                <h2>Parameters of your route: </h2>
+                <p>Total distance: <span style={{fontWeight: 'bold'}}>{distance}</span> km</p>
+           
+                <p>Long transport: <span style={{fontWeight: 'bold'}}>{longTransport}</span></p>
+                <p>Short transport: <span style={{fontWeight: 'bold'}}>{shortTransport}</span></p>
             {distance <= 20 ?
                 <div>
                     <Button
@@ -279,7 +298,7 @@ const Map = (props) => {
                     >
                         <TrainIcon/>
                     </Button>
-                    <h2>And from Main Station: </h2>
+                    <p>From Main Station you can go by: </p>
                     <Button
                         disabled={disable}
                         className={classes.transportButton}
@@ -298,8 +317,9 @@ const Map = (props) => {
                     </Button>
                 </div>
             }            
-            </div>
+            </Grid>
           </div>
+         
           <Attractions changeAttractions={changeAttractions}></Attractions>
           
         <Button onClick={handleCreatePlan}>
@@ -315,7 +335,7 @@ const Map = (props) => {
                     <Alert severity="error" >{message}</Alert>
                 </div>
             )}
-    </div>
+    </Box>
   );
 };
 

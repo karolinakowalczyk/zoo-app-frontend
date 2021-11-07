@@ -266,12 +266,13 @@ const Attractions = (props) => {
           )}
       {currentUser &&
         <div>
-          <h2>Added attractions</h2>
-          <Table>
-            <TableBody>
+          <h1 className={classes.greyTitle}>Added Attractions</h1>
+        {addedAttractions.length > 0 ? <Table>
+          <TableBody>
             {displayAddedAttractions}
-            </TableBody>
-          </Table>
+          </TableBody>
+        </Table>
+      :<div style={{textAlign: "center"}}><p>You haven't added any attractions yet.</p></div>}
         </div>
       }
     </div>

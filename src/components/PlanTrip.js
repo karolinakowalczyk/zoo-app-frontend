@@ -8,13 +8,10 @@ const sensor = false;
 const RenderMap = ()  => {
   
   return (
-    <div>
-      <h2>plan trip</h2>
-      <LoadScript googleMapsApiKey={key} libraries={lib} sensor={sensor}>
-        <Map />
-      </LoadScript>
-      </div>
-    );
+    <LoadScript googleMapsApiKey={key} libraries={lib} sensor={sensor}>
+      <Map />
+    </LoadScript>
+  );
 }
 
 export default RenderMap;

@@ -112,7 +112,7 @@ const Reservation = (props) => {
                     <Grid
                     container
                         justifyContent="center"
-                        sx={{mt: '2rem'}}
+                        sx={{mt: '0.25rem', mb: '2rem'}}
                     >
                     <Calendar
                         onChange={onDateChange}
@@ -125,7 +125,7 @@ const Reservation = (props) => {
                 <div style={{ textAlign: 'center' }}>
                     <TextField
                         id="reservationName"
-                        label="Your reservation"
+                        label="Your reservation name"
                         variant="outlined"
                         onChange={onNameChange}
                         value={name}
@@ -174,14 +174,26 @@ const Reservation = (props) => {
             </Grid> 
             </Grid>
             {message && successful && (
-                <div className={formclasses.alert}>
-                    <Alert severity="success" >{message}</Alert>
-                </div>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                    <div className={formclasses.alert}>
+                        <Alert severity="success" >{message}</Alert>
+                    </div>
+                </Grid>
             )}
             {message && !successful && (
-                <div className={formclasses.alert}>
-                    <Alert severity="error" >{message}</Alert>
-                </div>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                    <div className={formclasses.alert}>
+                        <Alert severity="error" >{message}</Alert>
+                    </div>
+                </Grid>
             )}
         </Box>
     );

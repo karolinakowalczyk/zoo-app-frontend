@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import { Container, Typography, Button, CircularProgress, Alert  } from '@mui/material/';
+import { Container, Typography, Button, CircularProgress, Alert, Grid  } from '@mui/material/';
 import useFormStyles from "../styles/useFormStyles";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthService from "../services/auth.service";
@@ -10,39 +10,13 @@ import { useHistory } from "react-router-dom";
 
 import required from "../helpers/requiredField";
 import validEmail from "../helpers/validEmail";
+import vpassword from "../helpers/vpassword";
 
 const vusername = (value) => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div>
         <p style={{color: "red", margin: "0"}}>The username must be between 3 and 20 characters.</p>
-      </div>
-    );
-  }
-};
-
-const vpassword = (value) => {
-  const oneNumber = /^(?=.*[0-9])/;
-  const oneSpecialCharacter = /^(?=.*[!@#$%^&*])/;
-  const appropriateLength = /[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-  if (!appropriateLength.test(value)) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>Password must be between 6 and 16 characters.</p>
-      </div>
-    );
-  }
-  else if (!oneNumber.test(value)) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>Password should have at least one number.</p>
-      </div>
-    );
-  }
-  else if (!oneSpecialCharacter.test(value)) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>Password should have at least one special character.</p>
       </div>
     );
   }
@@ -190,18 +164,29 @@ const Register = (props) => {
           )}
 
           {message && successful && (
+            <Grid
+              container
+              direction="row"
+              justifyContent="center"
+            >
             <div className={classes.alert}>
               <Alert severity="success" >{message}</Alert>
-              <Button onClick={() => goToPage(`login`)}>
+              <Button variant="contained" color="primary" className={classes.submit} sx={{color: 'primary.white'}} onClick={() => goToPage(`login`)}>
                 LOGIN
-              </Button>
-              
+              </Button>            
             </div>
+            </Grid>
           )}
           {message && !successful && (
-            <div className={classes.alert}>
-              <Alert severity="error" >{message}</Alert>
-            </div>
+            <Grid
+              container
+              direction="row"
+              justifyContent="center"
+            >
+              <div className={classes.alert}>
+                <Alert severity="error" >{message}</Alert>
+              </div>
+            </Grid>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
