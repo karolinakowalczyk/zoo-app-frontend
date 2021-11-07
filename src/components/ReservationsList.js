@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer} from '@mui/material/';
+import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField } from '@mui/material/';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PropTypes from 'prop-types';
 import { visuallyHidden } from '@mui/utils';
 import getComparator from "../helpers/getComparator";
@@ -40,6 +43,7 @@ const dateYear = (dateString) =>{
   return (date.getFullYear()).toString();
   
 }
+
 
 const TableHeadFunc = (props) => {
   const { order, orderBy,  onRequestSort } =
@@ -93,6 +97,8 @@ const ReservationsList = () => {
   const [orderBy, setOrderBy] = useState('reservation');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [dateValue, setDateValue] = useState([null, null]);
+  const [search, setSearch] = useState({ searchFun: items => { return items; } })
 
     useEffect(() => {
     ReservationsService.getUserReservations(currentUser.id).then(
@@ -132,6 +138,24 @@ const ReservationsList = () => {
 
 
   const classes = useInfoStyles();
+
+  const handeSearchReservations = (newValue) => {
+    setSearch({
+      searchFun: items => {
+        if (newValue[0] === null || newValue[1] === null) {
+          return items;
+        }
+
+        else if (items.filter(x => (new Date(newValue[0]) < new Date(x.date)) && (new Date(newValue[1]) > new Date(x.date)) ).length > 0) {
+          return items.filter(x => (new Date(newValue[0]) < new Date(x.date)) && (new Date(newValue[1]) > new Date(x.date)));
+        }
+        else {
+          return [];
+        }
+      }
+    })
+  }
+
   return (
     <div>
       {!successful && (
@@ -143,6 +167,26 @@ const ReservationsList = () => {
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>
             <h1 className={classes.greyTitle}>Your reservations</h1>
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateRangePicker
+                startText="Start date"
+                endText="End date"
+                value={dateValue}
+                onChange={(newValue) => {
+                  setDateValue(newValue);
+                  handeSearchReservations(newValue);
+                }}
+                renderInput={(startProps, endProps) => (
+                  <React.Fragment>
+                    <TextField {...startProps} />
+                    <Box sx={{ mx: 2 }}> to </Box>
+                    <TextField {...endProps} />
+                  </React.Fragment>
+                )}
+              />
+            </LocalizationProvider>
+
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -155,7 +199,7 @@ const ReservationsList = () => {
                 rowCount={reservationsData.length}
               />
               <TableBody>
-                {stableSort(reservationsData, getComparator(order, orderBy))
+                {stableSort(search.searchFun(reservationsData), getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((reservation, index) => {
                     return (

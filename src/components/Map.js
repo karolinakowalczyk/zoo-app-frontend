@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
 import { makeStyles } from '@mui/styles';
+import useFormStyles from "../styles/useFormStyles";
 
 import useInfoStyles from "../styles/useInfoStyles";
 
@@ -48,6 +49,7 @@ const Map = (props) => {
 
     const classes = useStyles();
     const infoclasses = useInfoStyles();
+    const formclasses = useFormStyles();
 
     const [message, setMessage] = useState("");
     const [successful, setSuccessful] = useState(false);
@@ -321,19 +323,32 @@ const Map = (props) => {
           </div>
          
           <Attractions changeAttractions={changeAttractions}></Attractions>
-          
-        <Button onClick={handleCreatePlan}>
-            Create Plan
-          </Button>
+          <div style={{textAlign: 'center'}}>
+            <Button onClick={handleCreatePlan} className={formclasses.submit}>
+                <span className={formclasses.buttonText}>Create Plan</span>
+            </Button>
+          </div>
           {message && successful && (
-                <div className={classes.alert}>
-                    <Alert severity="success" >{message}</Alert>
-                </div>
+               <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                >
+                    <div className={classes.alert}>
+                        <Alert severity="success" >{message}</Alert>
+                    </div>
+                </Grid>
             )}
-            {message && !successful && (
-                <div className={classes.alert}>
+          {message && !successful && (
+              <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                >
+                    <div className={classes.alert}>
                     <Alert severity="error" >{message}</Alert>
-                </div>
+                  </div>
+                </Grid>
             )}
     </Box>
   );
