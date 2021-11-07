@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import PlansService from "../services/plans.service";
 import AuthService from "../services/auth.service";
-import { Alert, Card, CardContent, Typography, List, ListItem, ListItemText, TextField, InputAdornment, Toolbar} from '@mui/material/';
+import { Alert, Card, CardContent, Typography, List, ListItem, ListItemText, TextField, InputAdornment, Box, Button, Grid } from '@mui/material/';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import createUUID from "../helpers/createUUID";
 import SearchIcon from '@mui/icons-material/Search';
 import convertMinsToTime from "../helpers/convertMinsToTime";
 import getMonthName from "../helpers/getMonthName";
-//import stableSort from "../helpers/stableSort";
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const searchPlans = (array) => {
@@ -19,7 +22,8 @@ const PlanList = () => {
   const [successful, setSuccessful] = useState(true);
   const [message, setMessage] = useState("");
   const currentUser = AuthService.getCurrentUser();
-  const [search, setSearch] = useState({ searchFun: items => { return items; } })
+  const [search, setSearch] = useState({ searchFun: items => { return items; } });
+  const [dateValue, setDateValue] = useState([null, null]);
 
     useEffect(() => {
     PlansService.getUserPlans(currentUser.id).then(
@@ -38,82 +42,29 @@ const PlanList = () => {
       }
     );
     }, [currentUser.id]);
-
-
-  /*const displayPlans = plansData.map((plan, index) =>
   
-     <Card sx={{ minWidth: 275 }} key={index}>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          Plan {index}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Reservation
-        </Typography>
-        <List> 
-          <ListItem key={createUUID(plan.reservation['date'])}>
-            <ListItemText >
-             Date: {plan.reservation['date']}
-            </ListItemText>
-          </ListItem>
-          <ListItem key={createUUID(plan.reservation['expirationDate'])}>
-            <ListItemText>
-              Expiration date: {plan.reservation['expirationDate']}
-            </ListItemText>
-          </ListItem>  
-        </List>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Transport
-        </Typography>
-        <List> 
-          {plan.transport['shortTransport'] && <ListItem key={createUUID(plan.transport['shortTransport'])}>
-            <ListItemText >
-              {plan.transport['shortTransport']}
-            </ListItemText>
-          </ListItem>}
-          {plan.transport['longTransport'] && <ListItem key={createUUID(plan.transport['longTransport'])}>
-            <ListItemText>
-              {plan.transport['longTransport']}
-            </ListItemText>
-          </ListItem>}
-        </List>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Attractions
-        </Typography>
-          {Object.keys(plan.attractions).map((key, index) => (
-            <List key={key} sx={{ display: "flex", flexDirection: "row", padding: 0}}>
-              <ListItem key={createUUID(plan.attractions[key].name)}>
-                <ListItemText>
-                  {plan.attractions[key].name}
-                </ListItemText>
-              </ListItem>
-              <ListItem key={createUUID(plan.attractions[key].hour)}>
-                <ListItemText>
-                  Start time: {convertMinsToTime(plan.attractions[key].hour)}
-                </ListItemText>
-              </ListItem>
-              <ListItem key={createUUID(plan.attractions[key].duration)}>
-                <ListItemText>
-                  Duration: {plan.attractions[key].duration} minutes
-                </ListItemText>
-              </ListItem>
-            </List>
-          ))}
-      </CardContent>
-    </Card>
-    
-  );*/
-  const handeSearchReservations = (e) => {
-    const currentValue = e.target.value;
+  const handeSearchReservations = (newValue) => {
     setSearch({
       searchFun: items => {
-        if (currentValue === "") {
+        if (newValue[0] === null || newValue[1] === null) {
           return items;
         }
-        else {
-          return items.filter(x => x.reservation.date.toLowerCase().includes(currentValue) );
+
+        else if (items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)) ).length > 0) {
+          return items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)));
         }
-      }
+        else {
+          return [];
+        }
+        }
+    })
+  }
+  const clearReservationFilters = () => {
+    setDateValue([null, null]);
+    setSearch({
+      searchFun: items => {
+        return items;
+        }
     })
   }
 
@@ -188,63 +139,84 @@ const handeSearchAttractions = (e) => {
      <Typography variant="h2">
         Your Trip Plans
       </Typography>
-      <Toolbar>
+      
+        <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                sx={{mb: '2rem'}}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateRangePicker
+                startText="Start date"
+                endText="End date"
+                value={dateValue}
+                onChange={(newValue) => {
+                  setDateValue(newValue);
+                  handeSearchReservations(newValue);
+                }}
+                renderInput={(startProps, endProps) => (
+                  <React.Fragment>
+                    <TextField {...startProps} sx={{ ml: 2}}/>
+                    <Box sx={{ mx: 2 }}> to </Box>
+                    <TextField {...endProps} sx={{ mr: 2}} />
+                  </React.Fragment>
+                )}
+              />
+            </LocalizationProvider>
+              <Button onClick={clearReservationFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem'}}>
+              <CloseIcon/>
+        </Button>
         <TextField
-        id="search-reservations"
-          label="Search plan with reservation by date"
-          onChange={handeSearchReservations}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
-        />
-        <TextField
-          sx={{marginLeft: '1rem'}}
-          id="search-long-transport"
-          label="Search plan with long transport type"
+        id="search-long-transport"
+        label="Search plan with long transport type"
+        variant="outlined"
           onChange={handeSearchLongTransport}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
+          sx={{
+              m: '1rem'
           }}
-          variant="standard"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
         />
         <TextField
-          sx={{marginLeft: '1rem'}}
-          id="search-long-transport"
-          label="Search plan with short transport type"
-          onChange={handeSearchShortTransport}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
+        id="search-short-transport"
+        label="Search plan with short transport type"
+        variant="outlined"
+        onChange={handeSearchShortTransport}
+        sx={{
+            m: '1rem'
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
         />
         <TextField
-          sx={{marginLeft: '1rem'}}
-          id="search-attractions"
-          label="Search Attractions by name"
-          onChange={handeSearchAttractions}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
-      />
-      </Toolbar>
+        id="search-attractions"
+        label="Search Attractions by name"
+        variant="outlined"
+        onChange={handeSearchAttractions}
+        sx={{
+            m: '1rem'
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+        />
+        
+      </Grid>
       {plansData.length > 0 ? 
         <div>
           {searchPlans(search.searchFun(plansData))

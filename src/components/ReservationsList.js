@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField, Button } from '@mui/material/';
+import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField, Button, Grid } from '@mui/material/';
 import DateRangePicker from '@mui/lab/DateRangePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -12,7 +12,7 @@ import stableSort from "../helpers/stableSort";
 import useInfoStyles from "../styles/useInfoStyles";
 import getMonthName from "../helpers/getMonthName";
 
-import useFormStyles from "../styles/useFormStyles";
+import CloseIcon from '@mui/icons-material/Close';
 
 const headCells = [
   {
@@ -101,8 +101,6 @@ const ReservationsList = () => {
   const [dateValue, setDateValue] = useState([null, null]);
   const [search, setSearch] = useState({ searchFun: items => { return items; } });
 
-  const formclasses = useFormStyles();
-
     useEffect(() => {
     ReservationsService.getUserReservations(currentUser.id).then(
       (response) => {
@@ -178,7 +176,12 @@ const ReservationsList = () => {
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>
             <h1 className={classes.greyTitle}>Your reservations</h1>
-
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                sx={{mb: '2rem'}}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateRangePicker
                 startText="Start date"
@@ -190,16 +193,17 @@ const ReservationsList = () => {
                 }}
                 renderInput={(startProps, endProps) => (
                   <React.Fragment>
-                    <TextField {...startProps} />
+                    <TextField {...startProps} sx={{ ml: 2}}/>
                     <Box sx={{ mx: 2 }}> to </Box>
-                    <TextField {...endProps} />
+                    <TextField {...endProps} sx={{ mr: 2}} />
                   </React.Fragment>
                 )}
               />
             </LocalizationProvider>
-            <Button onClick={clearReservationFilters} className={formclasses.submit}>
-              Clear
+              <Button onClick={clearReservationFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem'}}>
+              <CloseIcon/>
             </Button>
+            </Grid>
 
           <TableContainer>
             <Table
