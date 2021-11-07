@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField } from '@mui/material/';
+import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField, Button } from '@mui/material/';
 import DateRangePicker from '@mui/lab/DateRangePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -10,7 +10,9 @@ import { visuallyHidden } from '@mui/utils';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
 import useInfoStyles from "../styles/useInfoStyles";
-import getMonthName from "../helpers/getMonthName"
+import getMonthName from "../helpers/getMonthName";
+
+import useFormStyles from "../styles/useFormStyles";
 
 const headCells = [
   {
@@ -43,7 +45,6 @@ const dateYear = (dateString) =>{
   return (date.getFullYear()).toString();
   
 }
-
 
 const TableHeadFunc = (props) => {
   const { order, orderBy,  onRequestSort } =
@@ -98,7 +99,9 @@ const ReservationsList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [dateValue, setDateValue] = useState([null, null]);
-  const [search, setSearch] = useState({ searchFun: items => { return items; } })
+  const [search, setSearch] = useState({ searchFun: items => { return items; } });
+
+  const formclasses = useFormStyles();
 
     useEffect(() => {
     ReservationsService.getUserReservations(currentUser.id).then(
@@ -146,13 +149,21 @@ const ReservationsList = () => {
           return items;
         }
 
-        else if (items.filter(x => (new Date(newValue[0]) < new Date(x.date)) && (new Date(newValue[1]) > new Date(x.date)) ).length > 0) {
-          return items.filter(x => (new Date(newValue[0]) < new Date(x.date)) && (new Date(newValue[1]) > new Date(x.date)));
+        else if (items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)) ).length > 0) {
+          return items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)));
         }
         else {
           return [];
         }
-      }
+        }
+    })
+  }
+  const clearReservationFilters = () => {
+    setDateValue([null, null]);
+    setSearch({
+      searchFun: items => {
+        return items;
+        }
     })
   }
 
@@ -186,6 +197,9 @@ const ReservationsList = () => {
                 )}
               />
             </LocalizationProvider>
+            <Button onClick={clearReservationFilters} className={formclasses.submit}>
+              Clear
+            </Button>
 
           <TableContainer>
             <Table
