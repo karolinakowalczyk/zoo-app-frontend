@@ -44,14 +44,15 @@ const PlanList = () => {
     }, [currentUser.id]);
   
   const handeSearchReservations = (newValue) => {
+    console.log(newValue);
     setSearch({
       searchFun: items => {
         if (newValue[0] === null || newValue[1] === null) {
           return items;
         }
 
-        else if (items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)) ).length > 0) {
-          return items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)));
+        else if (items.filter(x => (new Date(newValue[0]) <= new Date(x.reservation.date)) && (new Date(newValue[1]) >= new Date(x.reservation.date))).length > 0) {
+          return items.filter(x => (new Date(newValue[0]) <= new Date(x.reservation.date)) && (new Date(newValue[1]) >= new Date(x.reservation.date)));
         }
         else {
           return [];
@@ -90,44 +91,37 @@ const PlanList = () => {
           return items;
         }
         else {
-          console.log("short transport" + items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue)));
+          console.log(items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue)));
           return items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue));
         }
       }
     })
   }
 
-  //nie działa
-const handeSearchAttractions = (e) => {
+  const handeSearchAttractions = (e) => {
     const currentValue = e.target.value;
     setSearch({
       searchFun: items => {
         if (currentValue === "") {
           return items;
         }
-        else {
-          let newArr = []
-          items.map((x) => {
-            return x.attractions.map((y, i) => {
-              //console.log(y.name)
-              newArr.push(y.name);
-              
-              //return y.name;
-              //return items.filter((z, iter) => y.name.toLowerCase().includes(currentValue));
-            })
-          });
-          //console.log(attrNameArray);
-          //console.log(newArr);
-          console.log("newArr" + newArr.filter(x => x.toLowerCase().includes(currentValue)));
-          //newArr.filter(x => x.toLowerCase().includes(currentValue));
+        else {        
+          let filtered = [];
+          for(let i = 0; i < items.length; i++){
 
-          console.log("return" + items.filter((x, index) => x.attractions.map((y, i) => (y.name.toLowerCase().includes(currentValue)))));
-          return items.filter((x, index) => x.attractions.map((y, i) => { return (y.name.toLowerCase().includes(currentValue))}));
+            var obj = items[i];
+            let attr = obj.attractions;
+            for (let j = 0; j < attr.length; j++){
+              if (attr[j].name.toLowerCase().includes(currentValue)){
+                filtered.push(items[i]);
+              }
+            }
+          }
+          return filtered;
         }
       }
     })
   }
-
 
   return (
     <div>
