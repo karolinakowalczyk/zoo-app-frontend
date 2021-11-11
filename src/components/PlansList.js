@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import convertMinsToTime from "../helpers/convertMinsToTime";
 import getMonthName from "../helpers/getMonthName";
 import CloseIcon from '@mui/icons-material/Close';
+import displayDate from "../helpers/displayDate"
 
 
 const searchPlans = (array) => {
@@ -24,6 +25,9 @@ const PlanList = () => {
   const currentUser = AuthService.getCurrentUser();
   const [search, setSearch] = useState({ searchFun: items => { return items; } });
   const [dateValue, setDateValue] = useState([null, null]);
+  const [longTransport, setLongTransport] = useState("");
+  const [shortTransport, setShortTransport] = useState("");
+  const [attractions, setAttractions] = useState("");
 
     useEffect(() => {
     PlansService.getUserPlans(currentUser.id).then(
@@ -44,7 +48,9 @@ const PlanList = () => {
     }, [currentUser.id]);
   
   const handeSearchReservations = (newValue) => {
-    console.log(newValue);
+    setLongTransport("");
+    setShortTransport("");
+    setAttractions("");
     setSearch({
       searchFun: items => {
         if (newValue[0] === null || newValue[1] === null) {
@@ -70,6 +76,9 @@ const PlanList = () => {
   }
 
   const handeSearchLongTransport = (e) => {
+    setDateValue([null, null]);
+    setShortTransport("");
+    setAttractions("");
     const currentValue = e.target.value;
     setSearch({
       searchFun: items => {
@@ -77,13 +86,16 @@ const PlanList = () => {
           return items;
         }
         else {
-          return items.filter(x => x.transport.longTransport.toLowerCase().includes(currentValue));
+          return items.filter(x => x.transport.longTransport.toString().toLowerCase().includes(currentValue.toString().toLowerCase()));
         }
       }
     })
   }
 
   const handeSearchShortTransport = (e) => {
+    setDateValue([null, null]);
+    setLongTransport("");
+    setAttractions("");
     const currentValue = e.target.value;
     setSearch({
       searchFun: items => {
@@ -91,14 +103,17 @@ const PlanList = () => {
           return items;
         }
         else {
-          console.log(items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue)));
-          return items.filter(x => x.transport.shortTransport.toLowerCase().includes(currentValue));
+          return items.filter(x => x.transport.shortTransport.toString().toLowerCase().includes(currentValue.toString().toLowerCase()));
         }
       }
     })
   }
 
   const handeSearchAttractions = (e) => {
+    setDateValue([null, null]);
+    setLongTransport("");
+    setShortTransport("");
+    
     const currentValue = e.target.value;
     setSearch({
       searchFun: items => {
@@ -112,7 +127,7 @@ const PlanList = () => {
             var obj = items[i];
             let attr = obj.attractions;
             for (let j = 0; j < attr.length; j++){
-              if (attr[j].name.toLowerCase().includes(currentValue)){
+              if (attr[j].name.toString().toLowerCase().includes(currentValue.toString().toLowerCase())){
                 filtered.push(items[i]);
               }
             }
@@ -162,51 +177,63 @@ const PlanList = () => {
               <CloseIcon/>
         </Button>
         <TextField
-        id="search-long-transport"
-        label="Search plan with long transport type"
-        variant="outlined"
-          onChange={handeSearchLongTransport}
+          id="search-long-transport"
+          label="Search plan with long transport type"
+          variant="outlined"
+          value={longTransport}
+          onChange={(newValue) => {
+            setLongTransport(newValue.target.value);
+            handeSearchLongTransport(newValue);
+          }}
           sx={{
               m: '1rem'
           }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
         }}
         />
         <TextField
-        id="search-short-transport"
-        label="Search plan with short transport type"
-        variant="outlined"
-        onChange={handeSearchShortTransport}
-        sx={{
-            m: '1rem'
-        }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
+          id="search-short-transport"
+          label="Search plan with short transport type"
+          variant="outlined"
+          value={shortTransport}
+          onChange={(newValue) => {
+              setShortTransport(newValue.target.value);
+              handeSearchShortTransport(newValue);
+          }}
+          sx={{
+              m: '1rem'
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
-        id="search-attractions"
-        label="Search Attractions by name"
-        variant="outlined"
-        onChange={handeSearchAttractions}
-        sx={{
-            m: '1rem'
-        }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
+          id="search-attractions"
+          label="Search Attractions by name"
+          variant="outlined"
+          value={attractions}
+          onChange={(newValue) => {
+              setAttractions(newValue.target.value);
+              handeSearchAttractions(newValue);
+            }}
+          sx={{
+              m: '1rem'
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
         }}
         />
         
@@ -226,17 +253,17 @@ const PlanList = () => {
                     Plan {reservationDay} {getMonthName(reservationMonth)} {reservationYear}
                   </Typography>
                   <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    Reservation
+                    Reservation: {plan.reservation.name}
                   </Typography>
-                  <List>
-                    <ListItem key={createUUID(plan.reservation['date'])}>
+                <List>
+                    <ListItem key={createUUID(plan.reservation.date)}>
                       <ListItemText >
-                        Date: {plan.reservation['date']}
+                        Date: {displayDate.dateDay(plan.reservation.date)} {displayDate.dateMonth(plan.reservation.date)} {displayDate.dateYear(plan.reservation.date) }
                       </ListItemText>
                     </ListItem>
-                    <ListItem key={createUUID(plan.reservation['expirationDate'])}>
+                    <ListItem key={createUUID(plan.reservation.expirationDate)}>
                       <ListItemText>
-                        Expiration date: {plan.reservation['expirationDate']}
+                        Expiration date: {displayDate.dateDay(plan.reservation.expirationDate)} {displayDate.dateMonth(plan.reservation.expirationDate)} {displayDate.dateYear(plan.reservation.expirationDate) }
                       </ListItemText>
                     </ListItem>
                   </List>
@@ -244,14 +271,14 @@ const PlanList = () => {
                     Transport
                   </Typography>
                   <List>
-                    {plan.transport['shortTransport'] && <ListItem key={createUUID(plan.transport['shortTransport'])}>
+                    {plan.transport.shortTransport && <ListItem key={createUUID(plan.transport.shortTransport)}>
                       <ListItemText >
-                        {plan.transport['shortTransport']}
+                        {plan.transport.shortTransport}
                       </ListItemText>
                     </ListItem>}
-                    {plan.transport['longTransport'] && <ListItem key={createUUID(plan.transport['longTransport'])}>
+                    {plan.transport.longTransport && <ListItem key={createUUID(plan.transport.longTransport)}>
                       <ListItemText>
-                        {plan.transport['longTransport']}
+                        {plan.transport.longTransport}
                       </ListItemText>
                     </ListItem>}
                   </List>

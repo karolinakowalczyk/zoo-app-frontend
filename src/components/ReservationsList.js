@@ -10,7 +10,7 @@ import { visuallyHidden } from '@mui/utils';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
 import useInfoStyles from "../styles/useInfoStyles";
-import getMonthName from "../helpers/getMonthName";
+import displayDate from "../helpers/displayDate";
 
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -28,23 +28,6 @@ const headCells = [
     label: 'Expiration Date',
   },
 ];
-
-const dateDay = (dateString) =>{
-  const date = new Date(dateString);
-  return (date.getDate()).toString();
-}
-
-const dateMonth = (dateString) =>{
-  const date = new Date(dateString);
-  const month = (date.getMonth()).toString();
-  return getMonthName(month);
-}
-
-const dateYear = (dateString) =>{
-  const date = new Date(dateString);
-  return (date.getFullYear()).toString();
-  
-}
 
 const TableHeadFunc = (props) => {
   const { order, orderBy,  onRequestSort } =
@@ -235,8 +218,12 @@ const ReservationsList = () => {
                       >
                         {reservation.name}
                       </TableCell>
-                      <TableCell align='center'>{dateDay(reservation.date)} {dateMonth(reservation.date)} {dateYear(reservation.date) }</TableCell>
-                      <TableCell align='center'>{dateDay(reservation.expirationDate)} {dateMonth(reservation.expirationDate)} {dateYear(reservation.expirationDate) }</TableCell>
+                        <TableCell align='center'>
+                          {displayDate.dateDay(reservation.date)} {displayDate.dateMonth(reservation.date)} {displayDate.dateYear(reservation.date)}
+                        </TableCell>
+                        <TableCell align='center'>
+                          {displayDate.dateDay(reservation.expirationDate)} {displayDate.dateMonth(reservation.expirationDate)} {displayDate.dateYear(reservation.expirationDate)}
+                        </TableCell>
                     </TableRow>
                   );
                 })}
