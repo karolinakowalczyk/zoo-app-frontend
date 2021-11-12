@@ -1,40 +1,39 @@
 import React, { useState, useRef } from "react";
 import AuthService from "../services/auth.service";
-import { Box, Button, CircularProgress, Alert } from '@mui/material/';
+import { Box, Button, CircularProgress, Alert, InputLabel, Grid  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckButton from "react-validation/build/button";
+import useFormStyles from "../styles/useFormStyles";
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
     backgroundColor: theme.palette.primary.main,
-    paddingTop: theme.spacing(3),
+    padding: '3rem',
     display:"flex",
-    justifyContent:"center"
-  },
-  childBox: {
-    width: '50%',
-    "@media (max-width: 48rem)": {
-      width: '100%',
-    },
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: 'center'
   },
   input: {
-    width: '50%',
+    width: '100%',
     height: '2rem',
+    paddingLeft: '0.5rem',
+    borderRadius: '0.25rem',
+    border: 'none',
+    backgroundColor: 'theme.palette.secondary.verylight',
   },
   title: {
     marginBottom: '2rem',
-  },
-  alert: {
-    marginTop: theme.spacing(1),
   },
 }));
 
 const Profile = () => {
   const classes = useStyles();
+  const formclasses = useFormStyles();
   const currentUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = useState(true);
@@ -135,7 +134,7 @@ const Profile = () => {
         <Form className={classes.form} onSubmit={handleEdit} ref={form}>
           <div>
             <div>
-              <label htmlFor="email">Email</label>
+              <InputLabel htmlFor="email" sx={{pb: 0.5, pl: 1}}>Email</InputLabel>
               <Input
                 className={classes.input}
                 type="text" disabled={true}
@@ -144,7 +143,7 @@ const Profile = () => {
               />
             </div>
             <div>
-              <label htmlFor="name">Name</label>
+              <InputLabel htmlFor="name" sx={{pt: 1, pb: 0.5, pl: 1}}>Name</InputLabel>
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
@@ -154,7 +153,7 @@ const Profile = () => {
               />
             </div>
             <div>
-              <label htmlFor="surname">Surname</label>
+              <InputLabel htmlFor="surname" sx={{pt: 1, pb: 0.5, pl: 1}}>Surname</InputLabel>
               <Input
                 className={classes.input}
                 type="text"
@@ -165,7 +164,7 @@ const Profile = () => {
               />
             </div>
             <div>
-              <label htmlFor="address">Address</label>
+              <InputLabel htmlFor="address" sx={{pt: 1, pb: 0.5, pl: 1}}>Address</InputLabel>
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
@@ -175,7 +174,7 @@ const Profile = () => {
               />
             </div>
             <div>
-              <label htmlFor="postalCode">Postal Code</label>
+              <InputLabel htmlFor="postalCode" sx={{pt: 1, pb: 0.5, pl: 1}}>Postal Code</InputLabel>
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
@@ -185,7 +184,7 @@ const Profile = () => {
               />
             </div>
             <div>
-              <label htmlFor="city">City</label>
+              <InputLabel htmlFor="city" sx={{pt: 1, pb: 0.5, pl: 1}}>City</InputLabel>
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
@@ -195,7 +194,7 @@ const Profile = () => {
               />
             </div>
             <div>
-              <label htmlFor="phonenumber">Phone Number</label>
+              <InputLabel htmlFor="phonenumber" sx={{pt: 1, pb: 0.5, pl: 1}}>Phone Number</InputLabel>
               <Input
                 className={classes.input}
                 type="text" disabled={disable}
@@ -204,32 +203,53 @@ const Profile = () => {
                 name="phonenumber"
               />
             </div>
-            <Button type="button" onClick={handleEditButton}>
-              {disable ? <EditIcon sx={{ color: '#FFF',}}/> : <CancelIcon sx={{color: '#FFF',}}/>}
+            <Box sx={{mt: 2}}>
+            <Button type="button" onClick={handleEditButton} sx={{p: 1, mb: 2}}>
+              {disable ? <EditIcon sx={{ color: 'secondary.verylight',}}/> : <CancelIcon sx={{color: 'secondary.verylight',}}/>}
             </Button>
             <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={(loading || disable)}
-              >
+              type="submit"
+              variant="contained"
+              className={classes.submit}
+              disabled={(loading || disable)}
+              sx={{
+                backgroundColor: 'secondary.verylight',
+                color: 'primary.main',
+                '&:hover': {
+                  backgroundColor: 'secondary.main',
+                },
+                p: 1,
+                mb: 2
+              }}
+            >
                 {loading && (
-                  <CircularProgress color="primary" />
+                  <CircularProgress color="primary.main" />
                 )}
                 <span className={classes.buttonText}>SAVE CHANGES</span>
             </Button>
+            </Box>
           </div>
           {message && successful && (
-            <div className={classes.alert}>
-              <Alert severity="success" >{message}</Alert>
-            </div>
+            <Grid
+              container
+              direction="row"
+              justifyContent="center"
+              >
+              <div className={formclasses.alert}>
+                  <Alert severity="success" >{message}</Alert>
+              </div>
+            </Grid>
           )}
           {message && !successful && (
-            <div className={classes.alert}>
-              <Alert severity="error" >{message}</Alert>
-            </div>
+            <Grid
+              container
+              direction="row"
+              justifyContent="center"
+              >
+              <div className={formclasses.alert}>
+                  <Alert severity="error" >{message}</Alert>
+              </div>
+            </Grid>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
