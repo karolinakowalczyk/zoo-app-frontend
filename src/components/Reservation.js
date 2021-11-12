@@ -134,32 +134,47 @@ const Reservation = (props) => {
                     <p>{currentDay} {getMonthName(currentMonth)} {currentYear}</p>
                     <p>
                         Set the quantity
-                    </p>
+                    </p> 
                     <div>
                         <Button sx={{
                             backgroundColor: 'primary.main',
                             color: 'primary.white',
+                            fontSize: '2rem',
                             borderRadius: '50%',
                                 '&:hover': {
                                 backgroundColor: 'primary.main',
                                 },
-                                marginRight: '0.5rem'
+                                marginRight: '0.5rem',
+                                "@media (max-width: 24rem)": {
+                                    display: 'block',
+                                    marginLeft: 'auto',
+                                    marginRight: 'auto',
+                            },
                         }}
                         onClick={decrement}>
-                        <span style={{ fontSize: '2rem' }}>-</span> 
+                            -
                         </Button>
                             <TextField value={quantity} disabled variant="outlined" sx={ { mt: '0.5rem'}}/>
                         <Button sx={{
                             backgroundColor: 'primary.main',
                             color: 'primary.white',
+                            fontSize: '2rem',
                             borderRadius: '50%',
                                 '&:hover': {
                             backgroundColor: 'primary.main',
                                 },
-                            marginLeft: '0.5rem'
+                                marginLeft: '0.5rem',
+                            "@media (max-width: 24rem)": {
+                                display: 'block',
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                marginTop: '0.5rem'
+                            },
                             }}
                             onClick={increment}>
-                            <span style={{ fontSize: '2rem' }}>+</span>
+                                
+                            +
+    
                         </Button>  
                     </div>
                     <div style={{ marginTop: '1rem' }}>

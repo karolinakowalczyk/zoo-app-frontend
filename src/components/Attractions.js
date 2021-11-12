@@ -166,7 +166,7 @@ const Attractions = (props) => {
           return items;
         }
         else {
-          return items.filter(x => x.name.toLowerCase().includes(currentValue));
+          return items.filter(x => x.name.toString().toLowerCase().includes(currentValue.toString().toLowerCase()));
         }
       }
     })

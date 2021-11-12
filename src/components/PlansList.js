@@ -10,7 +10,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import convertMinsToTime from "../helpers/convertMinsToTime";
 import getMonthName from "../helpers/getMonthName";
 import CloseIcon from '@mui/icons-material/Close';
-import displayDate from "../helpers/displayDate"
+import displayDate from "../helpers/displayDate";
+import useInfoStyles from "../styles/useInfoStyles";
 
 
 const searchPlans = (array) => {
@@ -28,6 +29,8 @@ const PlanList = () => {
   const [longTransport, setLongTransport] = useState("");
   const [shortTransport, setShortTransport] = useState("");
   const [attractions, setAttractions] = useState("");
+
+  const classes = useInfoStyles();
 
     useEffect(() => {
     PlansService.getUserPlans(currentUser.id).then(
@@ -66,8 +69,11 @@ const PlanList = () => {
         }
     })
   }
-  const clearReservationFilters = () => {
+  const clearFilters = () => {
     setDateValue([null, null]);
+    setLongTransport('');
+    setShortTransport('');
+    setAttractions('');
     setSearch({
       searchFun: items => {
         return items;
@@ -145,10 +151,7 @@ const PlanList = () => {
             <Alert severity="error" >{message}</Alert>
         </div>
        )}
-     <Typography variant="h2">
-        Your Trip Plans
-      </Typography>
-      
+     <h1 className={classes.greyTitle}>Your trip plans</h1>     
         <Grid
                 container
                 direction="row"
@@ -173,9 +176,6 @@ const PlanList = () => {
                 )}
               />
             </LocalizationProvider>
-              <Button onClick={clearReservationFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem'}}>
-              <CloseIcon/>
-        </Button>
         <TextField
           id="search-long-transport"
           label="Search plan with long transport type"
@@ -236,6 +236,9 @@ const PlanList = () => {
             ),
         }}
         />
+        <Button onClick={clearFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem'}}>
+            <CloseIcon/>
+        </Button>
         
       </Grid>
       {plansData.length > 0 ? 
