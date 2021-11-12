@@ -1,14 +1,15 @@
 import React from "react";
+import { Box } from '@mui/material/';
+import useInfoStyles from "../styles/useInfoStyles";
+
 
 const BoardUser = () => {
-
+  const infoclasses = useInfoStyles();
   return (
 
-    <div className="container">
-      <header className="jumbotron">
-        <h3>User</h3>
-      </header>
-    </div>
+    <Box className="container">
+       <h1 className={infoclasses.greyTitle}>Welcome user!</h1>
+    </Box>
   );
 };
 
