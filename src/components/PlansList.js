@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PlansService from "../services/plans.service";
 import AuthService from "../services/auth.service";
-import { Alert, Card, CardContent, Typography, List, ListItem, ListItemText, TextField, InputAdornment, Box, Button, Grid } from '@mui/material/';
+import { Alert, Card, CardContent, Typography, List, ListItem, ListItemText, TextField, InputAdornment, Box, Button, Grid, Container } from '@mui/material/';
 import DateRangePicker from '@mui/lab/DateRangePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -12,7 +12,9 @@ import getMonthName from "../helpers/getMonthName";
 import CloseIcon from '@mui/icons-material/Close';
 import displayDate from "../helpers/displayDate";
 import useInfoStyles from "../styles/useInfoStyles";
-
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import CommuteIcon from '@mui/icons-material/Commute';
+import AttractionsIcon from '@mui/icons-material/Attractions';
 
 const searchPlans = (array) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -145,37 +147,38 @@ const PlanList = () => {
   }
 
   return (
-    <div>
+    <Container maxWidth="xl">
       {!successful && (
         <div>
             <Alert severity="error" >{message}</Alert>
         </div>
        )}
      <h1 className={classes.greyTitle}>Your trip plans</h1>     
-        <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                sx={{mb: '2rem'}}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateRangePicker
-                startText="Start date"
-                endText="End date"
-                value={dateValue}
-                onChange={(newValue) => {
-                  setDateValue(newValue);
-                  handeSearchReservations(newValue);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <React.Fragment>
-                    <TextField {...startProps} sx={{ ml: 2}}/>
-                    <Box sx={{ mx: 2 }}> to </Box>
-                    <TextField {...endProps} sx={{ mr: 2}} />
-                  </React.Fragment>
-                )}
-              />
-            </LocalizationProvider>
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ mb: '2rem' }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DateRangePicker
+            startText="Start date"
+            endText="End date"
+            value={dateValue}
+            onChange={(newValue) => {
+              setDateValue(newValue);
+              handeSearchReservations(newValue);
+            }}
+            renderInput={(startProps, endProps) => (
+              <React.Fragment>
+                <TextField {...startProps} sx={{ ml: 2}}/>
+                <Box sx={{ mx: 2 }}> to </Box>
+                <TextField {...endProps} sx={{ mr: 2}} />
+              </React.Fragment>
+            )}
+          />
+        </LocalizationProvider>
         <TextField
           id="search-long-transport"
           label="Search plan with long transport type"
@@ -236,7 +239,7 @@ const PlanList = () => {
             ),
         }}
         />
-        <Button onClick={clearFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem'}}>
+        <Button onClick={clearFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem', height: '3.5rem'}}>
             <CloseIcon/>
         </Button>
         
@@ -250,30 +253,36 @@ const PlanList = () => {
               let reservationMonth = reservationDate.getMonth().toString();
               let reservationYear = reservationDate.getFullYear().toString();
           return (
-              <Card sx={{ minWidth: 275 }} key={index}>
+              <Card key={index} sx={{my: '2rem', p: '2rem'}} variant="outlined">
                 <CardContent>
                   <Typography variant="h5" component="div">
                     Plan {reservationDay} {getMonthName(reservationMonth)} {reservationYear}
+                </Typography>
+                <div style={{ display: 'flex', margin: '1.5rem 0'}}>
+                  <CalendarTodayIcon sx={{ color: 'secondary.main'}}/>
+                  <Typography sx={{ color: 'secondary.main', ml: 1.5, display: 'inline-block', fontSize: '1.25rem'}} color="text.secondary">
+                  Reservation: {plan.reservation.name}
                   </Typography>
-                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    Reservation: {plan.reservation.name}
-                  </Typography>
-                <List>
+                </div>
+                <List sx={{m: 0, p: 0}}>
                     <ListItem key={createUUID(plan.reservation.date)}>
                       <ListItemText >
-                        Date: {displayDate.dateDay(plan.reservation.date)} {displayDate.dateMonth(plan.reservation.date)} {displayDate.dateYear(plan.reservation.date) }
+                        <span style={{fontWeight: 'bold'}}>Date: </span> {displayDate.dateDay(plan.reservation.date)} {displayDate.dateMonth(plan.reservation.date)} {displayDate.dateYear(plan.reservation.date) }
                       </ListItemText>
                     </ListItem>
                     <ListItem key={createUUID(plan.reservation.expirationDate)}>
                       <ListItemText>
-                        Expiration date: {displayDate.dateDay(plan.reservation.expirationDate)} {displayDate.dateMonth(plan.reservation.expirationDate)} {displayDate.dateYear(plan.reservation.expirationDate) }
+                        <span style={{fontWeight: 'bold'}}>Expiration date: </span> {displayDate.dateDay(plan.reservation.expirationDate)} {displayDate.dateMonth(plan.reservation.expirationDate)} {displayDate.dateYear(plan.reservation.expirationDate) }
                       </ListItemText>
                     </ListItem>
-                  </List>
-                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                </List>
+                <div style={{ display: 'flex', margin: '1.5rem 0'}}>
+                  <CommuteIcon sx={{ color: 'secondary.main'}}/>
+                  <Typography sx={{ color: 'secondary.main', ml: 1.5, display: 'inline-block', fontSize: '1.25rem'}} color="text.secondary">
                     Transport
                   </Typography>
-                  <List>
+                </div>
+                  <List sx={{m: 0, p: 0}}>
                     {plan.transport.shortTransport && <ListItem key={createUUID(plan.transport.shortTransport)}>
                       <ListItemText >
                         {plan.transport.shortTransport}
@@ -285,11 +294,24 @@ const PlanList = () => {
                       </ListItemText>
                     </ListItem>}
                   </List>
-                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  <div style={{ display: 'flex', margin: '1.5rem 0'}}>
+                  <AttractionsIcon sx={{ color: 'secondary.main'}}/>
+                  <Typography sx={{ color: 'secondary.main', ml: 1.5, display: 'inline-block', fontSize: '1.25rem'}} color="text.secondary">
                     Attractions
                   </Typography>
+                </div>
                   {Object.keys(plan.attractions).map((key, index) => (
-                    <List key={key} sx={{ display: "flex", flexDirection: "row", padding: 0 }}>
+                    <List
+                      key={key}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        m: 0,
+                        p: 0,
+                        "@media (max-width: 24rem)": {
+                          flexDirection: "column",
+                        },
+                      }}>
                       <ListItem key={createUUID(plan.attractions[key].name)}>
                         <ListItemText>
                           {plan.attractions[key].name}
@@ -315,7 +337,7 @@ const PlanList = () => {
         </div>  
         : <Alert severity="info" >You haven't made your plans yet</Alert>
 }
-    </div>
+    </Container>
   );
 };
 

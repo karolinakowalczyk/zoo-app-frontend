@@ -183,7 +183,7 @@ const ReservationsList = () => {
                 )}
               />
             </LocalizationProvider>
-              <Button onClick={clearReservationFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem'}}>
+              <Button onClick={clearReservationFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem', height: '3.5rem'}}>
               <CloseIcon/>
             </Button>
             </Grid>
