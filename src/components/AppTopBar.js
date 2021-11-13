@@ -50,7 +50,7 @@ const AppTopBar = () => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const handleVisitZooMobileButton = (event) => {
+  const handleVisitZooMobileButton = () => {
     setMobileOpen(!mobileOpen);
   };
 
@@ -111,15 +111,6 @@ const AppTopBar = () => {
                   <Link to={"/admin"} className="item-link" onClick={() => setShowSiteBar(false)}>
                     <ListItemText>
                       <span className="item-text">Admin Board</span>
-                    </ListItemText>
-                  </Link>
-                </ListItem>
-              )}
-              {currentUser && (
-                <ListItem>
-                  <Link to={"/user"} className="item-link" onClick={() => setShowSiteBar(false)}>
-                    <ListItemText>
-                      <span className="item-text">User</span>
                     </ListItemText>
                   </Link>
                 </ListItem>
@@ -253,15 +244,6 @@ const AppTopBar = () => {
               </Link>
             </Typography>
           )}
-
-          {currentUser && (
-            <Typography className="typography-links">
-              <Link to={"/user"} className="nav-link">
-                USER
-              </Link>
-            </Typography>
-          )}
-
           {currentUser ? (
             <Toolbar className="typography-links">
               <Typography>

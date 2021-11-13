@@ -35,9 +35,6 @@ const RequestResetPassword = () => {
     setLoading(true);
 
     form.current.validateAll();
-    if (!form.current.validateAll()) {
-      setLoading(false);
-    }
    
     if (checkBtn.current.context._errors.length === 0) {
       

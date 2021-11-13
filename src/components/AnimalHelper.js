@@ -20,6 +20,7 @@ const AnimalHelper = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [pageLoad, setPageLoad] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [currentZipCode, setCurrentZipCode] = useState('10001');
 
   useEffect(() => {
     setPageLoad(true);
@@ -64,14 +65,16 @@ const AnimalHelper = () => {
     setZipCode(e.target.value);
   }
 
-  const findPets = async() => {
+  const findPets = async () => {
+    setCurrentZipCode(zipCode);
     if (zipCode === '') {
-      console.log('you must type your addres');
+      setErrorMessage('You must type your address!');
       return;
     }
     setLoading(!loading);
     if (accessToken === null) return;
     await fetchNewPets();
+    setErrorMessage('');
     
   }
 
@@ -139,22 +142,23 @@ const AnimalHelper = () => {
         </Typography>
         </Box>
         
-
-      <div style={{textAlign: 'center', marginBottom: '3rem', marginTop: "3rem",}}>
-      <TextField
-        sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}
-        id="zipCodeInput"
-        label="Type your zip code"
-        variant="outlined"
-        onChange={onZipCodeChange}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-          />
+      
+        <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: "3rem", }}>
+        <TextField value={currentZipCode} label="Current zip code" disabled variant="outlined" sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}/>
+        <TextField
+          sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}
+          id="zipCodeInput"
+          label="Type your zip code"
+          variant="outlined"
+          onChange={onZipCodeChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
       {loading ?
       <LoadingButton
         loading
