@@ -2,7 +2,7 @@
 import React, {useState, useEffect, useCallback} from "react";
 
 import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
-import { Alert, TextField, InputAdornment, Button  } from '@mui/material/';
+import { Alert, TextField, InputAdornment, Button, Grid  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -125,6 +125,12 @@ const StoreMap = () => {
         Search store
       </Button>
       </div>
+       <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="flex-start"
+                sx={{mb: '2rem'}}>
       <GoogleMap
         center={center}
         zoom={13}
@@ -147,6 +153,7 @@ const StoreMap = () => {
             );
           })}
       </GoogleMap>
+      </Grid>
         {isGeocodingError && (
           <div className={classes.alert}>
               <Alert severity="error" >There were problems retrieving the address</Alert>

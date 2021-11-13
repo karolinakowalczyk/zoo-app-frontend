@@ -9,7 +9,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/HomePage/Home";
 import Profile from "./components/Profile";
-import BoardUser from "./components/BoardUser";
 import BoardAdmin from "./components/BoardAdmin";
 import OpeningHours from "./components/OpeningHours";
 import Attractions from "./components/Attractions";
@@ -104,16 +103,9 @@ const App = () => {
             component={LoginRequired}
             appProps={{ isAuthenticated }}
           />   
-
-
           <AuthenticatedRoute
             path="/profile"
             component={Profile}
-            appProps={{ isAuthenticated }}
-          />
-          <AuthenticatedRoute
-            path="/user"
-            component={BoardUser}
             appProps={{ isAuthenticated }}
           />
           <AuthenticatedRouteWithProps

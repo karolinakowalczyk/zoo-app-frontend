@@ -112,7 +112,7 @@ const Reservation = (props) => {
                     <Grid
                     container
                         justifyContent="center"
-                        sx={{mt: '2rem'}}
+                        sx={{mt: '0.25rem', mb: '2rem'}}
                     >
                     <Calendar
                         onChange={onDateChange}
@@ -125,7 +125,7 @@ const Reservation = (props) => {
                 <div style={{ textAlign: 'center' }}>
                     <TextField
                         id="reservationName"
-                        label="Your reservation"
+                        label="Your reservation name"
                         variant="outlined"
                         onChange={onNameChange}
                         value={name}
@@ -134,32 +134,47 @@ const Reservation = (props) => {
                     <p>{currentDay} {getMonthName(currentMonth)} {currentYear}</p>
                     <p>
                         Set the quantity
-                    </p>
+                    </p> 
                     <div>
                         <Button sx={{
                             backgroundColor: 'primary.main',
                             color: 'primary.white',
+                            fontSize: '2rem',
                             borderRadius: '50%',
                                 '&:hover': {
                                 backgroundColor: 'primary.main',
                                 },
-                                marginRight: '0.5rem'
+                                marginRight: '0.5rem',
+                                "@media (max-width: 24rem)": {
+                                    display: 'block',
+                                    marginLeft: 'auto',
+                                    marginRight: 'auto',
+                            },
                         }}
                         onClick={decrement}>
-                        <span style={{ fontSize: '2rem' }}>-</span> 
+                            -
                         </Button>
                             <TextField value={quantity} disabled variant="outlined" sx={ { mt: '0.5rem'}}/>
                         <Button sx={{
                             backgroundColor: 'primary.main',
                             color: 'primary.white',
+                            fontSize: '2rem',
                             borderRadius: '50%',
                                 '&:hover': {
                             backgroundColor: 'primary.main',
                                 },
-                            marginLeft: '0.5rem'
+                                marginLeft: '0.5rem',
+                            "@media (max-width: 24rem)": {
+                                display: 'block',
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                marginTop: '0.5rem'
+                            },
                             }}
                             onClick={increment}>
-                            <span style={{ fontSize: '2rem' }}>+</span>
+                                
+                            +
+    
                         </Button>  
                     </div>
                     <div style={{ marginTop: '1rem' }}>
@@ -174,14 +189,26 @@ const Reservation = (props) => {
             </Grid> 
             </Grid>
             {message && successful && (
-                <div className={formclasses.alert}>
-                    <Alert severity="success" >{message}</Alert>
-                </div>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                    <div className={formclasses.alert}>
+                        <Alert severity="success" >{message}</Alert>
+                    </div>
+                </Grid>
             )}
             {message && !successful && (
-                <div className={formclasses.alert}>
-                    <Alert severity="error" >{message}</Alert>
-                </div>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                    <div className={formclasses.alert}>
+                        <Alert severity="error" >{message}</Alert>
+                    </div>
+                </Grid>
             )}
         </Box>
     );

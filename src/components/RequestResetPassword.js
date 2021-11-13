@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
-import { Container, Typography, Button, CircularProgress, Alert } from '@mui/material/';
+import { Container, Typography, Button, CircularProgress, Alert, Grid } from '@mui/material/';
 import useFormStyles from "../styles/useFormStyles";
 import EmailIcon from '@mui/icons-material/Email';
 import AuthService from "../services/auth.service";
@@ -35,9 +35,6 @@ const RequestResetPassword = () => {
     setLoading(true);
 
     form.current.validateAll();
-    if (!form.current.validateAll()) {
-      setLoading(false);
-    }
    
     if (checkBtn.current.context._errors.length === 0) {
       
@@ -100,18 +97,29 @@ const RequestResetPassword = () => {
                       </div>
                   )}
                   {message && successful && (
-                        
-                      <div className={classes.alert}>
-                        <Alert severity="success" >{message}</Alert>
-                          <Button variant="contained" color="primary" onClick={() => goToPage(`/`)}>
-                            Back to main site
-                          </Button>
-                        </div>
-                    )}
-                    {message && !successful && (
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                      >
                         <div className={classes.alert}>
-                        <Alert severity="error" >{message}</Alert>
+                          <Alert severity="success" >{message}</Alert>
+                          <Button variant="contained" color="primary" className={classes.submit} sx={{color: 'primary.white'}} onClick={() => goToPage(`/`)}>
+                            Back to main site
+                          </Button>            
                         </div>
+                      </Grid> 
+                    )}
+                  {message && !successful && (
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                      >
+                        <div className={classes.alert}>
+                          <Alert severity="error" >{message}</Alert>
+                        </div>
+                      </Grid> 
                     )}
                 <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>

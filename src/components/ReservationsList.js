@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
-import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer} from '@mui/material/';
+import { Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField, Button, Grid } from '@mui/material/';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PropTypes from 'prop-types';
 import { visuallyHidden } from '@mui/utils';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
 import useInfoStyles from "../styles/useInfoStyles";
-import getMonthName from "../helpers/getMonthName"
+import displayDate from "../helpers/displayDate";
+
+import CloseIcon from '@mui/icons-material/Close';
 
 const headCells = [
   {
@@ -23,23 +28,6 @@ const headCells = [
     label: 'Expiration Date',
   },
 ];
-
-const dateDay = (dateString) =>{
-  const date = new Date(dateString);
-  return (date.getDate()).toString();
-}
-
-const dateMonth = (dateString) =>{
-  const date = new Date(dateString);
-  const month = (date.getMonth()).toString();
-  return getMonthName(month);
-}
-
-const dateYear = (dateString) =>{
-  const date = new Date(dateString);
-  return (date.getFullYear()).toString();
-  
-}
 
 const TableHeadFunc = (props) => {
   const { order, orderBy,  onRequestSort } =
@@ -93,6 +81,8 @@ const ReservationsList = () => {
   const [orderBy, setOrderBy] = useState('reservation');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [dateValue, setDateValue] = useState([null, null]);
+  const [search, setSearch] = useState({ searchFun: items => { return items; } });
 
     useEffect(() => {
     ReservationsService.getUserReservations(currentUser.id).then(
@@ -132,6 +122,32 @@ const ReservationsList = () => {
 
 
   const classes = useInfoStyles();
+
+  const handeSearchReservations = (newValue) => {
+    setSearch({
+      searchFun: items => {
+        if (newValue[0] === null || newValue[1] === null) {
+          return items;
+        }
+
+        else if (items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)) ).length > 0) {
+          return items.filter(x => (new Date(newValue[0]) <= new Date(x.date)) && (new Date(newValue[1]) >= new Date(x.date)));
+        }
+        else {
+          return [];
+        }
+        }
+    })
+  }
+  const clearReservationFilters = () => {
+    setDateValue([null, null]);
+    setSearch({
+      searchFun: items => {
+        return items;
+        }
+    })
+  }
+
   return (
     <div>
       {!successful && (
@@ -143,6 +159,35 @@ const ReservationsList = () => {
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>
             <h1 className={classes.greyTitle}>Your reservations</h1>
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                sx={{mb: '2rem'}}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateRangePicker
+                startText="Start date"
+                endText="End date"
+                value={dateValue}
+                onChange={(newValue) => {
+                  setDateValue(newValue);
+                  handeSearchReservations(newValue);
+                }}
+                renderInput={(startProps, endProps) => (
+                  <React.Fragment>
+                    <TextField {...startProps} sx={{ ml: 2}}/>
+                    <Box sx={{ mx: 2 }}> to </Box>
+                    <TextField {...endProps} sx={{ mr: 2}} />
+                  </React.Fragment>
+                )}
+              />
+            </LocalizationProvider>
+              <Button onClick={clearReservationFilters} sx={{ border: '1px solid', borderColor: 'secondary.light', m: '1rem', height: '3.5rem'}}>
+              <CloseIcon/>
+            </Button>
+            </Grid>
+
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -155,7 +200,7 @@ const ReservationsList = () => {
                 rowCount={reservationsData.length}
               />
               <TableBody>
-                {stableSort(reservationsData, getComparator(order, orderBy))
+                {stableSort(search.searchFun(reservationsData), getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((reservation, index) => {
                     return (
@@ -173,8 +218,12 @@ const ReservationsList = () => {
                       >
                         {reservation.name}
                       </TableCell>
-                      <TableCell align='center'>{dateDay(reservation.date)} {dateMonth(reservation.date)} {dateYear(reservation.date) }</TableCell>
-                      <TableCell align='center'>{dateDay(reservation.expirationDate)} {dateMonth(reservation.expirationDate)} {dateYear(reservation.expirationDate) }</TableCell>
+                        <TableCell align='center'>
+                          {displayDate.dateDay(reservation.date)} {displayDate.dateMonth(reservation.date)} {displayDate.dateYear(reservation.date)}
+                        </TableCell>
+                        <TableCell align='center'>
+                          {displayDate.dateDay(reservation.expirationDate)} {displayDate.dateMonth(reservation.expirationDate)} {displayDate.dateYear(reservation.expirationDate)}
+                        </TableCell>
                     </TableRow>
                   );
                 })}
