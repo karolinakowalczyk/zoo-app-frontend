@@ -245,7 +245,7 @@ const Map = (props) => {
                         }}
                         />    
                     <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
-                        Search store
+                        Search route
                     </Button>
                 </div>
               {isGeocodingError && (
