@@ -38,7 +38,9 @@ const Reservation = (props) => {
     }, [currentReservation, props]);
 
     const increment = () => {
-        setQuantity(quantity + 1);
+        if (quantity !== 8) {
+            setQuantity(quantity + 1);
+        }
     }
     const decrement = () => {
         if (quantity !== 1) {
