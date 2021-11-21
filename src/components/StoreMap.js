@@ -20,11 +20,11 @@ const StoreMap = () => {
 
   const [center, setCenter] = useState({ lat: parseFloat(52.229004552708055), lng: parseFloat(21.00320926962863) });
   const [userLocation, setUserLocation] = useState({ lat: parseFloat(52.229004552708055), lng: parseFloat(21.003209269628638) });
-  const [isGeocodingError, setIsGeocodingError] = useState(false);
   const [coordsResult, setCordsResult] = useState([]);
   const [addressInput, setAddressInput] = useState('');
   const [mapLoaded, setMapLoaded] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
+  const [error, setError] = useState('');
 
   const [mapVariable, setMapVariable] = useState();
   const [markerId, setMarkerId] = useState('');
@@ -76,17 +76,20 @@ const StoreMap = () => {
         geocoder.geocode({ 'address': address }, function handleResults(results, status) {
 
             if (status === google.maps.GeocoderStatus.OK) {
-                setIsGeocodingError(false);
+                setError('')
                 setUserLocation({ lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) })
                 return;
             }
-
-            setIsGeocodingError(true);
+          setError('There were problems retrieving the address')
 
         });
     };
 
     const handleAddressSubmit = (e) => {
+      if (!addressInput) {
+        setError('Type your address!');
+        return;
+       }
         e.preventDefault();
         geocodeAddress(addressInput);
         setFirstLoad(false);
@@ -110,6 +113,7 @@ const StoreMap = () => {
       <TextField
         sx={{ marginTop: "0.5rem", marginBottom: "0.5rem"}}
         id="addressInput"
+        value={addressInput}
         label="Type your address"
         variant="outlined"
         onChange={onAddressInput}
@@ -123,7 +127,12 @@ const StoreMap = () => {
         />    
       <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
         Search store
-      </Button>
+        </Button>
+        {error && (
+          <div className={classes.alert}>
+            <Alert severity="error" >{error}</Alert>
+          </div>
+      )}
       </div>
        <Grid
         container
@@ -158,11 +167,6 @@ const StoreMap = () => {
           })}
       </GoogleMap>
       </Grid>
-        {isGeocodingError && (
-          <div className={classes.alert}>
-              <Alert severity="error" >There were problems retrieving the address</Alert>
-          </div>
-      )}
     </div>
   );
 }
