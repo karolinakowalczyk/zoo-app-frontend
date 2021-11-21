@@ -60,7 +60,7 @@ const Map = (props) => {
     const [transport, setTransport] = useState({});
     const [attractions, setAttractions] = useState({});
 
-    const [center, setCenter] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
+    const [center, ] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
     const [mapLoaded, setMapLoaded] = useState(false);
 
     const onMapLoad = () => {
@@ -72,7 +72,7 @@ const Map = (props) => {
                     navigator.geolocation.getCurrentPosition(
                     position => {
                     const { latitude, longitude } = position.coords;
-                    setUserLocation({ lat: latitude, lng: longitude })
+                    setUserLocation({ lat: latitude, lng: longitude });
                     setLoading(false);
                 }
                 );
@@ -81,7 +81,6 @@ const Map = (props) => {
             const directionsService = new google.maps.DirectionsService();
             const origin = { lat: userLocation.lat, lng: userLocation.lng };
             const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
-            setCenter({ lat: ((userLocation.lat - 51.10430767042046)/2), lng: ((userLocation.lng - 51.10430767042046)/2) });
             directionsService.route(
             {
                 origin: origin,
@@ -91,11 +90,11 @@ const Map = (props) => {
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK) {
                     setDirections(result);
-                let totalDist = 0;
-                let route = result.routes[0];
-                for (let i = 0; i < route.legs.length; i++) {
-                    totalDist += route.legs[i].distance.value;
-                }
+                    let totalDist = 0;
+                    let route = result.routes[0];
+                    for (let i = 0; i < route.legs.length; i++) {
+                        totalDist += route.legs[i].distance.value;
+                    }
                     setDistance(totalDist / 1000);
     
                 } else {

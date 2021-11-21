@@ -37,7 +37,7 @@ export const AuthContext = createContext();
 const App = () => {
   const [ , setAppReservation] = useState({});
   const [isAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
-  const[message, setMessage] = useState('');
+  const [message, setMessage] = useState('');
 
   const [accessToken, setAccessToken] = useState(null);
 
