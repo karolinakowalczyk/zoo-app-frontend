@@ -126,11 +126,11 @@ const StoreMap = () => {
       </Button>
       </div>
        <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
-                sx={{mb: '2rem'}}>
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        sx={{mb: '2rem'}}>
       <GoogleMap
         center={center}
         zoom={13}
@@ -147,7 +147,11 @@ const StoreMap = () => {
               >
                 {(markerId === i) &&
                   <InfoWindow position={results.geometry.location} onCloseClick={() => handleToggleClose()}>
-                    <span>{results.name}</span>
+                  <div>
+                    <h4>{results.name}</h4>
+                    <p>{results.vicinity}</p>
+                    <p>Ocena: {results.rating}</p>
+                  </div>
                   </InfoWindow>}
               </Marker>
             );
