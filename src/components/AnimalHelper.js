@@ -227,8 +227,8 @@ const AnimalHelper = () => {
         </Typography>
       </Card>
     </Grid>
-        )}
-        {!results && <p>no results</p>}
+          )}
+        {!results && <p>No results.</p>}
         </Grid>
     </div>   
   );
