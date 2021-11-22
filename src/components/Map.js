@@ -1,5 +1,5 @@
 /*global google*/
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
 import { makeStyles } from '@mui/styles';
@@ -40,7 +40,7 @@ const Map = (props) => {
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
     const [isGeocodingError, setIsGeocodingError] = useState(false);
     const [addressInput, setAddressInput] = useState('');
-    const [, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [distance, setDistance] = useState(0);
     const [shortTransport, setShortTransport] = useState("");
     const [longTransport, setLongTransport] = useState("");
@@ -62,26 +62,13 @@ const Map = (props) => {
 
     const [center, ] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
     const [mapLoaded, setMapLoaded] = useState(false);
+    const [mapVariable, setMapVariable] = useState();
 
-    const onMapLoad = () => {
-        setMapLoaded(true);
-    }
-    useEffect(() => {
-        if (mapLoaded) {
-            if (firstLoad) {
-                    navigator.geolocation.getCurrentPosition(
-                    position => {
-                    const { latitude, longitude } = position.coords;
-                    setUserLocation({ lat: latitude, lng: longitude });
-                    setLoading(false);
-                }
-                );
-            }
-
-            const directionsService = new google.maps.DirectionsService();
-            const origin = { lat: userLocation.lat, lng: userLocation.lng };
-            const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
-            directionsService.route(
+    const onMapLoad = useCallback(async (map) => {
+        const origin = { lat: userLocation.lat, lng: userLocation.lng };
+        const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
+        //let wait = false;
+        const data = await new Promise (resolve => new google.maps.DirectionsService().route(
             {
                 origin: origin,
                 destination: destination,
@@ -89,21 +76,80 @@ const Map = (props) => {
             },
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK) {
-                    setDirections(result);
-                    let totalDist = 0;
-                    let route = result.routes[0];
-                    for (let i = 0; i < route.legs.length; i++) {
-                        totalDist += route.legs[i].distance.value;
-                    }
-                    setDistance(totalDist / 1000);
-    
-                } else {
+                    resolve(result);
+                }
+                else if (status === google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
+        
+                }
+
+                else {
+
                     setMessage(`error fetching directions ${result}`);
                 }
             }
-            );
+        ));
+        setDirections(data);
+        let totalDist = 0;
+        let route = data.routes[0];
+        for (let i = 0; i < route.legs.length; i++) {
+            totalDist += route.legs[i].distance.value;
         }
-    }, [firstLoad, mapLoaded, userLocation.lat, userLocation.lng]);
+        setDistance(totalDist / 1000);
+        setMapVariable(map);
+        setMapLoaded(true);
+        //setMapVariable(map);
+        //setMapLoaded(true);
+   }, [userLocation.lat, userLocation.lng]);
+    
+    
+    useEffect(() => {
+        let isMounted = true;
+        
+        if (firstLoad) {
+                new Promise((resolve) => {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        return resolve(position.coords);
+                    }
+                    );
+                    
+                }).then((data) => {
+                    if (isMounted) {
+                        const { latitude, longitude } = data;
+                        setUserLocation({ lat: latitude, lng: longitude });
+                        onMapLoad(mapVariable);
+                        setFirstLoad(false);
+                        setLoading(false);
+                    }
+                    
+                });
+        }
+       
+        onMapLoad(mapVariable);
+        
+        /*if (mapLoaded) {
+            if (firstLoad) {
+                new Promise(function (resolve, reject) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        return resolve(position.coords);
+                    }
+                    );
+                    
+                }).then((data) => {
+                    if (isMounted) {
+                        const { latitude, longitude } = data;
+                        setUserLocation({ lat: latitude, lng: longitude });
+                        onMapLoad(mapVariable);
+                        setLoading(false);
+                    }
+                    
+                });
+            }
+        }*/
+        return () => { isMounted = false};
+    }, [firstLoad, mapVariable, onMapLoad]);
+    /*firstLoad, mapLoaded, mapVariable, onMapLoad*/
 
     useEffect(() => {
         setTransport({
@@ -218,7 +264,7 @@ const Map = (props) => {
           <GoogleMap
             center={center}
             zoom={8}
-            onLoad={onMapLoad}
+            onLoad={map => onMapLoad(map)}
             mapContainerStyle={{ height: "40rem", width: "100%" }}
         >
         <DirectionsRenderer
