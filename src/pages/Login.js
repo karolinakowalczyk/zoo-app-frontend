@@ -4,7 +4,7 @@ import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
 import { Container, Typography, Button, Grid, CircularProgress } from '@mui/material/';
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../components/ErrorMessage";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 

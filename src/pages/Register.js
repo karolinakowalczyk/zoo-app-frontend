@@ -7,7 +7,7 @@ import useFormStyles from "../styles/useFormStyles";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthService from "../services/auth.service";
 import { useHistory } from "react-router-dom";
-import ErrorMessageGrid from "./ErrorMessageGrid";
+import ErrorMessageGrid from "../components/ErrorMessageGrid";
 
 import required from "../helpers/requiredField";
 import validEmail from "../helpers/validEmail";

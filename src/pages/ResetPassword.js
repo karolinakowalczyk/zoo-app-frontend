@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import useFormStyles from "../styles/useFormStyles";
 import vpassword from "../helpers/vpassword";
-import ErrorMessageGrid from "./ErrorMessageGrid";
+import ErrorMessageGrid from "../components/ErrorMessageGrid";
 
 const required = (value) => {
   if (!value) {

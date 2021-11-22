@@ -7,8 +7,8 @@ import Form from "react-validation/build/form";
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckButton from "react-validation/build/button";
-import ErrorMessageGrid from "./ErrorMessageGrid";
-import SuccessMessageGrid from "./SuccessMessageGrid";
+import ErrorMessageGrid from "../components/ErrorMessageGrid";
+import SuccessMessageGrid from "../components/SuccessMessageGrid";
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {

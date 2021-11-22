@@ -5,27 +5,27 @@ import PetFinderService from "../src/services/petfinder.service";
 
 import "./App.css";
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/HomePage/Home";
-import Profile from "./components/Profile";
-import BoardAdmin from "./components/BoardAdmin";
-import OpeningHours from "./components/OpeningHours";
-import Attractions from "./components/Attractions";
-import RequestResetPassword from "./components/RequestResetPassword";
-import ResetPassword from "./components/ResetPassword";
-import Reservation from "./components/Reservation";
-import LoginRequired from "./components/LoginRequired";
-import ReservationsList from "./components/ReservationsList";
-import PlanTrip from "./components/PlanTrip";
-import PlansList from "./components/PlansList";
-import AnimalHelper from "./components/AnimalHelper";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/HomePage/Home";
+import Profile from "./pages/Profile";
+import BoardAdmin from "./pages/BoardAdmin";
+import OpeningHours from "./pages/OpeningHours";
+import Attractions from "./pages/Attractions";
+import RequestResetPassword from "./pages/RequestResetPassword";
+import ResetPassword from "./pages/ResetPassword";
+import Reservation from "./pages/Reservation";
+import LoginRequired from "./pages/LoginRequired";
+import ReservationsList from "./pages/ReservationsList";
+import PlanTrip from "./pages/PlanTrip";
+import PlansList from "./pages/PlansList";
+import AnimalHelper from "./pages/AnimalHelper";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute"
 import AuthenticatedRoute from "./components/AuthenticatedRoute"
 import AuthenticatedRouteWithProps from "./components/AuthenticatedRouteWithProps"
 import AuthenticatedAdminRoute from "./components/AuthenticatedAdminRoute"
-import NotFound from "./components/NotFound"
-import Tickets from "./components/Tickets"
+import NotFound from "./pages/NotFound"
+import Tickets from "./pages/Tickets"
 import Footer from "./components/Footer"
 import ErrorMessage from "./components/ErrorMessage";
 

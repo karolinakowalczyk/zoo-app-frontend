@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { LoadScript } from '@react-google-maps/api';
-import StoreMap from './StoreMap';
+import StoreMap from '../components/StoreMap';
 import { AuthContext } from "../App";
 import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Box, LinearProgress } from '@mui/material/';
 import createUUID from "../helpers/createUUID";
@@ -8,7 +8,7 @@ import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from '../components/ErrorMessage';
 const lib = ['places', 'geometry'];
 const key = `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 const sensor = false;

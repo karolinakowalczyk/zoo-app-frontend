@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from '@mui/material/';
 import 'react-calendar/dist/Calendar.css';
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../components/ErrorMessage";
 import useFormStyles from "../styles/useFormStyles";
 
 const NotFound = () => {

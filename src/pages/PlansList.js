@@ -15,7 +15,7 @@ import useInfoStyles from "../styles/useInfoStyles";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CommuteIcon from '@mui/icons-material/Commute';
 import AttractionsIcon from '@mui/icons-material/Attractions';
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../components/ErrorMessage";
 
 const searchPlans = (array) => {
   const stabilizedThis = array.map((el, index) => [el, index]);

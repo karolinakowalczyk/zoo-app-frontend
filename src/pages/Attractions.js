@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
 import useInfoStyles from "../styles/useInfoStyles";
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../components/ErrorMessage";
 
 
 const headCells = [

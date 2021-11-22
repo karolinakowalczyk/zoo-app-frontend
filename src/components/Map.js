@@ -18,8 +18,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import AuthService from "../services/auth.service";
 
 import PlansService from "../services/plans.service";
-import Reservation from './Reservation'
-import Attractions from './Attractions'
+import Reservation from '../pages/Reservation'
+import Attractions from '../pages/Attractions'
 
 import SuccessMessageGrid from "./SuccessMessageGrid";
 import ErrorMessageGrid from "./ErrorMessageGrid";
