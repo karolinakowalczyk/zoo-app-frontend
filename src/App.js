@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
-import { ThemeProvider,  Box, Alert } from '@mui/material/';
+import { ThemeProvider,  Box } from '@mui/material/';
 import PetFinderService from "../src/services/petfinder.service";
 
 import "./App.css";
@@ -27,6 +27,7 @@ import AuthenticatedAdminRoute from "./components/AuthenticatedAdminRoute"
 import NotFound from "./components/NotFound"
 import Tickets from "./components/Tickets"
 import Footer from "./components/Footer"
+import ErrorMessage from "./components/ErrorMessage";
 
 import AppTopBar from "./components/AppTopBar"
 
@@ -138,11 +139,8 @@ const App = () => {
           <Route component={NotFound} />
           </Switch>
       {message && (
-        <div>
-          <Alert severity="error">{message}</Alert>
-        </div>
+        <ErrorMessage message={message}></ErrorMessage>
       )}
-        
       </Box>
       </AuthContext.Provider>
       <Footer/>

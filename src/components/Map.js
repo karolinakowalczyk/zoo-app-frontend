@@ -21,6 +21,9 @@ import PlansService from "../services/plans.service";
 import Reservation from './Reservation'
 import Attractions from './Attractions'
 
+import SuccessMessageGrid from "./SuccessMessageGrid";
+import ErrorMessageGrid from "./ErrorMessageGrid";
+
 
 const useStyles = makeStyles((theme) => ({
     transportButton: {
@@ -374,26 +377,10 @@ const Map = (props) => {
             </Button>
           </div>
           {message && successful && (
-               <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                >
-                    <div className={classes.alert}>
-                        <Alert severity="success" >{message}</Alert>
-                    </div>
-                </Grid>
+               <SuccessMessageGrid message={message}></SuccessMessageGrid>
             )}
           {message && !successful && (
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                >
-                    <div className={classes.alert}>
-                    <Alert severity="error" >{message}</Alert>
-                  </div>
-                </Grid>
+              <ErrorMessageGrid message={message}></ErrorMessageGrid>
             )}
     </Box>
   );

@@ -3,7 +3,8 @@ import { useHistory } from "react-router-dom";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Input from "react-validation/build/input";
-import { Container, Typography, Button, Grid, CircularProgress, Alert  } from '@mui/material/';
+import { Container, Typography, Button, Grid, CircularProgress } from '@mui/material/';
+import ErrorMessage from "./ErrorMessage";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -123,9 +124,7 @@ const Login = (props) => {
             </Grid>
           </Grid>
           {message && (
-            <div className={classes.alert}>
-              <Alert severity="error">{message}</Alert>
-            </div>
+            <ErrorMessage message={message}></ErrorMessage>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>

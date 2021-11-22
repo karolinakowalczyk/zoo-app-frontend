@@ -32,12 +32,11 @@ const RequestResetPassword = () => {
     e.preventDefault();
 
     setMessage("");
-    setLoading(true);
-
+    
     form.current.validateAll();
-   
+    
     if (checkBtn.current.context._errors.length === 0) {
-      
+      setLoading(true);
       AuthService.requestResetPassword(email).then(
         (response) => {
           setLoading(false);

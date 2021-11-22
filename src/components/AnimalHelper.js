@@ -2,13 +2,13 @@ import React, { useEffect, useState, useContext } from 'react';
 import { LoadScript } from '@react-google-maps/api';
 import StoreMap from './StoreMap';
 import { AuthContext } from "../App";
-import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Alert, Box, LinearProgress } from '@mui/material/';
+import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Box, LinearProgress } from '@mui/material/';
 import createUUID from "../helpers/createUUID";
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
-
+import ErrorMessage from './ErrorMessage';
 const lib = ['places', 'geometry'];
 const key = `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 const sensor = false;
@@ -141,8 +141,6 @@ const AnimalHelper = () => {
           for adoption nearby!
         </Typography>
         </Box>
-        
-      
         <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: "3rem", }}>
         <TextField value={currentZipCode} label="Current zip code" disabled variant="outlined" sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}/>
         <TextField
@@ -181,13 +179,9 @@ const AnimalHelper = () => {
       </LoadingButton> :  <Button onClick={findPets} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
         Find
       </Button>}  
-     
-      
         </div>
       {errorMessage && (
-            <div>
-              <Alert severity="error">{errorMessage}</Alert>
-            </div>
+          <ErrorMessage message={errorMessage}></ErrorMessage>
         )}
       <Grid
       container

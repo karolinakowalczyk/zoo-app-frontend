@@ -1,13 +1,14 @@
 import React, { useState, useRef } from "react";
 import AuthService from "../services/auth.service";
-import { Box, Button, CircularProgress, Alert, InputLabel, Grid  } from '@mui/material/';
+import { Box, Button, CircularProgress, InputLabel  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckButton from "react-validation/build/button";
-import useFormStyles from "../styles/useFormStyles";
+import ErrorMessageGrid from "./ErrorMessageGrid";
+import SuccessMessageGrid from "./SuccessMessageGrid";
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -33,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
   const classes = useStyles();
-  const formclasses = useFormStyles();
   const currentUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = useState(true);
@@ -230,26 +230,10 @@ const Profile = () => {
             </Box>
           </div>
           {message && successful && (
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              >
-              <div className={formclasses.alert}>
-                  <Alert severity="success" >{message}</Alert>
-              </div>
-            </Grid>
+            <SuccessMessageGrid message={message}></SuccessMessageGrid>
           )}
           {message && !successful && (
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              >
-              <div className={formclasses.alert}>
-                  <Alert severity="error" >{message}</Alert>
-              </div>
-            </Grid>
+            <ErrorMessageGrid message={message}></ErrorMessageGrid>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>

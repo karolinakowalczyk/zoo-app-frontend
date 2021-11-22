@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AttractionsService from "../services/attractions.service";
 import createUUID from "../helpers/createUUID";
-import { Button, Alert, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField, InputAdornment } from '@mui/material/';
+import { Button, TableCell, TableRow, Table, TableBody, TableHead, TableSortLabel, Box, TablePagination, Paper, TableContainer, TextField, InputAdornment } from '@mui/material/';
 import AuthService from "../services/auth.service";
 import convertMinsToTime from "../helpers/convertMinsToTime";
 import { visuallyHidden } from '@mui/utils';
@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
 import useInfoStyles from "../styles/useInfoStyles";
+import ErrorMessage from "./ErrorMessage";
 
 
 const headCells = [
@@ -77,7 +78,6 @@ TableHeadFunc.propTypes = {
 
 const Attractions = (props) => {
   const [attractionsData, setAttractionsData] = useState([]);
-  const [successful, setSuccessful] = useState(true);
   const [message, setMessage] = useState("");
   const currentUser = AuthService.getCurrentUser();
   const [addedAttractions, setAddedAttractions] = useState([]);
@@ -100,7 +100,6 @@ const Attractions = (props) => {
           error.message ||
           error.toString();
           setMessage(resMessage);
-          setSuccessful(false); 
       }
     );
   }, []);
@@ -136,8 +135,6 @@ const Attractions = (props) => {
       <TableCell key={createUUID(attraction.hour)}>{convertMinsToTime(attraction.hour)}</TableCell>
     <TableCell><Button onClick={() => removeAttraction(attraction)}>Remove</Button></TableCell>
     </TableRow>
-  
-    
   );
 
   const handleRequestSort = (event, property) => {
@@ -253,17 +250,9 @@ const Attractions = (props) => {
         />
       </Paper>
     </Box>
-      {!successful && (
-        <div>
-            <Alert severity="error" >{message}</Alert>
-        </div>
-       )}
-      
       {message && (
-            <div>
-              <Alert severity="error">{message}</Alert>
-            </div>
-          )}
+        <ErrorMessage message={message}></ErrorMessage>
+       )}
       {currentUser &&
         <div>
           <h1 className={classes.greyTitle}>Added Attractions</h1>

@@ -15,6 +15,7 @@ import useInfoStyles from "../styles/useInfoStyles";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CommuteIcon from '@mui/icons-material/Commute';
 import AttractionsIcon from '@mui/icons-material/Attractions';
+import ErrorMessage from "./ErrorMessage";
 
 const searchPlans = (array) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -23,7 +24,6 @@ const searchPlans = (array) => {
 
 const PlanList = () => {
   const [plansData, setPlansData] = useState([]);
-  const [successful, setSuccessful] = useState(true);
   const [message, setMessage] = useState("");
   const currentUser = AuthService.getCurrentUser();
   const [search, setSearch] = useState({ searchFun: items => { return items; } });
@@ -47,7 +47,6 @@ const PlanList = () => {
           error.message ||
           error.toString();
           setMessage(resMessage);
-          setSuccessful(false); 
       }
     );
     }, [currentUser.id]);
@@ -148,10 +147,8 @@ const PlanList = () => {
 
   return (
     <Container maxWidth="xl">
-      {!successful && (
-        <div>
-            <Alert severity="error" >{message}</Alert>
-        </div>
+      {message && (
+        <ErrorMessage message={message}></ErrorMessage>
        )}
      <h1 className={classes.greyTitle}>Your trip plans</h1>     
       <Grid

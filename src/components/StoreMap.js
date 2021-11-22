@@ -2,19 +2,11 @@
 import React, {useState, useEffect, useCallback} from "react";
 
 import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
-import { Alert, TextField, InputAdornment, Button, Grid  } from '@mui/material/';
-import { makeStyles } from '@mui/styles';
+import { TextField, InputAdornment, Button, Grid  } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
+import ErrorMessage from './ErrorMessage';
 
 let coords = [];
-
-const useStyles = makeStyles((theme) => ({
-    
-  alert: {
-      marginTop: 1,
-  },
-
-}));
 
 const StoreMap = () => {
 
@@ -28,8 +20,6 @@ const StoreMap = () => {
 
   const [mapVariable, setMapVariable] = useState();
   const [markerId, setMarkerId] = useState('');
-
-  const classes = useStyles();
 
   const onMapLoad = useCallback((map) => {
     setMapVariable(map);
@@ -129,10 +119,8 @@ const StoreMap = () => {
         Search store
         </Button>
         {error && (
-          <div className={classes.alert}>
-            <Alert severity="error" >{error}</Alert>
-          </div>
-      )}
+          <ErrorMessage message={error}></ErrorMessage>
+        )}
       </div>
        <Grid
         container

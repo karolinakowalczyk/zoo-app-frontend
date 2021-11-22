@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import useFormStyles from "../styles/useFormStyles";
 import vpassword from "../helpers/vpassword";
+import ErrorMessageGrid from "./ErrorMessageGrid";
 
 const required = (value) => {
   if (!value) {
@@ -44,11 +45,11 @@ const ResetPassword = (props) => {
     e.preventDefault();
 
     setMessage("");
-    setLoading(true);
     setSuccessful(false);
     form.current.validateAll();
-    setLoading(false);
+    
     if (checkBtn.current.context._errors.length === 0) {
+        setLoading(true);
         AuthService.resetPassword(hash, password).then(
         (response) => {
           setLoading(false);
@@ -123,15 +124,7 @@ const ResetPassword = (props) => {
                       </Grid>
                     )}
                     {message && !successful && (
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="center"
-                      >
-                        <div className={classes.alert}>
-                        <Alert severity="error" >{message}</Alert>
-                        </div>
-                      </Grid>
+                      <ErrorMessageGrid message={message}></ErrorMessageGrid>
                     )}
                 <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
