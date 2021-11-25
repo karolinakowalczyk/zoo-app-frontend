@@ -24,7 +24,8 @@ const StoreMap = () => {
   const onMapLoad = useCallback((map) => {
     setMapVariable(map);
     const place = new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
-    var request = {
+  
+    let request = {
       location: place,
       radius: '30000', //30km
       type: ['pet_store']
@@ -45,6 +46,8 @@ const StoreMap = () => {
   }, [userLocation.lat, userLocation.lng]);
 
 
+
+
   useEffect(() => {
     if (mapLoaded) {
       if (firstLoad) {
@@ -60,6 +63,58 @@ const StoreMap = () => {
     }
     
   }, [userLocation, mapLoaded, mapVariable, onMapLoad, coordsResult, firstLoad]);
+  /*const onMapLoad = useCallback(async (map) => {
+    const place = new Promise((resolutionFunc, rejectionFunc) => {
+      new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
+
+    });
+    
+    //const place =  new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
+    let request = {
+      location: place,
+      radius: '30000', //30km
+      type: ['pet_store']
+    };
+
+
+    let service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          coords.push(results[i]);
+        }
+        setCordsResult(coords);
+        setCenter(results[0].geometry.location);
+      }
+    });
+    setMapVariable(map);
+  }, [userLocation.lat, userLocation.lng]);*/
+
+  /*useEffect(() => {
+        let isMounted = true;
+        
+        if (firstLoad) {
+                new Promise((resolve) => {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        return resolve(position.coords);
+                    }
+                    );
+                    
+                }).then((data) => {
+                    if (isMounted) {
+                        const { latitude, longitude } = data;
+                        setUserLocation({ lat: latitude, lng: longitude });
+                        onMapLoad(mapVariable);
+                        setFirstLoad(false);
+                    }
+                    
+                });
+        }
+       
+        onMapLoad(mapVariable);
+        return () => { isMounted = false};
+    }, [firstLoad, mapVariable, onMapLoad]);*/
 
   const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();

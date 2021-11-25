@@ -43,7 +43,7 @@ const Map = (props) => {
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
     const [isGeocodingError, setIsGeocodingError] = useState(false);
     const [addressInput, setAddressInput] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [distance, setDistance] = useState(0);
     const [shortTransport, setShortTransport] = useState("");
     const [longTransport, setLongTransport] = useState("");
@@ -64,13 +64,11 @@ const Map = (props) => {
     const [attractions, setAttractions] = useState({});
 
     const [center, ] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
-    const [mapLoaded, setMapLoaded] = useState(false);
     const [mapVariable, setMapVariable] = useState();
 
     const onMapLoad = useCallback(async (map) => {
         const origin = { lat: userLocation.lat, lng: userLocation.lng };
         const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
-        //let wait = false;
         const data = await new Promise (resolve => new google.maps.DirectionsService().route(
             {
                 origin: origin,
@@ -99,9 +97,6 @@ const Map = (props) => {
         }
         setDistance(totalDist / 1000);
         setMapVariable(map);
-        setMapLoaded(true);
-        //setMapVariable(map);
-        //setMapLoaded(true);
    }, [userLocation.lat, userLocation.lng]);
     
     
@@ -122,37 +117,14 @@ const Map = (props) => {
                         setUserLocation({ lat: latitude, lng: longitude });
                         onMapLoad(mapVariable);
                         setFirstLoad(false);
-                        setLoading(false);
                     }
                     
                 });
         }
        
         onMapLoad(mapVariable);
-        
-        /*if (mapLoaded) {
-            if (firstLoad) {
-                new Promise(function (resolve, reject) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        return resolve(position.coords);
-                    }
-                    );
-                    
-                }).then((data) => {
-                    if (isMounted) {
-                        const { latitude, longitude } = data;
-                        setUserLocation({ lat: latitude, lng: longitude });
-                        onMapLoad(mapVariable);
-                        setLoading(false);
-                    }
-                    
-                });
-            }
-        }*/
         return () => { isMounted = false};
     }, [firstLoad, mapVariable, onMapLoad]);
-    /*firstLoad, mapLoaded, mapVariable, onMapLoad*/
 
     useEffect(() => {
         setTransport({
@@ -372,7 +344,7 @@ const Map = (props) => {
          
           <Attractions changeAttractions={changeAttractions}></Attractions>
           <div style={{textAlign: 'center'}}>
-            <Button onClick={handleCreatePlan} className={formclasses.submit}>
+              <Button onClick={handleCreatePlan} className={formclasses.submit} disabled={loading}>
                 <span className={formclasses.buttonText}>Create Plan</span>
             </Button>
           </div>
