@@ -23,6 +23,7 @@ const StoreMap = () => {
 
   const onMapLoad = useCallback((map) => {
     setMapVariable(map);
+    coords = [];
     const place = new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
   
     let request = {
@@ -45,76 +46,34 @@ const StoreMap = () => {
     setMapLoaded(true);
   }, [userLocation.lat, userLocation.lng]);
 
-
-
-
-  useEffect(() => {
-    if (mapLoaded) {
-      if (firstLoad) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ lat: parseFloat(latitude), lng: parseFloat(longitude) })
-            setCenter({ lat: parseFloat(userLocation.lat), lng: parseFloat(userLocation.lng) });
-          }
-        );
-      }
-      onMapLoad(mapVariable);
-    }
-    
-  }, [userLocation, mapLoaded, mapVariable, onMapLoad, coordsResult, firstLoad]);
-  /*const onMapLoad = useCallback(async (map) => {
-    const place = new Promise((resolutionFunc, rejectionFunc) => {
-      new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
-
-    });
-    
-    //const place =  new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
-    let request = {
-      location: place,
-      radius: '30000', //30km
-      type: ['pet_store']
-    };
-
-
-    let service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          coords.push(results[i]);
-        }
-        setCordsResult(coords);
-        setCenter(results[0].geometry.location);
-      }
-    });
-    setMapVariable(map);
-  }, [userLocation.lat, userLocation.lng]);*/
-
-  /*useEffect(() => {
+useEffect( () => {
         let isMounted = true;
-        
-        if (firstLoad) {
-                new Promise((resolve) => {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        return resolve(position.coords);
-                    }
-                    );
+  if (mapLoaded) {
+    if (firstLoad) {
+      async function getUserLocation() {
+        await new Promise((resolve) => {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              return resolve(position.coords);
+            }
+          );
                     
-                }).then((data) => {
-                    if (isMounted) {
-                        const { latitude, longitude } = data;
-                        setUserLocation({ lat: latitude, lng: longitude });
-                        onMapLoad(mapVariable);
-                        setFirstLoad(false);
-                    }
+        }).then((data) => {
+          if (isMounted) {
+            const { latitude, longitude } = data;
+            setUserLocation({ lat: latitude, lng: longitude });
+            setFirstLoad(false);
+          }
                     
-                });
-        }
-       
-        onMapLoad(mapVariable);
-        return () => { isMounted = false};
-    }, [firstLoad, mapVariable, onMapLoad]);*/
+        });
+      }
+      getUserLocation();
+            
+    }
+    onMapLoad(mapVariable);
+  }
+  return () => { isMounted = false;};
+    }, [firstLoad, mapLoaded, mapVariable, onMapLoad]);
 
   const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();

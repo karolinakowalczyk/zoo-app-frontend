@@ -9,19 +9,10 @@ import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import useFormStyles from "../styles/useFormStyles";
 import vpassword from "../helpers/vpassword";
-import ErrorMessageGrid from "../components/ErrorMessageGrid";
+import ErrorMessage from "../components/ErrorMessage";
+import required from "../helpers/requiredField";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>This field is required!</p>
-      </div>
-    );
-  }
-};
-
-const ResetPassword = (props) => {
+const ResetPassword = () => {
   const classes = useFormStyles();
   
   const { hash } = useParams();
@@ -124,7 +115,13 @@ const ResetPassword = (props) => {
                       </Grid>
                     )}
                     {message && !successful && (
-                      <ErrorMessageGrid message={message}></ErrorMessageGrid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                        >
+                          <ErrorMessage message={message}></ErrorMessage>
+                      </Grid>
                     )}
                 <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>

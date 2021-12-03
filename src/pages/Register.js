@@ -7,7 +7,7 @@ import useFormStyles from "../styles/useFormStyles";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthService from "../services/auth.service";
 import { useHistory } from "react-router-dom";
-import ErrorMessageGrid from "../components/ErrorMessageGrid";
+import ErrorMessage from "../components/ErrorMessage";
 
 import required from "../helpers/requiredField";
 import validEmail from "../helpers/validEmail";
@@ -23,7 +23,7 @@ const vusername = (value) => {
   }
 };
 
-const Register = (props) => {
+const Register = () => {
   const classes = useFormStyles();
 
   const form = useRef();
@@ -179,7 +179,13 @@ const Register = (props) => {
             </Grid>
           )}
           {message && !successful && (
-            <ErrorMessageGrid message={message}></ErrorMessageGrid>
+            <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            >
+              <ErrorMessage message={message}></ErrorMessage>
+          </Grid>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>

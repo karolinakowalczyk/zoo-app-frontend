@@ -21,7 +21,6 @@ const AppTopBar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
-
     const onLoad = async () => {
       const user = await AuthService.getCurrentUser();
       if (user) {

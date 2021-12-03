@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react";
 import AuthService from "../services/auth.service";
-import { Box, Button, CircularProgress, InputLabel  } from '@mui/material/';
+import { Box, Button, CircularProgress, InputLabel, Grid  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckButton from "react-validation/build/button";
-import ErrorMessageGrid from "../components/ErrorMessageGrid";
-import SuccessMessageGrid from "../components/SuccessMessageGrid";
+import ErrorMessage from "../components/ErrorMessage";
+import SuccessMessageGrid from "../components/SuccessMessage";
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -69,7 +69,7 @@ const Profile = () => {
     setPhoneNumber(e.target.value);
   };
 
-  const handleEditButton = (e) => {
+  const handleEditButton = () => {
     setDisable(!disable);
     if (disable === false) {
       setName(currentUser.name || '');
@@ -233,7 +233,13 @@ const Profile = () => {
             <SuccessMessageGrid message={message}></SuccessMessageGrid>
           )}
           {message && !successful && (
-            <ErrorMessageGrid message={message}></ErrorMessageGrid>
+            <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            >
+              <ErrorMessage message={message}></ErrorMessage>
+          </Grid>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>

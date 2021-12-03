@@ -9,6 +9,7 @@ import AuthService from "../services/auth.service";
 import { useHistory } from "react-router-dom";
 import required from "../helpers/requiredField";
 import validEmail from "../helpers/validEmail";
+import ErrorMessage from "../components/ErrorMessage";
 
 const RequestResetPassword = () => {
   const classes = useFormStyles();
@@ -27,7 +28,7 @@ const RequestResetPassword = () => {
     setEmail(email);
   };
 
-  const handleResetPassword = (e) => {
+  const handleRequestResetPassword = (e) => {
 
     e.preventDefault();
 
@@ -69,7 +70,7 @@ const RequestResetPassword = () => {
         <Typography className={classes.h1} component="h1" variant="h5">
           Request Reset Password
         </Typography>
-            <Form className={classes.form} onSubmit={handleResetPassword} ref={form}>
+            <Form className={classes.form} onSubmit={handleRequestResetPassword} ref={form}>
                   {!successful && (
                       <div>
                           <Input
@@ -115,9 +116,7 @@ const RequestResetPassword = () => {
                         direction="row"
                         justifyContent="center"
                       >
-                        <div className={classes.alert}>
-                          <Alert severity="error" >{message}</Alert>
-                        </div>
+                        <ErrorMessage message={message}></ErrorMessage>
                       </Grid> 
                     )}
                 <CheckButton style={{ display: "none" }} ref={checkBtn} />

@@ -16,16 +16,8 @@ import theme from "./styles/theme"
 export const AuthContext = createContext();
 
 const App = () => {
-  // [ , setAppReservation] = useState({});
-  //const [isAuthenticated] = useState(JSON.parse(window.localStorage.getItem('user')));
   const [message, setMessage] = useState('');
-
   const [accessToken, setAccessToken] = useState(null);
-
-
-  /*const changeReservation = (value) => {
-    setAppReservation(value);
-  }*/
 
   useEffect(() => {
     const fetchAccessToken = async () => {
