@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, CircularProgress, Alert, Grid, TextField,} from '@mui/material/';
+import { Box, Button, CircularProgress, Grid, TextField,} from '@mui/material/';
 import Calendar from 'react-calendar';
 import ReservationsService from "../services/reservations.service";
 import AuthService from "../services/auth.service";
 import useInfoStyles from "../styles/useInfoStyles";
 import useFormStyles from "../styles/useFormStyles";
 import getMonthName from "../helpers/getMonthName";
+import ErrorMessage from "../components/ErrorMessage";
+import SuccessMessage from "../components/SuccessMessage";
 
 
 const Reservation = (props) => {
@@ -196,9 +198,7 @@ const Reservation = (props) => {
                     direction="row"
                     justifyContent="center"
                     >
-                    <div className={formclasses.alert}>
-                        <Alert severity="success" >{message}</Alert>
-                    </div>
+                    <SuccessMessage message={message}></SuccessMessage>
                 </Grid>
             )}
             {message && !successful && (
@@ -207,9 +207,7 @@ const Reservation = (props) => {
                     direction="row"
                     justifyContent="center"
                     >
-                    <div className={formclasses.alert}>
-                        <Alert severity="error" >{message}</Alert>
-                    </div>
+                   <ErrorMessage message={message}></ErrorMessage>
                 </Grid>
             )}
         </Box>

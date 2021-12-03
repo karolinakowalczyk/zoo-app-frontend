@@ -11,6 +11,8 @@ import getComparator from "../helpers/getComparator";
 import stableSort from "../helpers/stableSort";
 import useInfoStyles from "../styles/useInfoStyles";
 import displayDate from "../helpers/displayDate";
+import SuccessMessage from "../components/SuccessMessage";
+import ErrorMessage from "../components/ErrorMessage";
 
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -248,7 +250,25 @@ const ReservationsList = () => {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </Paper>
+          </Paper>
+          {message && successful && (
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                    <SuccessMessage message={message}></SuccessMessage>
+                </Grid>
+            )}
+            {message && !successful && (
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                   <ErrorMessage message={message}></ErrorMessage>
+                </Grid>
+            )}
       </Box>    
     : <Alert severity="info" >You haven't made your reservations yet</Alert>}      
   </div>

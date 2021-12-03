@@ -21,8 +21,8 @@ import PlansService from "../services/plans.service";
 import Reservation from '../pages/Reservation'
 import Attractions from '../pages/Attractions'
 
-import SuccessMessageGrid from "./SuccessMessage";
-import ErrorMessageGrid from "./ErrorMessageGrid";
+import SuccessMessage from "./SuccessMessage";
+import ErrorMessage from "./ErrorMessage";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Map = (props) => {
+const Map = () => {
     const [directions, setDirections] = useState();
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
     const [isGeocodingError, setIsGeocodingError] = useState(false);
@@ -353,10 +353,16 @@ const Map = (props) => {
             </Button>
           </div>
           {message && successful && (
-               <SuccessMessageGrid message={message}></SuccessMessageGrid>
+               <SuccessMessage message={message}></SuccessMessage>
             )}
           {message && !successful && (
-              <ErrorMessageGrid message={message}></ErrorMessageGrid>
+              <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                   <ErrorMessage message={message}></ErrorMessage>
+                </Grid>
             )}
     </Box>
   );
