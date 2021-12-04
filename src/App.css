@@ -54,7 +54,7 @@
 .menu-btn {
   display: none !important;
 }
-@media (max-width: 74rem){
+@media (max-width: 72rem){
   .menu-btn {
     display: block !important;
   }

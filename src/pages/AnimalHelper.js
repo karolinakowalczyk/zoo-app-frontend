@@ -180,8 +180,14 @@ const AnimalHelper = () => {
         Find
       </Button>}  
         </div>
-      {errorMessage && (
+        {errorMessage && (
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            >
           <ErrorMessage message={errorMessage}></ErrorMessage>
+          </Grid>
         )}
       <Grid
       container

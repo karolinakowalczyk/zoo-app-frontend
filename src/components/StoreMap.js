@@ -133,7 +133,13 @@ useEffect( () => {
         Search store
         </Button>
         {error && (
-          <ErrorMessage message={error}></ErrorMessage>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            >
+            <ErrorMessage message={error}></ErrorMessage>
+          </Grid>
         )}
       </div>
        <Grid

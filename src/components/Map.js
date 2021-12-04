@@ -67,6 +67,8 @@ const Map = () => {
     const [center, ] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
     const [mapVariable, setMapVariable] = useState();
 
+    const [addressError, setAddressError] = useState("");
+
     const onMapLoad = useCallback(async (map) => {
         
         const origin = { lat: userLocation.lat, lng: userLocation.lng };
@@ -191,12 +193,17 @@ const Map = () => {
 
     const handleAddressSubmit = (e) => {
         e.preventDefault();
+        if (!addressInput) {
+        setAddressError('Type your address!');
+        return;
+       }
         geocodeAddress(addressInput);
+        setAddressError('');
         setFirstLoad(false);
     };
 
     const onAddressInput = (e) => {
-    setAddressInput(e.target.value);
+        setAddressInput(e.target.value);
     };
 
     const carButtonClicked = () => {
@@ -270,7 +277,16 @@ const Map = () => {
                         />    
                     <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
                         Search route
-                    </Button>
+                  </Button>
+                  {addressError && (
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                        >
+                        <ErrorMessage message={addressError}></ErrorMessage>
+                    </Grid>
+                    )}
                 </div>
               {isGeocodingError && (
                 <div className={classes.alert}>
