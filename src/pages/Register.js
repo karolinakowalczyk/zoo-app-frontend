@@ -12,17 +12,7 @@ import ErrorMessage from "../components/ErrorMessage";
 import required from "../helpers/requiredField";
 import validEmail from "../helpers/validEmail";
 import vpassword from "../helpers/vpassword";
-
-const vusername = (value) => {
-  if (value.length < 3 || value.length > 20) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>The username must be between 3 and 20 characters.</p>
-      </div>
-    );
-  }
-};
-
+import vusername from "../helpers/vusername";
 const Register = () => {
   const classes = useFormStyles();
 

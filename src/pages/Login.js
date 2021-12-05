@@ -13,6 +13,7 @@ import AuthService from "../services/auth.service";
 import useFormStyles from "../styles/useFormStyles";
 
 import required from "../helpers/requiredField";
+import vusername from "../helpers/vusername";
 
 const Login = (props) => {
   const classes = useFormStyles();
@@ -82,7 +83,7 @@ const Login = (props) => {
          <div>
           <Input
             className={classes.input}
-            validations={[required]}
+            validations={[required, vusername]}
             name="username"
             value={username}
             onChange={onChangeUsername}
