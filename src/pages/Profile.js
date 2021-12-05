@@ -9,6 +9,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckButton from "react-validation/build/button";
 import ErrorMessage from "../components/ErrorMessage";
 import SuccessMessageGrid from "../components/SuccessMessage";
+import vonlyLetters from "../helpers/vonlyLetters";
+import vphone from "../helpers/vphone";
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -150,6 +152,7 @@ const Profile = () => {
                 value={name}
                 onChange={onChangeName}
                 name="name"
+                validations={[vonlyLetters]}
               />
             </div>
             <div>
@@ -161,6 +164,7 @@ const Profile = () => {
                 value={surname}
                 onChange={onChangeSurname}
                 name="surname"
+                validations={[vonlyLetters]}
               />
             </div>
             <div>
@@ -191,6 +195,7 @@ const Profile = () => {
                 value={city}
                 onChange={onChangeCity}
                 name="city"
+                validations={[vonlyLetters]}
               />
             </div>
             <div>
@@ -201,6 +206,7 @@ const Profile = () => {
                 value={phoneNumber}
                 onChange={onChangePhoneNumber}
                 name="phonenumber"
+                validations={[vphone]}
               />
             </div>
             <Box sx={{mt: 2}}>
