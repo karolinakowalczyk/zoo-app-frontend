@@ -36,7 +36,7 @@ const StoreMap = () => {
     let service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, (results, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
+        for (let i = 0; i < results.length; i++) {
           coords.push(results[i]);
         }
         setCordsResult(coords);

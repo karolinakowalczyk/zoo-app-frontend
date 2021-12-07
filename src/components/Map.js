@@ -64,7 +64,7 @@ const Map = () => {
     const [transport, setTransport] = useState({});
     const [attractions, setAttractions] = useState({});
 
-    const [center, ] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
+    const [center, setCenter] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
     const [mapVariable, setMapVariable] = useState();
 
     const [addressError, setAddressError] = useState("");
@@ -98,6 +98,7 @@ const Map = () => {
         for (let i = 0; i < route.legs.length; i++) {
             totalDist += route.legs[i].distance.value;
         }
+        setCenter({ lat: ((userLocation.lat - 51.10430767042046)/2), lng: ((userLocation.lng - 51.10430767042046)/2) });
         setDistance(totalDist / 1000);
         setMapVariable(map);
         setMapLoaded(true);

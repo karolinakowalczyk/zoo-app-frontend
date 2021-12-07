@@ -223,6 +223,12 @@ const AnimalHelper = () => {
           {result.gender}
         </Typography>
         <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
+          {result.contact.email}
+        </Typography>
+        <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
+          {result.contact.phone}
+        </Typography>
+        <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
           {Math.round(result.distance * 1.60934 * 100) / 100 } km from you
         </Typography>
       </Card>
