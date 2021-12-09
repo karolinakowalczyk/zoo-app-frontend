@@ -196,7 +196,7 @@ const AnimalHelper = () => {
       justifyContent="center"
       >
     {results && results.map((result, index) =>
-    <Grid item xs={10} sm={4} md={3} key={index} sx={{marginBottom: "2rem"}}>
+    <Grid item xs={12} sm={4} md={3} key={index} sx={{marginBottom: "2rem"}}>
       <Card key={createUUID(result.id)} style={{ height: '100%', marginLeft: "1rem", marginRight: "1rem" }}>
         {result.photos.length > 0 ?
           <CardMedia
