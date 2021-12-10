@@ -111,7 +111,8 @@ const Profile = () => {
             city: city,
             phonenumber: phoneNumber,
             roles: currentUser.roles,
-            accessToken: currentUser.accessToken
+            accessToken: currentUser.accessToken,
+            refreshToken: currentUser.refreshToken
           });
           AuthService.updateCurrentUser(data);
         },

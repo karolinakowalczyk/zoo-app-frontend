@@ -1,11 +1,8 @@
-import axios from "axios";
 import api from "./api";
 import TokenService from "./token.service";
 
-const API_URL = "http://localhost:8080/api/auth/";
-
 const register = (username, email, password) => {
-  return api.post(API_URL + "signup", {
+  return api.post("/auth/signup", {
     username,
     email,
     password,
@@ -28,20 +25,20 @@ const login = async (username, password) => {
 };
 
 const requestResetPassword = async (email) => {
-  return axios.post(API_URL + "requestResetPassword", {
+  return api.post("/auth/requestResetPassword", {
     email,
   });
 }
 
 const resetPassword = async (hash, password) => {
-  return axios.post(API_URL + "resetPassword", {
+  return api.post("/auth/resetPassword", {
     hash,
     password,
   });
 }
 
 const editProfile = async (id, email, name, surname, address, postalCode, city, phonenumber) => {
-  return axios.put(API_URL + "editProfile", {
+  return api.put("/auth/editProfile", {
     id,
     email,
     name,

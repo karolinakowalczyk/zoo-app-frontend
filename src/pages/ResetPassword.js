@@ -71,7 +71,7 @@ const ResetPassword = () => {
       <div className={classes.paper}>
           <EmailIcon sx={{ color: 'primary.main', fontSize: '8rem'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
-          Request Reset Password
+          Reset Password
         </Typography>
             <Form className={classes.form} onSubmit={handleResetPassword} ref={form}>
                   {!successful && (
