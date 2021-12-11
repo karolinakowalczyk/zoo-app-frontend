@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from '@mui/material/';
 import useInfoStyles from "../styles/useInfoStyles";
 
-const BoardUser = () => {
+const BoardAdmin = () => {
   const infoclasses = useInfoStyles();
   return (
     <Box className="container">
@@ -11,4 +11,4 @@ const BoardUser = () => {
   );
 };
 
-export default BoardUser;
+export default BoardAdmin;

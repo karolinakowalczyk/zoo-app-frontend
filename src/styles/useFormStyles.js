@@ -41,7 +41,7 @@ const useFormStyles = makeStyles((theme) => ({
     color: theme.palette.primary.white,
   },
   alert: {
-      marginTop: 1
+    marginBottom: '1rem'
   },
   h1: {
     color: theme.palette.primary.black

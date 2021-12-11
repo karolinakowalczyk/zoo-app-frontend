@@ -2,19 +2,11 @@
 import React, {useState, useEffect, useCallback} from "react";
 
 import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
-import { Alert, TextField, InputAdornment, Button, Grid  } from '@mui/material/';
-import { makeStyles } from '@mui/styles';
+import { TextField, InputAdornment, Button, Grid  } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
+import ErrorMessage from './ErrorMessage';
 
 let coords = [];
-
-const useStyles = makeStyles((theme) => ({
-    
-  alert: {
-      marginTop: 1,
-  },
-
-}));
 
 const StoreMap = () => {
 
@@ -29,12 +21,12 @@ const StoreMap = () => {
   const [mapVariable, setMapVariable] = useState();
   const [markerId, setMarkerId] = useState('');
 
-  const classes = useStyles();
-
   const onMapLoad = useCallback((map) => {
     setMapVariable(map);
+    coords = [];
     const place = new google.maps.LatLng(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
-    var request = {
+  
+    let request = {
       location: place,
       radius: '30000', //30km
       type: ['pet_store']
@@ -44,7 +36,7 @@ const StoreMap = () => {
     let service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, (results, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
+        for (let i = 0; i < results.length; i++) {
           coords.push(results[i]);
         }
         setCordsResult(coords);
@@ -54,22 +46,34 @@ const StoreMap = () => {
     setMapLoaded(true);
   }, [userLocation.lat, userLocation.lng]);
 
-
-  useEffect(() => {
-    if (mapLoaded) {
-      if (firstLoad) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ lat: parseFloat(latitude), lng: parseFloat(longitude) })
-            setCenter({ lat: parseFloat(userLocation.lat), lng: parseFloat(userLocation.lng) });
+useEffect( () => {
+        let isMounted = true;
+  if (mapLoaded) {
+    if (firstLoad) {
+      async function getUserLocation() {
+        await new Promise((resolve) => {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              return resolve(position.coords);
+            }
+          );
+                    
+        }).then((data) => {
+          if (isMounted) {
+            const { latitude, longitude } = data;
+            setUserLocation({ lat: latitude, lng: longitude });
+            setFirstLoad(false);
           }
-        );
+                    
+        });
       }
-      onMapLoad(mapVariable);
+      getUserLocation();
+            
     }
-    
-  }, [userLocation, mapLoaded, mapVariable, onMapLoad, coordsResult, firstLoad]);
+    onMapLoad(mapVariable);
+  }
+  return () => { isMounted = false;};
+    }, [firstLoad, mapLoaded, mapVariable, onMapLoad]);
 
   const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();
@@ -129,10 +133,14 @@ const StoreMap = () => {
         Search store
         </Button>
         {error && (
-          <div className={classes.alert}>
-            <Alert severity="error" >{error}</Alert>
-          </div>
-      )}
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            >
+            <ErrorMessage message={error}></ErrorMessage>
+          </Grid>
+        )}
       </div>
        <Grid
         container

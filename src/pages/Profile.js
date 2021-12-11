@@ -1,13 +1,16 @@
 import React, { useState, useRef } from "react";
 import AuthService from "../services/auth.service";
-import { Box, Button, CircularProgress, Alert, InputLabel, Grid  } from '@mui/material/';
+import { Box, Button, CircularProgress, InputLabel, Grid  } from '@mui/material/';
 import { makeStyles } from '@mui/styles';
 import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckButton from "react-validation/build/button";
-import useFormStyles from "../styles/useFormStyles";
+import ErrorMessage from "../components/ErrorMessage";
+import SuccessMessageGrid from "../components/SuccessMessage";
+import vonlyLetters from "../helpers/vonlyLetters";
+import vphone from "../helpers/vphone";
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -33,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
   const classes = useStyles();
-  const formclasses = useFormStyles();
   const currentUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = useState(true);
@@ -69,7 +71,7 @@ const Profile = () => {
     setPhoneNumber(e.target.value);
   };
 
-  const handleEditButton = (e) => {
+  const handleEditButton = () => {
     setDisable(!disable);
     if (disable === false) {
       setName(currentUser.name || '');
@@ -109,7 +111,8 @@ const Profile = () => {
             city: city,
             phonenumber: phoneNumber,
             roles: currentUser.roles,
-            accessToken: currentUser.accessToken
+            accessToken: currentUser.accessToken,
+            refreshToken: currentUser.refreshToken
           });
           AuthService.updateCurrentUser(data);
         },
@@ -150,6 +153,7 @@ const Profile = () => {
                 value={name}
                 onChange={onChangeName}
                 name="name"
+                validations={[vonlyLetters]}
               />
             </div>
             <div>
@@ -161,6 +165,7 @@ const Profile = () => {
                 value={surname}
                 onChange={onChangeSurname}
                 name="surname"
+                validations={[vonlyLetters]}
               />
             </div>
             <div>
@@ -191,6 +196,7 @@ const Profile = () => {
                 value={city}
                 onChange={onChangeCity}
                 name="city"
+                validations={[vonlyLetters]}
               />
             </div>
             <div>
@@ -201,6 +207,7 @@ const Profile = () => {
                 value={phoneNumber}
                 onChange={onChangePhoneNumber}
                 name="phonenumber"
+                validations={[vphone]}
               />
             </div>
             <Box sx={{mt: 2}}>
@@ -230,26 +237,16 @@ const Profile = () => {
             </Box>
           </div>
           {message && successful && (
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              >
-              <div className={formclasses.alert}>
-                  <Alert severity="success" >{message}</Alert>
-              </div>
-            </Grid>
+            <SuccessMessageGrid message={message}></SuccessMessageGrid>
           )}
           {message && !successful && (
             <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              >
-              <div className={formclasses.alert}>
-                  <Alert severity="error" >{message}</Alert>
-              </div>
-            </Grid>
+            container
+            direction="row"
+            justifyContent="center"
+            >
+              <ErrorMessage message={message}></ErrorMessage>
+          </Grid>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>

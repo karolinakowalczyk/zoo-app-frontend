@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { LoadScript } from '@react-google-maps/api';
-import StoreMap from './StoreMap';
+import StoreMap from '../components/StoreMap';
 import { AuthContext } from "../App";
-import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Alert, Box, LinearProgress } from '@mui/material/';
+import { Button, Grid, Card, CardMedia, Typography, Avatar, TextField, InputAdornment, Box, LinearProgress } from '@mui/material/';
 import createUUID from "../helpers/createUUID";
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
-
+import ErrorMessage from '../components/ErrorMessage';
 const lib = ['places', 'geometry'];
 const key = `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 const sensor = false;
@@ -141,8 +141,6 @@ const AnimalHelper = () => {
           for adoption nearby!
         </Typography>
         </Box>
-        
-      
         <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: "3rem", }}>
         <TextField value={currentZipCode} label="Current zip code" disabled variant="outlined" sx={{ marginTop: "0.5rem", marginBottom: "0.5rem", marginLeft: "1rem"}}/>
         <TextField
@@ -181,13 +179,15 @@ const AnimalHelper = () => {
       </LoadingButton> :  <Button onClick={findPets} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
         Find
       </Button>}  
-     
-      
         </div>
-      {errorMessage && (
-            <div>
-              <Alert severity="error">{errorMessage}</Alert>
-            </div>
+        {errorMessage && (
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            >
+          <ErrorMessage message={errorMessage}></ErrorMessage>
+          </Grid>
         )}
       <Grid
       container
@@ -196,7 +196,7 @@ const AnimalHelper = () => {
       justifyContent="center"
       >
     {results && results.map((result, index) =>
-    <Grid item xs={10} sm={4} md={3} key={index} sx={{marginBottom: "2rem"}}>
+    <Grid item xs={12} sm={4} md={3} key={index} sx={{marginBottom: "2rem"}}>
       <Card key={createUUID(result.id)} style={{ height: '100%', marginLeft: "1rem", marginRight: "1rem" }}>
         {result.photos.length > 0 ?
           <CardMedia
@@ -221,6 +221,12 @@ const AnimalHelper = () => {
         </Typography>
         <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
           {result.gender}
+        </Typography>
+        <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
+          {result.contact.email}
+        </Typography>
+        <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
+          {result.contact.phone}
         </Typography>
         <Typography variant="h8" component="div" sx={{ marginLeft: "0.5rem"}}> 
           {Math.round(result.distance * 1.60934 * 100) / 100 } km from you

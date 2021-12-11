@@ -1,13 +1,13 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:8080/api/plans/";
+//import axios from "axios";
+import api from "./api";
+//const API_URL = "http://localhost:8080/api/plans/";
 
 const getUserPlans = (userId) => {
-  return axios.get(API_URL + `getUserPlans?userId=${userId}`);
+  return api.get(`/plans/getUserPlans?userId=${userId}`);
 };
 
 const createPlan = async (owner, reservation, transport, attractions) => {
-  return axios.post(API_URL + "createPlan", {
+  return api.post("/plans/createPlan", {
     owner,
     reservation,
     transport,

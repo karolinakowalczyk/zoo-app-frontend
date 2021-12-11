@@ -9,18 +9,10 @@ import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import useFormStyles from "../styles/useFormStyles";
 import vpassword from "../helpers/vpassword";
+import ErrorMessage from "../components/ErrorMessage";
+import required from "../helpers/requiredField";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>This field is required!</p>
-      </div>
-    );
-  }
-};
-
-const ResetPassword = (props) => {
+const ResetPassword = () => {
   const classes = useFormStyles();
   
   const { hash } = useParams();
@@ -44,11 +36,11 @@ const ResetPassword = (props) => {
     e.preventDefault();
 
     setMessage("");
-    setLoading(true);
     setSuccessful(false);
     form.current.validateAll();
-    setLoading(false);
+    
     if (checkBtn.current.context._errors.length === 0) {
+        setLoading(true);
         AuthService.resetPassword(hash, password).then(
         (response) => {
           setLoading(false);
@@ -79,7 +71,7 @@ const ResetPassword = (props) => {
       <div className={classes.paper}>
           <EmailIcon sx={{ color: 'primary.main', fontSize: '8rem'}} />
         <Typography className={classes.h1} component="h1" variant="h5">
-          Request Reset Password
+          Reset Password
         </Typography>
             <Form className={classes.form} onSubmit={handleResetPassword} ref={form}>
                   {!successful && (
@@ -127,10 +119,8 @@ const ResetPassword = (props) => {
                         container
                         direction="row"
                         justifyContent="center"
-                      >
-                        <div className={classes.alert}>
-                        <Alert severity="error" >{message}</Alert>
-                        </div>
+                        >
+                          <ErrorMessage message={message}></ErrorMessage>
                       </Grid>
                     )}
                 <CheckButton style={{ display: "none" }} ref={checkBtn} />

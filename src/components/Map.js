@@ -1,5 +1,5 @@
 /*global google*/
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
 import { makeStyles } from '@mui/styles';
@@ -18,8 +18,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import AuthService from "../services/auth.service";
 
 import PlansService from "../services/plans.service";
-import Reservation from './Reservation'
-import Attractions from './Attractions'
+import Reservation from '../pages/Reservation'
+import Attractions from '../pages/Attractions'
+
+import SuccessMessage from "./SuccessMessage";
+import ErrorMessage from "./ErrorMessage";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,17 +38,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Map = (props) => {
+const Map = () => {
     const [directions, setDirections] = useState();
     const [userLocation, setUserLocation] = useState({ lat: 52.229004552708055, lng: 21.003209269628638 });
     const [isGeocodingError, setIsGeocodingError] = useState(false);
     const [addressInput, setAddressInput] = useState('');
-    const [, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [distance, setDistance] = useState(0);
     const [shortTransport, setShortTransport] = useState("");
     const [longTransport, setLongTransport] = useState("");
     const [disable, setDisable] = useState(true);
     const [firstLoad, setFirstLoad] = useState(true);
+    const [mapLoaded, setMapLoaded] = useState(false);
 
     const classes = useStyles();
     const infoclasses = useInfoStyles();
@@ -60,28 +64,16 @@ const Map = (props) => {
     const [transport, setTransport] = useState({});
     const [attractions, setAttractions] = useState({});
 
-    const [center, ] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
-    const [mapLoaded, setMapLoaded] = useState(false);
+    const [center, setCenter] = useState({ lat: userLocation.lat, lng: userLocation.lng, });
+    const [mapVariable, setMapVariable] = useState();
 
-    const onMapLoad = () => {
-        setMapLoaded(true);
-    }
-    useEffect(() => {
-        if (mapLoaded) {
-            if (firstLoad) {
-                    navigator.geolocation.getCurrentPosition(
-                    position => {
-                    const { latitude, longitude } = position.coords;
-                    setUserLocation({ lat: latitude, lng: longitude });
-                    setLoading(false);
-                }
-                );
-            }
+    const [addressError, setAddressError] = useState("");
 
-            const directionsService = new google.maps.DirectionsService();
-            const origin = { lat: userLocation.lat, lng: userLocation.lng };
-            const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
-            directionsService.route(
+    const onMapLoad = useCallback(async (map) => {
+        
+        const origin = { lat: userLocation.lat, lng: userLocation.lng };
+        const destination = { lat: 51.10430767042046, lng: 17.074593965353543 };
+        const data = await new Promise (resolve => new google.maps.DirectionsService().route(
             {
                 origin: origin,
                 destination: destination,
@@ -89,21 +81,57 @@ const Map = (props) => {
             },
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK) {
-                    setDirections(result);
-                    let totalDist = 0;
-                    let route = result.routes[0];
-                    for (let i = 0; i < route.legs.length; i++) {
-                        totalDist += route.legs[i].distance.value;
-                    }
-                    setDistance(totalDist / 1000);
-    
-                } else {
+                    resolve(result);
+                }
+                else if (status === google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
+                    setMessage('Too many requests');
+                }
+                else {
+
                     setMessage(`error fetching directions ${result}`);
                 }
             }
-            );
+        ));
+        setDirections(data);
+        let totalDist = 0;
+        let route = data.routes[0];
+        for (let i = 0; i < route.legs.length; i++) {
+            totalDist += route.legs[i].distance.value;
         }
-    }, [firstLoad, mapLoaded, userLocation.lat, userLocation.lng]);
+        setCenter({ lat: ((userLocation.lat - 51.10430767042046)/2), lng: ((userLocation.lng - 51.10430767042046)/2) });
+        setDistance(totalDist / 1000);
+        setMapVariable(map);
+        setMapLoaded(true);
+   }, [userLocation.lat, userLocation.lng]);
+    
+    
+    useEffect( () => {
+        let isMounted = true;
+        if (mapLoaded) {
+            if (firstLoad) {
+                async function getUserLocation() {
+                    await new Promise((resolve) => {
+                        navigator.geolocation.getCurrentPosition(
+                            position => {
+                                return resolve(position.coords);
+                            }
+                        );
+                    
+                    }).then((data) => {
+                        if (isMounted) {
+                            const { latitude, longitude } = data;
+                            setUserLocation({ lat: latitude, lng: longitude });
+                            setFirstLoad(false);
+                        }
+                    
+                    });
+                }
+                getUserLocation();
+            }
+            onMapLoad(mapVariable);
+        }
+        return () => { isMounted = false};
+    }, [firstLoad, mapLoaded, mapVariable, onMapLoad]);
 
     useEffect(() => {
         setTransport({
@@ -166,12 +194,17 @@ const Map = (props) => {
 
     const handleAddressSubmit = (e) => {
         e.preventDefault();
+        if (!addressInput) {
+        setAddressError('Type your address!');
+        return;
+       }
         geocodeAddress(addressInput);
+        setAddressError('');
         setFirstLoad(false);
     };
 
     const onAddressInput = (e) => {
-    setAddressInput(e.target.value);
+        setAddressInput(e.target.value);
     };
 
     const carButtonClicked = () => {
@@ -218,7 +251,7 @@ const Map = (props) => {
           <GoogleMap
             center={center}
             zoom={8}
-            onLoad={onMapLoad}
+            onLoad={map => onMapLoad(map)}
             mapContainerStyle={{ height: "40rem", width: "100%" }}
         >
         <DirectionsRenderer
@@ -245,7 +278,16 @@ const Map = (props) => {
                         />    
                     <Button onClick={handleAddressSubmit} sx={{height: '3.5rem', marginTop: '0.5rem', marginLeft: '1rem',  backgroundColor: 'primary.main', color: 'primary.white', paddingLeft: '1rem', paddingRight: '1rem', '&:hover': { backgroundColor: 'secondary.main',} }}>
                         Search route
-                    </Button>
+                  </Button>
+                  {addressError && (
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                        >
+                        <ErrorMessage message={addressError}></ErrorMessage>
+                    </Grid>
+                    )}
                 </div>
               {isGeocodingError && (
                 <div className={classes.alert}>
@@ -323,30 +365,20 @@ const Map = (props) => {
          
           <Attractions changeAttractions={changeAttractions}></Attractions>
           <div style={{textAlign: 'center'}}>
-            <Button onClick={handleCreatePlan} className={formclasses.submit}>
+              <Button onClick={handleCreatePlan} className={formclasses.submit} disabled={loading}>
                 <span className={formclasses.buttonText}>Create Plan</span>
             </Button>
           </div>
           {message && successful && (
-               <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                >
-                    <div className={classes.alert}>
-                        <Alert severity="success" >{message}</Alert>
-                    </div>
-                </Grid>
+               <SuccessMessage message={message}></SuccessMessage>
             )}
           {message && !successful && (
               <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                >
-                    <div className={classes.alert}>
-                    <Alert severity="error" >{message}</Alert>
-                  </div>
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    >
+                   <ErrorMessage message={message}></ErrorMessage>
                 </Grid>
             )}
     </Box>

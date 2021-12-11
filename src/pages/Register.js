@@ -7,22 +7,13 @@ import useFormStyles from "../styles/useFormStyles";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthService from "../services/auth.service";
 import { useHistory } from "react-router-dom";
+import ErrorMessage from "../components/ErrorMessage";
 
 import required from "../helpers/requiredField";
 import validEmail from "../helpers/validEmail";
 import vpassword from "../helpers/vpassword";
-
-const vusername = (value) => {
-  if (value.length < 3 || value.length > 20) {
-    return (
-      <div>
-        <p style={{color: "red", margin: "0"}}>The username must be between 3 and 20 characters.</p>
-      </div>
-    );
-  }
-};
-
-const Register = (props) => {
+import vusername from "../helpers/vusername";
+const Register = () => {
   const classes = useFormStyles();
 
   const form = useRef();
@@ -179,14 +170,12 @@ const Register = (props) => {
           )}
           {message && !successful && (
             <Grid
-              container
-              direction="row"
-              justifyContent="center"
+            container
+            direction="row"
+            justifyContent="center"
             >
-              <div className={classes.alert}>
-                <Alert severity="error" >{message}</Alert>
-              </div>
-            </Grid>
+              <ErrorMessage message={message}></ErrorMessage>
+          </Grid>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
