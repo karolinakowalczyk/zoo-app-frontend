@@ -1,6 +1,4 @@
-//import axios from "axios";
 import api from "./api";
-//const API_URL = "http://localhost:8080/api/reservations/";
 
 const getUserReservations = (userId) => {
   return api.get(`/reservations/getUserReservations?userId=${userId}`);
