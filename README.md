@@ -6,11 +6,13 @@ Informations about backend are on [this repository](https://github.com/karolinak
 
 ![Main site - mobile](https://i.ibb.co/RDz5G08/zoo-app-mobile.png)
 
-##Description
+## Description
+
 Zoo Application is a responsive web application that facilitates zoo visitors to organize a tour, provides interactive ways to help animals and allows user account. management.
 Tech stack: React, MUI, Node.js, MongoDB.
 
-##How to Install and Run the Project Frontend on your computer
+## How to Install and Run the Project Frontend on your computer
+
 You need [node](https://nodejs.org/en/) installed.
 1. Clone repository.
 2. Add file *.env.local* to main project folder. To get this file content, contact with the author by mail: *karolinakowalczyk1999@gmail.com*.
