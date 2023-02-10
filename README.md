@@ -1,7 +1,9 @@
 # Zoo Application - frontend
 
 Informations about backend are on [this repository](https://github.com/karolinakowalczyk/zoo-app-backend).
-![Main site - device](https://ibb.co/kXtr9xs)
+
+![Main site - device](https://i.ibb.co/dDR3Lrw/zoo-app-computer.png)
+
 ![Main site - mobile](https://ibb.co/yQW3my2)
 
 ##Description
