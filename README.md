@@ -4,7 +4,7 @@ Informations about backend are on [this repository](https://github.com/karolinak
 
 ![Main site - device](https://i.ibb.co/dDR3Lrw/zoo-app-computer.png)
 
-![Main site - mobile](https://ibb.co/yQW3my2)
+![Main site - mobile](https://i.ibb.co/RDz5G08/zoo-app-mobile.png)
 
 ##Description
 Zoo Application is a responsive web application that facilitates zoo visitors to organize a tour, provides interactive ways to help animals and allows user account. management.
