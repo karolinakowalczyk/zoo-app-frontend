@@ -17,6 +17,6 @@ You need [node](https://nodejs.org/en/) installed.
 1. Clone repository.
 2. Add file *.env.local* to main project folder. To get this file content, contact with the author by mail: *karolinakowalczyk1999@gmail.com*.
 3. Open terminal, go to project main folder.
-3. You need instal node packages by typing *npm install*.
-3. To run application in browser type *npm start*.
-4. App should running on *localhost:8001*.
+4. You need instal node packages by typing *npm install*.
+5. To run application in browser type *npm start*.
+6. App should running on *localhost:8001*.
